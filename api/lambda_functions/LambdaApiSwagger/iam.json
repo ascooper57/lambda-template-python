@@ -1,0 +1,82 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1467321237000",
+      "Effect": "Deny",
+      "Action": [
+        "apigateway:POST",
+        "apigateway:PUT",
+        "apigateway:PATCH",
+        "apigateway:DELETE"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:us-east-1::/*"
+      ]
+    },
+    {
+      "Sid": "Stmt1467321341000",
+      "Effect": "Deny",
+      "Action": [
+        "apigateway:GET",
+        "apigateway:HEAD",
+        "apigateway:OPTIONS"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:us-east-1::/",
+        "arn:aws:apigateway:us-east-1::/account",
+        "arn:aws:apigateway:us-east-1::/clientcertificates",
+        "arn:aws:apigateway:us-east-1::/domainnames",
+        "arn:aws:apigateway:us-east-1::/apikeys"
+      ]
+    },
+    {
+      "Sid": "Stmt1467321344000",
+      "Effect": "Allow",
+      "Action": [
+        "apigateway:GetRestApis",
+        "apigateway:GET",
+        "apigateway:HEAD",
+        "apigateway:OPTIONS"
+      ],
+      "Resource": [
+        "arn:aws:apigateway:us-east-1::/*"
+      ]
+    },
+    {
+      "Action": [
+        "cognito-idp:ListUserPools"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "cognito-identity:ListIdentityPools"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:cognito-identity:*:*:identitypool/"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:DescribeLogStreams",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "arn:aws:logs:us-east-1:*:log-group:/aws/lambda/*"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "rds-db:connect"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:rds:us-east-1:###########:db:XXXXXXXXXX-us-east-1a"
+    },
+    {
+      "Sid": "DenyDelete1",
+      "Effect": "Deny",
+      "Action": [
+        "rds:*"
+      ],
+      "Resource": "arn:aws:rds:us-east-1:###########:db:XXXXXXXXXX-us-east-1a"
+    },
+    {
+      "Action": [
+        "cognito-idp:AdminGetUser"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "cognito-idp:ListUserPools"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "cognito-identity:ListIdentityPools"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "kms:Decrypt"
+      ],
+      "Resource": [
+        "*"
+      ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:DescribeLogStreams",
+        "logs:PutLogEvents"
+      ],
+      "Resource": [
+        "*"
+      ]
+    }
+  ]
+}

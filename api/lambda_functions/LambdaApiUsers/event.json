@@ -1,0 +1,7 @@
+{
+  "httpMethod": "GET",
+  "queryStringParameters": {
+    "cognito_user_pool_id": "us-east-1_a8nFeZaMd"
+  }
+}
+

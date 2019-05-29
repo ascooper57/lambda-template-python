@@ -1,0 +1,14 @@
+# ###################################
+# pegged and provided by Amazon itself, check lambda log files for current supported version
+# boto3==1.9.42
+# botocore==1.12.42
+# ###################################
+
+# ###################################
+# external python packages
+peewee==3.4.0
+psycopg2==2.7.3
+requests==2.20.1
+# ###################################
+
+-e.

@@ -1,0 +1,11 @@
+{
+  "region": "us-east-1",
+  "function_name": "LambdaApiAwsBackup",
+  "handler": "lambda_function.handler",
+  "description": "Backup AWS configurations for API Gateway API",
+  "runtime": "python3.7",
+  "environment_variables": {
+    "RDB_ENV": "production",
+    "RDB_LOG_LEVEL": "INFO"
+  }
+}

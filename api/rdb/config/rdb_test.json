@@ -1,0 +1,11 @@
+{
+  "rdb.pg.database": "praktikos_test",
+  "rdb.pg.host": "",
+  "rdb.pg.port": 5432,
+  "rdb.pg.username": "",
+  "rdb.pg.password": "",
+  "rdb.pg.max_connections": 10,
+  "rdb.pg.stale_timeout": 300,
+  "rdb.pg.sslmode": "allow",
+  "rdb.log.level": 20
+}

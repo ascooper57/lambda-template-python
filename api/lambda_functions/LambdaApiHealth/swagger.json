@@ -1,0 +1,87 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "API"
+  },
+  "host": "r1gzxipb32.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/health": {
+      "x-lambda": "LambdaApiHealth",
+      "get": {
+        "summary": "Get the system health info of this RESTful API",
+        "description": "Get the system health info of this RESTful API",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/HealthResponse"
+            }
+          }
+        }
+      },
+      "options": {
+        "summary": "Standard RestFUL API OPTIONS for prefetch",
+        "description": "Standard RestFUL API OPTIONS for prefetch",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema",
+      "description": "Empty Schema"
+    },
+    "HealthResponse": {
+      "type": "object",
+      "title": "HealthResponse",
+      "description": "Data model for the /health response",
+      "required": [
+        "health"
+      ],
+      "properties": {
+        "health": {
+          "type": "string",
+          "description": "OK"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "httpMethod": "PUT",
+  "body": {
+    "email": "tester1@praktikos.com",
+    "cognito_user_pool_id": "us-east-1_a8nFeZaMd",
+    "password": "ChangeMe123!",
+    "newpassword": "Tester123!"
+  }
+}

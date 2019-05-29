@@ -1,0 +1,113 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "API"
+  },
+  "host": "r1gzxipb32.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/users": {
+      "x-lambda": "LambdaApiUsers",
+      "get": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/UsersResponses"
+            }
+          }
+        },
+        "x-security": [
+          {
+            "AWS_IAM": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema",
+      "description": "Empty Schema"
+    },
+    "UsersResponse": {
+      "type": "object",
+      "properties": {
+        "username_id": {
+          "type": "string",
+          "description": "User's Cognito Id - this is the key"
+        },
+        "given_name": {
+          "type": "string",
+          "description": "Person's first name"
+        },
+        "family_name": {
+          "type": "string",
+          "description": "Person's family / last / sir name"
+        },
+        "UserCreateDate": {
+          "type": "string",
+          "description": "The date this user's record was created in AWS Cognito"
+        },
+        "UserLastModifiedDate": {
+          "type": "string",
+          "description": "The date this user's record was last modified in AWS Cognito"
+        },
+        "Enabled": {
+          "type": "boolean",
+          "description": "The user's account is enabled / disabled in AWS Cognito"
+        },
+        "UserStatus": {
+          "type": "string",
+          "description": "FORCE_CHANGE_PASSWORD means exactly what it says"
+        }
+      },
+      "title": "UsersResponse"
+    },
+    "UsersResponses": {
+      "title": "UsersResponses",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/UsersResponse"
+      }
+    }
+  }
+}

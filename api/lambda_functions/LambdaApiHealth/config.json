@@ -1,0 +1,11 @@
+{
+  "region": "us-east-1",
+  "function_name": "LambdaApiHealth",
+  "handler": "lambda_function.handler",
+  "description": "Health test for lambda services",
+  "runtime": "python3.7",
+  "environment_variables": {
+    "RDB_ENV": "production",
+    "RDB_LOG_LEVEL": "INFO"
+  }
+}

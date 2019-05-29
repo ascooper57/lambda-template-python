@@ -1,0 +1,147 @@
+# Byte-compiled / optimized / DLL files
+__pycache__
+__pycache__/
+/**/__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+.pyc
+
+# PyInstaller
+#  Usually these files are written by a python script from a template
+#  before PyInstaller builds the exe, so as to inject date/other infos into it.
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+local_settings.py
+
+# Flask stuff:
+instance/
+.webassets-cache
+
+# Scrapy stuff:
+.scrapy
+
+# Sphinx documentation
+docs/_build/
+
+# PyBuilder
+target/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# celery beat schedule file
+celerybeat-schedule
+
+# SageMath parsed files
+*.sage.py
+
+# dotenv
+.env
+
+# virtualenv
+.venv
+venv/
+ENV/
+
+# Spyder project settings
+.spyderproject
+.spyproject
+
+# Rope project settings
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy
+.mypy_cache/
+
+# PyCharm
+.idea
+
+.serverless
+*.pyc
+*.pyo
+
+*.zip
+git_stats/
+/api/.env
+
+imageDownloaded.jpg
+
+# Ignore Mac DS_Store files
+.DS_Store
+
+api/lambda_functions/LambdaApiUser/.DS_Store
+
+# http://plantuml.com/starting
+*.puml
+*.png
+*.atxt
+
+.pytest_cache/
+api/lambda_functions/LambdaApiSwagger/API.json
+api/lambda_functions/LambdaApiSwagger/API.yaml
+API.json
+API.yaml
+
+# ignore all newly CREATED files from Codegen, can't ignore files that exist but were modified.
+# Need to manually revert them
+api/rdb/model/model_list.py.MERGE
+
+api/iam/LambdaApiGenerated.json
+api/lambda_functions/LambdaApiGenerated/__init__.py
+api/lambda_functions/LambdaApiGenerated/config.yaml
+api/lambda_functions/LambdaApiGenerated/event.json
+api/lambda_functions/LambdaApiGenerated/iam.json
+api/lambda_functions/LambdaApiGenerated/lambda_function.py
+api/lambda_functions/LambdaApiGenerated/requirements.txt
+api/rdb/model/generated.py
+test/units/LambdaApiGenerated_test.py
+
+praktikos_python_rdb.egg-info/

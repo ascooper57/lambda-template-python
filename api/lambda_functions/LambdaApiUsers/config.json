@@ -1,0 +1,11 @@
+{
+  "region": "us-east-1",
+  "function_name": "LambdaApiUsers",
+  "handler": "lambda_function.handler",
+  "description": "List Users API",
+  "runtime": "python3.6",
+  "environment_variables": {
+    "RDB_ENV": "production",
+    "RDB_LOG_LEVEL": "INFO"
+  }
+}
