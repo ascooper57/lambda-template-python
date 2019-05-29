@@ -2,7 +2,7 @@
 set -e
 
 BUCKET=praktikos-template
-ZIP_FILE=/tmp/python3.7.zip
+ZIP_FILE=/tmp/praktikos-python-rdb.zip
 echo "Sync content with S3 bucket ${BUCKET} start"
 [[ -e ${ZIP_FILE} ]] && rm -f ${ZIP_FILE}
 zip -r -X ${ZIP_FILE} . --exclude deploy.sh *.git* *.idea* .DS_Store api/.DS_Store api/*/.DS_Store api/*/*/.DS_Store *__pycache__* *.pyc
