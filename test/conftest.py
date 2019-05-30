@@ -59,7 +59,7 @@ def really_delete_users():
         try:
             if is_test():
                 fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
-                event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN, alt_event=None)
+                event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN)
                 # noinspection PyTypeChecker
                 event['httpMethod'] = 'DELETE'
                 username = get_cognito_username_id(cognito_idp_client,
@@ -78,7 +78,7 @@ def really_delete_users():
 
             if is_production():
                 fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
-                event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN, alt_event=None)
+                event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN)
                 event['httpMethod'] = 'DELETE'
                 username = get_cognito_username_id(cognito_idp_client,
                                                    tester,

@@ -63,14 +63,6 @@ def invoke(src, event, verbose=False):
     return results
 
 
-def read(path, loader=None, binary_file=False):
-    open_mode = 'rb' if binary_file else 'r'
-    with open(path, mode=open_mode) as fh:
-        if not loader:
-            return fh.read()
-        return loader(fh.read())
-
-
 def get_callable_handler_function(src, handler):
     """Translate a string of the form "module.function" into a callable
     function.
@@ -105,6 +97,8 @@ def get_handler_filename(handler):
 
 
 def get_config(src):
+    # type: (str) -> dict
+
     """Simulates a call to your function.
 
     :param str src:
@@ -115,33 +109,34 @@ def get_config(src):
     import os.path
     # https://codebeautify.org/yaml-to-json-xml-csv
     path_to_config_file = os.path.join(src, 'config.json')
-    cfg = read(path_to_config_file, loader=json.loads)
-    return cfg
+    with open(path_to_config_file) as json_file:
+        return json.load(json_file)
 
 
-def get_lambda_test_data(src, authorization_token=None, alt_event=None):
+def get_lambda_test_data(src, authorization_token=None, alt_event_filename=None):
+    # type: (str, str, str) -> dict
+
     """Simulates a call to your function.
 
     :param str src:
         The path to your Lambda ready project (folder must contain a valid
         config.json and handler module (e.g.: lambda_function.py).
-    :param str alt_event:
-        An optional argument to override which event file to use.
     :param str authorization_token:
         An optional argument to add Cognito authorization id_token to event header.
+    :param str alt_event_filename:
+        An optional argument to override which event file to use.
     """
 
     # Load and parse event file.
-    if alt_event:
-        event = alt_event
-    else:
-        path_to_event_file = os.path.join(src, 'event.json')
-        event = read(path_to_event_file, loader=json.loads)
+    event_filename = alt_event_filename if alt_event_filename else 'event.json'
+    path_to_event_file = os.path.join(src, event_filename)
+    with open(path_to_event_file) as json_file:
+        event = json.load(json_file)
         if 'headers' not in event:
             event['headers'] = dict(Authorization=authorization_token if authorization_token else '')
         elif authorization_token:
             event['headers']['Authorization'] = authorization_token
-    return event
+        return event
 
 
 def zipdir(folder_path, ziph, exclude=None):
@@ -155,6 +150,7 @@ def zipdir(folder_path, ziph, exclude=None):
     toplevel = "."
     for root, dirs, files in walk(toplevel):
         for file in files:
+            # noinspection PyPep8
             if not file in exclude:
                 ziph.write(path.join(root, file))
     chdir(current_working_directory)
