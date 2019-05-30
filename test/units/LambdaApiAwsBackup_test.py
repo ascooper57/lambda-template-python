@@ -5,9 +5,9 @@ import json
 import requests
 
 from api.rdb.config import is_test, is_production
-from api.rdb.utils.helpers import invoke, get_lambda_test_data, get_lambda_fullpath
-from api.rdb.utils.service_framework import STATUS_OK
 from api.rdb.utils.apigateway import get_api_url
+from api.rdb.utils.service_framework import STATUS_OK
+from ..utilities import invoke, get_lambda_test_data, get_lambda_fullpath
 
 
 # noinspection PyUnusedLocal,PyTypeChecker

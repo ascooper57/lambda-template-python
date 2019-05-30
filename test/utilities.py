@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
+
 import json
 import os
 import sys
 import time
-
-from api.rdb.utils.lambda_logger import lambda_logger
-
-logger = lambda_logger(__name__, os.getcwd())
 
 
 class Context:
@@ -139,101 +136,8 @@ def get_lambda_test_data(src, authorization_token=None, alt_event_filename=None)
         return event
 
 
-def zipdir(folder_path, ziph, exclude=None):
-    if exclude is None:
-        exclude = ['.DS_Store']
-    from os import path, getcwd, chdir, walk
-
-    current_working_directory = getcwd()
-    chdir(folder_path)
-    # ziph is zipfile handle
-    toplevel = "."
-    for root, dirs, files in walk(toplevel):
-        for file in files:
-            # noinspection PyPep8
-            if not file in exclude:
-                ziph.write(path.join(root, file))
-    chdir(current_working_directory)
-
-
-def imzipdir(folder_path, imzip):
-    from os import path, getcwd, chdir, walk
-
-    current_working_directory = getcwd()
-    chdir(folder_path)
-    # imzip is zipfile handle
-    toplevel = "."
-    for root, dirs, files in walk(toplevel):
-        for file in files:
-            file_path = path.join(root, file)
-            print(file_path)
-            imzip.append(file_path, get_file_binary_contents(file_path))
-
-    chdir(current_working_directory)
-
-
-# noinspection PyMethodMayBeStatic
-def copy_directory(src, dest):
-    import shutil
-
-    try:
-        shutil.copytree(src, dest)
-    # Directories are the same
-    except shutil.Error as e:
-        print('Directory not copied. Error: %s' % e)
-    # Any error saying that the directory doesn't exist
-    except OSError as e:
-        print('Directory not copied. Error: %s' % e)
-
-
-# noinspection PyMethodMayBeStatic
-def get_file_contents(filename, mode="r"):
-    with open(filename, mode) as f:
-        contents = f.read()
-        f.close()
-        return contents
-
-
-def get_file_binary_contents(filename):
-    return get_file_contents(filename, mode="rb")
-
-
 def get_lambda_fullpath(lambda_function):
     from os import path
     lambda_directory = path.abspath(
-        path.join(path.dirname(__file__), ".." + os.path.sep + ".." + os.path.sep + "lambda_functions"))
+        path.join(path.dirname(__file__), ".." + os.path.sep + "api" + os.path.sep + "lambda_functions"))
     return path.realpath(path.join(lambda_directory, lambda_function))
-
-
-def get_os_temp_dir():
-    import platform
-    import tempfile
-    # On MacOS, i.e. Darwin, tempfile.gettempdir() and os.getenv('TMPDIR') return a value
-    # such as '/var/folders/nj/269977hs0_96bttwj2gs_jhhp48z54/T'; it is one that I do not want!
-    return '/tmp' if platform.system() == 'Darwin' else tempfile.gettempdir()
-
-
-def remove_subdir(subdir):
-    import shutil
-    if os.path.exists(subdir):
-        shutil.rmtree(subdir, ignore_errors=True)
-
-
-def make_temp_subdir(subdir):
-    os_temp_dir = get_os_temp_dir()
-    fullpath = os.path.join(os_temp_dir, subdir)
-    remove_subdir(fullpath)
-    os.makedirs(fullpath)
-    return fullpath
-
-
-def traverse(pathname, d):
-    """prints a given nested directory with proper indentation"""
-    indent = ''
-    for i in range(d):
-        indent = indent + '  '
-    for item in os.listdir(pathname):
-        new_item = os.path.join(pathname, item)
-        logger.info(indent + new_item)
-        if os.path.isdir(new_item):
-            traverse(new_item, d + 1)

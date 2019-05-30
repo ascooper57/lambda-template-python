@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 
 import json
+
 import requests
-from os import path
-from api.rdb.utils.helpers import invoke
-from api.rdb.utils.service_framework import STATUS_OK
-from api.rdb.config import get, is_test, is_production
+
+from api.rdb.config import is_test, is_production
 from api.rdb.utils.apigateway import get_api_url
+from api.rdb.utils.service_framework import STATUS_OK
 from ..conftest import get_secure_event
+from ..utilities import invoke
 
 
 # noinspection PyUnusedLocal,PyTypeChecker
@@ -24,7 +25,8 @@ def test(empty_database, create_and_delete_user, create_login_session):
                 if k in response_data:
                     assert event['body'][k] == response_data[k]
 
-        payload = {"httpMethod": "GET", "queryStringParameters": {"index_key_example": event['body']['index_key_example']}}
+        payload = {"httpMethod": "GET",
+                   "queryStringParameters": {"index_key_example": event['body']['index_key_example']}}
         response2 = invoke(fullpath, payload)
         assert response2['statusCode'] == STATUS_OK
         response_data = json.loads(response2['body'])
@@ -45,7 +47,8 @@ def test(empty_database, create_and_delete_user, create_login_session):
         response_data = json.loads(response4.text)
         assert response_data
 
-        response5 = requests.get(url, headers=event['headers'], params={"index_key_example": event['body']['index_key_example']})
+        response5 = requests.get(url, headers=event['headers'],
+                                 params={"index_key_example": event['body']['index_key_example']})
         assert response5.status_code == STATUS_OK
         response_data = json.loads(response5.text)
         assert response_data

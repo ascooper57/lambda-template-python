@@ -11,8 +11,8 @@ from api.rdb.config import get, is_test, is_production
 from api.rdb.model import db_cursor, db_close, db_migrate
 from api.rdb.utils.apigateway import get_api_url
 from api.rdb.utils.cognito import get_cognito_username_id, get_cognito_user_pool_id
-from api.rdb.utils.helpers import invoke, get_lambda_test_data, get_lambda_fullpath
 from api.rdb.utils.service_framework import STATUS_OK, STATUS_BAD_REQUEST
+from .utilities import invoke, get_lambda_test_data, get_lambda_fullpath
 
 cognito_idp_client = boto3.client('cognito-idp')
 
@@ -214,6 +214,7 @@ def fixture_directory():
     import os
     return os.path.join(os.path.dirname(__file__), "fixtures")
 
+
 # ### Relational Database functions ###
 
 def close():
@@ -277,4 +278,3 @@ def _create_database(cursor):
 
         except psycopg2.ProgrammingError as ex:
             logger.error(str(ex))
-

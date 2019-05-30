@@ -7,7 +7,7 @@ from api.rdb import db_cursor
 def test(empty_database, create_and_delete_user):
     with db_cursor() as cursor:
         cursor.execute(
-        "SELECT column_name, data_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'sample'"
+            "SELECT column_name, data_type FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = 'sample'"
         )
         column_names = set(name for name, _ in cursor.fetchall())
 

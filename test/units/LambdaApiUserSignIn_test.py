@@ -1,14 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import json
+
 import boto3
 import requests
 
 from api.rdb.config import is_test, is_production
-from api.rdb.utils.helpers import invoke, get_lambda_test_data, get_lambda_fullpath
-from api.rdb.utils.service_framework import STATUS_OK
 from api.rdb.utils.apigateway import get_api_url
 from api.rdb.utils.cognito import get_cognito_username_id
+from api.rdb.utils.service_framework import STATUS_OK
+from ..utilities import invoke, get_lambda_test_data, get_lambda_fullpath
+
 
 # noinspection PyUnusedLocal,PyTypeChecker
 def test(empty_database, create_and_delete_user):
@@ -59,8 +61,8 @@ def force_change_password():
     # Update user tester1@praktikos.com
     cognito_idp_client = boto3.client('cognito-idp')
     event['body']['username'] = get_cognito_username_id(cognito_idp_client,
-                                       event['body']['email'],
-                                       event['body']['cognito_user_pool_id'])
+                                                        event['body']['email'],
+                                                        event['body']['cognito_user_pool_id'])
     event['body'].pop('email', None)
     payload = {"httpMethod": "POST", "body": event['body']}
     response1 = invoke(fullpath, payload)
