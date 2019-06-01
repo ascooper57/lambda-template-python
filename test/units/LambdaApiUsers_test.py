@@ -2,6 +2,7 @@
 
 import json
 
+import boto3
 import requests
 
 from api.rdb.config import is_test, is_production
@@ -28,7 +29,7 @@ def test(empty_database, create_and_delete_user):
     elif is_production():
         fullpath = get_lambda_fullpath("LambdaApiUsers")
         event = get_lambda_test_data(fullpath)
-        url = get_api_url('API', '/v1', '/users')
+        url = get_api_url(boto3.client("apigateway"), 'API', '/v1', '/users')
         # http://docs.python-requests.org/en/master/user/quickstart
         response3 = requests.get(url, params=event['queryStringParameters'])
         assert response3.status_code == STATUS_OK

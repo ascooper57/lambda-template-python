@@ -2,27 +2,17 @@
 
 import logging
 
-import boto3
-from boto3.session import Session
-
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def get_api_url(rest_api_name, stage, endpoint):
-    # type: (str, str, str) -> str
-    # noinspection PyTypeChecker
-    session = Session(region_name="us-east-1")
-    credentials = session.get_credentials()
-
-    apigateway_client = boto3.client("apigateway", aws_access_key_id=credentials.access_key,
-                                     aws_secret_access_key=credentials.secret_key)
-    url = 'https://%s.execute-api.us-east-1.amazonaws.com%s%s' % (
+def get_api_url(apigateway_client, rest_api_name, stage, endpoint):
+    # type: ('boto3.client("apigateway")', str, str, str) -> str
+    return 'https://%s.execute-api.us-east-1.amazonaws.com%s%s' % (
         get_rest_api_id(apigateway_client, rest_api_name),
         stage,
         endpoint
     )
-    return url
 
 
 def get_rest_api_id(apigateway_client, rest_api_name):

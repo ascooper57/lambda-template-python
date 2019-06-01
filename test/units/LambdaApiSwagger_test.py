@@ -2,6 +2,7 @@
 
 import json
 
+import boto3
 import requests
 import yaml
 
@@ -32,7 +33,7 @@ def test():
     elif is_production():
         fullpath = get_lambda_fullpath("LambdaApiSwagger")
         event = get_lambda_test_data(fullpath)
-        url = get_api_url('API', '/v1', '/swagger')
+        url = get_api_url(boto3.client("apigateway"), 'API', '/v1', '/swagger')
         response3 = requests.get(url, params=event['queryStringParameters'])
         assert response3.status_code == STATUS_OK
         assert len(response3.text)

@@ -2,6 +2,7 @@
 
 import json
 
+import boto3
 import requests
 
 from api.rdb.config import is_test, is_production
@@ -40,7 +41,7 @@ def test(empty_database, create_and_delete_user, create_login_session):
 
     elif is_production():
         event, fullpath = get_secure_event("LambdaApiSamplePython", aws=True)
-        url = get_api_url('API', '/v1', '/sample')
+        url = get_api_url(boto3.client("apigateway"), 'API', '/v1', '/sample')
 
         response4 = requests.put(url, headers=event['headers'], data=json.dumps(event['body']))
         assert response4.status_code == STATUS_OK

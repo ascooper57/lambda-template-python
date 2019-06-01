@@ -36,7 +36,7 @@ def test(empty_database, create_and_delete_user):
         # new user, fully authenticated use new password via API Gateway
         event = get_lambda_test_data(get_lambda_fullpath("LambdaApiUserSignIn"))
         # http://docs.python-requests.org/en/master/user/quickstart
-        url = get_api_url('API', '/v1', '/user/signin')
+        url = get_api_url(boto3.client("apigateway"), 'API', '/v1', '/user/signin')
         response3 = requests.post(url, headers=event['headers'], data=json.dumps(event['body']))
         response_data = response3.json()
         assert response3.status_code == STATUS_OK

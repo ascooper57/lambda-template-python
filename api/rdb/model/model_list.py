@@ -1,5 +1,6 @@
-from .database_migration import DatabaseMigration
+# -*- coding: utf-8 -*-
 
+from .database_migration import DatabaseMigration
 
 # noinspection PyMethodMayBeStatic
 def get_model_list():

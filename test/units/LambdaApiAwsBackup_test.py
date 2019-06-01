@@ -2,6 +2,7 @@
 
 import json
 
+import boto3
 import requests
 
 from api.rdb.config import is_test, is_production
@@ -27,7 +28,7 @@ def test():
     elif is_production():
         event = get_lambda_test_data(get_lambda_fullpath("LambdaApiAwsBackup"))
         # http://docs.python-requests.org/en/master/user/quickstart
-        url = get_api_url('API', '/v1', '/aws/backup')
+        url = get_api_url(boto3.client("apigateway"), 'API', '/v1', '/aws/backup')
         response2 = requests.get(url, params=event['queryStringParameters'])
         assert response2  # "/backup should return Status \"OK\"")
         assert response2.status_code == STATUS_OK

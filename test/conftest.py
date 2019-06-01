@@ -15,6 +15,7 @@ from api.rdb.utils.service_framework import STATUS_OK, STATUS_BAD_REQUEST
 from .utilities import invoke, get_lambda_test_data, get_lambda_fullpath
 
 cognito_idp_client = boto3.client('cognito-idp')
+apigateway_client = boto3.client("apigateway")
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -89,7 +90,8 @@ def really_delete_users():
                     'force': True,
                     'username': username
                 }
-                url = get_api_url('API', '/v1', '/user/signup')
+                url = get_api_url(apigateway_client, 'API', '/v1', '/user/signup')
+                # noinspection PyUnusedLocal
                 response3 = requests.delete(url, params=event['queryStringParameters'])
         # except cognito_idp_client.exceptions.UserNotFoundException as ex:
         except Exception as ex:
@@ -117,7 +119,7 @@ def create_users(delete_users):
             if response['statusCode'] == STATUS_BAD_REQUEST:
                 assert body['Code'] == "UsernameExistsException"
                 payload = {"httpMethod": "GET", "queryStringParameters": event['body']}
-                # noinspection PyTypeChecker
+                # noinspection PyTypeChecker,PyUnusedLocal
                 response = invoke(fullpath, payload)
             else:
                 assert response['statusCode'] == STATUS_OK
@@ -127,11 +129,12 @@ def create_users(delete_users):
             # noinspection PyBroadException,PyUnusedLocal
             event = get_lambda_test_data(get_lambda_fullpath("LambdaApiUserSignUp"))
             event['body']['email'] = tester
-            url = get_api_url('API', '/v1', '/user/signup')
+            url = get_api_url(apigateway_client, 'API', '/v1', '/user/signup')
             response = requests.put(url, headers=event['headers'], data=json.dumps(event['body']))
             response_data = json.loads(response.text)
             if response.status_code == STATUS_BAD_REQUEST:
                 assert response_data['Code'] == "UsernameExistsException"
+                # noinspection PyUnusedLocal
                 response = requests.get(url, params=event['body'])
             else:
                 assert response.status_code == STATUS_OK
