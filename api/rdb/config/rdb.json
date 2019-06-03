@@ -6,6 +6,5 @@
   "rdb.pg.password": "LKqnsUIQ7h6FiXsu",
   "rdb.pg.max_connections": 10,
   "rdb.pg.stale_timeout": 300,
-  "rdb.pg.sslmode": "allow",
-  "rdb.log.level": 20
+  "rdb.pg.sslmode": "allow"
 }
