@@ -15,21 +15,6 @@ def get_cognito_username_id(cognito_idp_client, email, cognito_user_pool_id):
     raise Exception("User does not exist.")
 
 
-def get_cognito_federated_identity_pool_id(cognito_identity_client,
-                                           cognito_identity_pool_name):
-    # type: ('boto3.client("cognito-identity")', str) -> str
-    # An error occurred (ValidationException) when calling the ListIdentityPools operation: 1 validation error
-    # detected: Value '123' at 'maxResults' failed to satisfy constraint: Member must have value less than or
-    # equal to 60
-    response = cognito_identity_client.list_identity_pools(
-        MaxResults=60
-    )
-    for identity_pool in response['IdentityPools']:
-        if identity_pool['IdentityPoolName'] == cognito_identity_pool_name:
-            return identity_pool['IdentityPoolId']
-    raise Exception("Cognito User Pool %s not found" % cognito_identity_pool_name)
-
-
 def get_cognito_user_pool_id(cognito_idp_client, cognito_user_pool_name):
     # type: ('boto3.client("cognito-idp")', str) -> str
     response = cognito_idp_client.list_user_pools(
@@ -39,17 +24,6 @@ def get_cognito_user_pool_id(cognito_idp_client, cognito_user_pool_name):
         if user_pool['Name'] == cognito_user_pool_name:
             return user_pool['Id']
     raise Exception("Cognito User Pool %s not found" % cognito_user_pool_name)
-
-
-def get_cognito_user_pool_name(cognito_idp_client, cognito_user_pool_id):
-    # type: ('boto3.client("cognito-idp")', str) -> str
-    response = cognito_idp_client.list_user_pools(
-        MaxResults=60
-    )
-    for user_pool in response['UserPools']:
-        if user_pool['Id'] == cognito_user_pool_id:
-            return user_pool['Name']
-    raise Exception("Cognito User Pool Id %s not found" % cognito_user_pool_id)
 
 
 def get_cognito_app_client_id(cognito_idp_client, cognito_user_pool_id):
