@@ -110,7 +110,7 @@ def get_config(src):
         return json.load(json_file)
 
 
-def get_lambda_test_data(src, authorization_token=None, alt_event_filename=None):
+def get_lambda_test_data(src, authorization_token="", alt_event_filename=""):
     # type: (str, str, str) -> dict
 
     """Simulates a call to your function.

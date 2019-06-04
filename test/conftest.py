@@ -27,7 +27,7 @@ TESTER2 = "tester2@praktikos.com"
 
 TESTERS = [TESTER1, TESTER2]
 
-_ID_TOKEN = None
+_ID_TOKEN = ""
 
 
 def get_secure_event(lambda_function, aws=False):
@@ -172,7 +172,6 @@ def create_login_session():
 
     # new user, FORCE_CHANGE_PASSWORD required
     event, fullpath = get_secure_event("LambdaApiUserSignUp")
-    cognito_idp_client = boto3.client('cognito-idp')
     username = get_cognito_username_id(cognito_idp_client,
                                        event['body']['email'],
                                        event['body']['cognito_user_pool_id'])

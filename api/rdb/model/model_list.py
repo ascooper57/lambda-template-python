@@ -2,6 +2,7 @@
 
 from .database_migration import DatabaseMigration
 
+
 # noinspection PyMethodMayBeStatic
 def get_model_list():
     from .sample import Sample
