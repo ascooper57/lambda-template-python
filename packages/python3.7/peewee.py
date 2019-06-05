@@ -65,7 +65,7 @@ except ImportError:
         mysql = None
 
 
-__version__ = '3.9.5'
+__version__ = '3.9.4'
 __all__ = [
     'AsIs',
     'AutoField',
@@ -765,9 +765,6 @@ class Source(Node):
     def left_outer_join(self, dest, on=None):
         return Join(self, dest, JOIN.LEFT_OUTER, on)
 
-    def cte(self, name, recursive=False, columns=None):
-        return CTE(name, self, recursive=recursive, columns=columns)
-
     def get_sort_key(self, ctx):
         if self._alias:
             return (self._alias,)
@@ -997,21 +994,17 @@ class ValuesList(_HashableSource, BaseTable):
         if self._alias:
             ctx.alias_manager[self] = self._alias
 
-        if ctx.scope == SCOPE_SOURCE or ctx.scope == SCOPE_NORMAL:
-            with ctx(parentheses=not ctx.parentheses):
-                ctx = (ctx
-                       .literal('VALUES ')
-                       .sql(CommaNodeList([
-                           EnclosedNodeList(row) for row in self._values])))
-
-            if ctx.scope == SCOPE_SOURCE:
-                ctx.literal(' AS ').sql(Entity(ctx.alias_manager[self]))
-                if self._columns:
-                    entities = [Entity(c) for c in self._columns]
-                    ctx.sql(EnclosedNodeList(entities))
+        if ctx.scope == SCOPE_SOURCE:
+            ctx = (ctx
+                   .literal('(VALUES ')
+                   .sql(CommaNodeList([
+                       EnclosedNodeList(row) for row in self._values]))
+                   .literal(') AS ')
+                   .sql(Entity(ctx.alias_manager[self])))
+            if self._columns:
+                ctx.sql(EnclosedNodeList([Entity(c) for c in self._columns]))
         else:
             ctx.sql(Entity(ctx.alias_manager[self]))
-
         return ctx
 
 
@@ -2005,6 +1998,9 @@ class SelectQuery(Query):
     __ror__ = __compound_select__('UNION', inverted=True)
     __rand__ = __compound_select__('INTERSECT', inverted=True)
     __rsub__ = __compound_select__('EXCEPT', inverted=True)
+
+    def cte(self, name, recursive=False, columns=None):
+        return CTE(name, self, recursive=recursive, columns=columns)
 
     def select_from(self, *columns):
         if not columns:
@@ -3668,9 +3664,6 @@ class PostgresqlDatabase(Database):
     def get_noop_select(self, ctx):
         return ctx.sql(Select().columns(SQL('0')).where(SQL('false')))
 
-    def set_time_zone(self, timezone):
-        self.execute_sql('set time zone "%s";' % timezone)
-
 
 class MySQLDatabase(Database):
     field_types = {
@@ -4426,10 +4419,7 @@ class BlobField(Field):
     field_type = 'BLOB'
 
     def _db_hook(self, database):
-        if database is None:
-            self._constructor = bytearray
-        else:
-            self._constructor = database.get_binary_type()
+        self._constructor = database.get_binary_type()
 
     def bind(self, model, name, set_attribute=True):
         self._constructor = bytearray
@@ -4705,34 +4695,17 @@ class TimestampField(BigIntegerField):
     valid_resolutions = [10**i for i in range(7)]
 
     def __init__(self, *args, **kwargs):
-        self.resolution = kwargs.pop('resolution', None)
-        if not self.resolution:
-            self.resolution = 1
-        elif self.resolution in range(7):
-            self.resolution = 10 ** self.resolution
-        elif self.resolution not in self.valid_resolutions:
+        self.resolution = kwargs.pop('resolution', 1) or 1
+        if self.resolution not in self.valid_resolutions:
             raise ValueError('TimestampField resolution must be one of: %s' %
                              ', '.join(str(i) for i in self.valid_resolutions))
 
         self.utc = kwargs.pop('utc', False) or False
-        dflt = datetime.datetime.utcnow if self.utc else datetime.datetime.now
-        kwargs.setdefault('default', dflt)
+        _dt = datetime.datetime
+        self._conv = _dt.utcfromtimestamp if self.utc else _dt.fromtimestamp
+        _default = _dt.utcnow if self.utc else _dt.now
+        kwargs.setdefault('default', _default)
         super(TimestampField, self).__init__(*args, **kwargs)
-
-    def local_to_utc(self, dt):
-        # Convert naive local datetime into naive UTC, e.g.:
-        # 2019-03-01T12:00:00 (local=US/Central) -> 2019-03-01T18:00:00.
-        # 2019-05-01T12:00:00 (local=US/Central) -> 2019-05-01T17:00:00.
-        # 2019-03-01T12:00:00 (local=UTC)        -> 2019-03-01T12:00:00.
-        return datetime.datetime(*time.gmtime(time.mktime(dt.timetuple()))[:6])
-
-    def utc_to_local(self, dt):
-        # Convert a naive UTC datetime into local time, e.g.:
-        # 2019-03-01T18:00:00 (local=US/Central) -> 2019-03-01T12:00:00.
-        # 2019-05-01T17:00:00 (local=US/Central) -> 2019-05-01T12:00:00.
-        # 2019-03-01T12:00:00 (local=UTC)        -> 2019-03-01T12:00:00.
-        ts = calendar.timegm(dt.utctimetuple())
-        return datetime.datetime.fromtimestamp(ts)
 
     def db_value(self, value):
         if value is None:
@@ -4746,13 +4719,11 @@ class TimestampField(BigIntegerField):
             return int(round(value * self.resolution))
 
         if self.utc:
-            # If utc-mode is on, then we assume all naive datetimes are in UTC.
             timestamp = calendar.timegm(value.utctimetuple())
         else:
             timestamp = time.mktime(value.timetuple())
-
+        timestamp += (value.microsecond * .000001)
         if self.resolution > 1:
-            timestamp += (value.microsecond * .000001)
             timestamp *= self.resolution
         return int(round(timestamp))
 
@@ -4762,17 +4733,9 @@ class TimestampField(BigIntegerField):
                 ticks_to_microsecond = 1000000 // self.resolution
                 value, ticks = divmod(value, self.resolution)
                 microseconds = int(ticks * ticks_to_microsecond)
+                return self._conv(value).replace(microsecond=microseconds)
             else:
-                microseconds = 0
-
-            if self.utc:
-                value = datetime.datetime.utcfromtimestamp(value)
-            else:
-                value = datetime.datetime.fromtimestamp(value)
-
-            if microseconds:
-                value = value.replace(microsecond=microseconds)
-
+                return self._conv(value)
         return value
 
 
@@ -5151,8 +5114,8 @@ class CompositeKey(MetaField):
         return hash((self.model.__name__, self.field_names))
 
     def __sql__(self, ctx):
-        return ctx.sql(EnclosedNodeList([self.model._meta.fields[field]
-                                         for field in self.field_names]))
+        return ctx.sql(CommaNodeList([self.model._meta.fields[field]
+                                      for field in self.field_names]))
 
     def bind(self, model, name, set_attribute=True):
         self.model = model
@@ -5989,10 +5952,6 @@ class Model(with_metaclass(ModelBase, Node)):
 
     @classmethod
     def bulk_update(cls, model_list, fields, batch_size=None):
-        if isinstance(cls._meta.primary_key, CompositeKey):
-            raise ValueError('bulk_update() is not supported for models with '
-                             'a composite primary key.')
-
         # First normalize list of fields so all are field instances.
         fields = [cls._meta.fields[f] if isinstance(f, basestring) else f
                   for f in fields]
@@ -6137,8 +6096,6 @@ class Model(with_metaclass(ModelBase, Node)):
                 return False
 
         self._populate_unsaved_relations(field_dict)
-        rows = 1
-
         if pk_value is not None and not force_insert:
             if self._meta.composite_key:
                 for pk_part_name in pk_field.field_names:
@@ -6146,14 +6103,15 @@ class Model(with_metaclass(ModelBase, Node)):
             else:
                 field_dict.pop(pk_field.name, None)
             rows = self.update(**field_dict).where(self._pk_expr()).execute()
-        elif pk_field is not None:
-            pk = self.insert(**field_dict).execute()
-            if pk is not None and (self._meta.auto_increment or
-                                   pk_value is None):
-                self._pk = pk
-        else:
+        elif pk_field is None or not self._meta.auto_increment:
             self.insert(**field_dict).execute()
-
+            rows = 1
+        else:
+            pk_from_cursor = self.insert(**field_dict).execute()
+            if pk_from_cursor is not None:
+                pk_value = pk_from_cursor
+            self._pk = pk_value
+            rows = 1
         self._dirty.clear()
         return rows
 

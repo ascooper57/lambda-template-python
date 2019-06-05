@@ -3,7 +3,8 @@ import datetime
 import logging
 
 from peewee import *
-from playhouse.pool import PostgresqlExtDatabase
+# from playhouse.pool import PostgresqlExtDatabase
+from playhouse.postgres_ext import *
 # noinspection PyUnresolvedReferences
 from playhouse.postgres_ext import BinaryJSONField
 
@@ -12,26 +13,16 @@ from ..config import get
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-
-def _db_with_hostname(host, dbname=None):
-    logger.info("database url:" + get('rdb.pg.database'))
-
-    if isinstance(host, PostgresqlExtDatabase):
-        return host
-    else:
-        return PostgresqlExtDatabase(
-            (dbname or get('rdb.pg.database')),
-            host=(host or None),
-            port=get('rdb.pg.port'),
-            user=(get('rdb.pg.username') or None),
-            password=(get('rdb.pg.password') or None),
-            sslmode=get('rdb.pg.sslmode'),
-            autocommit=True,
-            register_hstore=True)
-
-
 # global db pointer
-_db = _db_with_hostname(get('rdb.pg.host'))
+_db = PostgresqlExtDatabase(
+    (get('rdb.pg.database') or None),
+    host=(get('rdb.pg.host') or None),
+    port=get('rdb.pg.port'),
+    user=(get('rdb.pg.username') or None),
+    password=(get('rdb.pg.password') or None),
+    sslmode=get('rdb.pg.sslmode'),
+    autocommit=True,
+    register_hstore=True)
 
 
 @contextlib.contextmanager
