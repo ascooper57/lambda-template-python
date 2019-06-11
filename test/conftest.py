@@ -95,7 +95,7 @@ def really_delete_users():
                 response3 = requests.delete(url, params=event['queryStringParameters'])
         # except cognito_idp_client.exceptions.UserNotFoundException as ex:
         except Exception as ex:
-            logger.info(str(ex))
+            pass
 
 
 # noinspection PyUnusedLocal
