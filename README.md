@@ -105,6 +105,7 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
     ssh-add -L
     git clone https://github.com/praktikos/praktikos-python-rdb.git
     cd praktikos-python-rdb
+    pip3 install -r requirements.txt
 ```
 
 ### OPTIONAL: .env
@@ -112,8 +113,8 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 If you create an .env file at the root of the project, you can add the RDB_ENV= and it will overrdie the env variable.
 
 ```bash
-    cd praktikos-python-rdb
-    echo RDB_ENV=test > .env
+cd praktikos-python-rdb
+echo RDB_ENV=test > .env
 ```
 
 ## Start Postgres
@@ -121,48 +122,36 @@ If you create an .env file at the root of the project, you can add the RDB_ENV= 
 If you want to manually start and stop postgresql (installed via homebrew), the easiest way is:
 
 ```bash
-    rm /usr/local/var/postgres/postmaster.pid
-    brew services start postgresql
+rm /usr/local/var/postgres/postmaster.pid
+brew services start postgresql
 
 and
 
-    brew services stop postgresql
+brew services stop postgresql
 ```
 
 ## creating a new table in the production database
 
 ```bash
-    cd praktikos-python-rdb
+cd praktikos-python-rdb
 
-    RDB_ENV=test       ./cli.sh migrate
-    RDB_ENV=production ./cli.sh migrate
+RDB_ENV=test       ./cli.sh migrate
+RDB_ENV=production ./cli.sh migrate
 
-    Table should now be in production with the requesite test data in it.
+Table should now be in production with the requesite test data in it.
 ```
-
-### to run tests
-```bash
-    cd praktikos-python-rdb
-    
-To run an individual unit test
-    RDB_ENV=test py.test test/units/schema_test.py
-
-OR
-to run all unit tests
-    RDB_ENV=test py.test --verbose test
-```
-
 
 ### to run tests
 
 ```bash
-    cd praktikos-python-rdb
+cd praktikos-python-rdb
+pip3 install -r requirements.txt
 
 TO run a unit test
-    RDB_ENV=test py.test test/units/LambdaApiHealth_test.py
+RDB_ENV=test py.test test/units/LambdaApiHealth_test.py
 
 OR to run all unit tests
-    RDB_ENV=test py.test --verbose test
+RDB_ENV=test py.test --verbose test
 ```
 
 # RESTful API Code generation, provisioning and publication automation
@@ -171,7 +160,7 @@ OR to run all unit tests
 ## 1. Sign Up / Sign in
 
 ```bash
-    open https://client.praktikos.com
+open https://client.praktikos.com
 ```
 
 ## 2. Generate Code from example swagger file
