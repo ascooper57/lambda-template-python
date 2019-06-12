@@ -14,7 +14,7 @@ praktikos-python-rdb
 
 API Gateway implemented with Lambda, Cognito and RDS (Postgres)
 
-## Getting Started
+## Getting Started on Mac OS
 
 ```bash
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -165,151 +165,49 @@ OR to run all unit tests
     RDB_ENV=test py.test --verbose test
 ```
 
-# Extras
+# RESTful API Code generation, provisioning and publication automation
 
-## Optionally Setting up a Docker environment to update dependencies
-        
-```bash
-	brew install docker
-	docker --version
-	
-    cd praktikos-python-rdb
-    docker build -t praktikos-python-rdb .
-    docker images
-    docker ps
-    docker run -it -v `pwd`:/mnt --entrypoint=/bin/bash  praktikos-python-rdb
-    (you are automatically put into: /mnt )
-```
-```bash
-    namo ~/.aws/credentials
-        [default]
-        output = json
-        region = us-east-1
-        aws_access_key_id = ********************
-        aws_secret_access_key = ****************************************
-    ^o
-    ^x
-    (to run test suite:)
-    pip3 install -r requirements.txt 
-    /etc/init.d/postgresql restart
-    RDB_ENV=test py.test --verbose test
-```
-```bash
-    if you need to update python packages dependencies to be deployed with your lambda function(s)
-        open http://docs.aws.amazon.com/lambda/latest/dg/lambda-python-how-to-create-deployment-package.html
 
-    cd packages/python3.7
-    pip3 install psycopg2-binary --upgrade -t /mnt/packages/python3.7/
-    pip3 install peewee --upgrade -t /mnt/packages/python3.7/
-    pip3 install requests --upgrade -t /mnt/packages/python3.7/
-```
-
-#### Optionally Cleaning up a Docker environment
+## 1. Sign Up / Sign in
 
 ```bash
-   docker rmi $(docker images -q) --force
-   docker rm -v $(docker ps -qa)
+    open https://client.praktikos.com
 ```
 
-## Optionally View API via Swagger
+## 2. Generate Code from example swagger file
+
+   * In the browser window side panel, Click "Generate Code"
+   * Click in dashed line box "Drag SWAGGER JSON file here..."
+   * Navigate to the file: praktikos-python-rdb/example/swagger.json
+   * Click the "Next" button
+   * Click the "Finish" button after generated code is downloaded
+
+## 3. Merge generated code into main project
+
+open up a Terminal (shell) window
 
 ```bash
-    open https://chrome.google.com/webstore/detail/swagger-ui-console/ljlmonadebogfjabhkppkoohjkjclfai?hl=en
-    download and install into your Chrome browser: Swagger2Puml UI Console
-    Once installed into Chrome, Click the lime green button to the right of the URL input area 
-    In type in box, enter: https://###########.execute-api.us-east-1.amazonaws.com/v1/swagger
-    Click "explore" button
+cd praktikos-python-rdb/example
+./merge_after_codegen.sh
 ```
 
-## Optionally Generate a Plant UML representation of your API
+## 4. Publish API from newly generated code
 
-![excerpt of the petstore example](petstore_example/swagger.png)
+   * Zip up the main project (merged) ~/praktikos-python-rdb.zip
+   * In the browser window side panel, Click "Publish API"
+   * Click in dashed line box "Drag Zip file here..."
+   * Navigate to the file: praktikos-python-rdb.zip
+   * Click the "Next" button
+   * Click on "LambdaApiGenerated"
+   * Click the "Next" button
+   * wait patiently about a minute
+   * Click the "Finish" button after API is provisioned and published
+   
+## 5. Test RESTful API
 
-To create a diagram call the script with:
+open up a Terminal (shell) window
 
 ```bash
-    brew cask install java
-    java --version
-        java 10.0.2 2018-07-17
-        
-    brew install plantuml
-        plantuml -version
-        PlantUML version 1.2018.03 \(Thu Apr 05 09:59:15 PDT 2018\)
-
-    brew install graphviz
-        /usr/local/Cellar/graphviz/2.40.1
-        
-    brew install plantuml graphviz
-    plantuml -version
-    PlantUML version 1.2018.08 (Sun Jun 24 05:31:00 PDT 2018)
-    (GPL source distribution)
-    Java Runtime: Java(TM) SE Runtime Environment
-    JVM: Java HotSpot(TM) 64-Bit Server VM
-    Java Version: 1.8.0_71-b15
-    Operating System: Mac OS X
-    OS Version: 10.13.6
-    Default Encoding: UTF-8
-    Language: en
-    Country: US
-    Machine: Alan-Cooper-MBP-2.local
-    PLANTUML_LIMIT_SIZE: 4096
-    Processors: 8
-    Max Memory: 3,817,865,216
-    Total Memory: 257,425,408
-    Free Memory: 248,029,560
-    Used Memory: 9,395,848
-    Thread Active Count: 1
-
-    The environment variable GRAPHVIZ_DOT has been set to /usr/local/opt/graphviz/bin/dot
-    Dot executable is /usr/local/opt/graphviz/bin/dot
-    Dot version: dot - graphviz version 2.40.1 (20161225.0304)
-    Installation seems OK. File generation OK    
-    cd praktikos-python-rdb/api/rdb/utils
-    python swagger_2_puml.py endpoints/sample.json > sample.puml
+cd praktikos-python-rdb/example
+./test_published.sh
 ```
-
-It will create the file `sample.puml` which can then be translated into a PNG image with PlantUML with:
-
-
-```bash
-    open http://plantuml.com/starting
-    plantuml -help
-    plantuml code_gen/endpoints/sample.puml -tpng
-    plantuml code_gen/endpoints/sample.puml -ttxt
-```
-
-## Add PlantUML plugin to PyCharm
-
-```
-    Menu: PyCharm->Preferences->Plugins->PlantUML
-```
-
-# Debugging
-
-## Debugging API Gateway
-
-```bash
-    If you see this error message, you have envoked the endpoint with the incorrect hppt verb (GET/PUT/POST/DELETE)
-        HTTP/2 403 
-        content-type: application/json
-        content-length: 42
-        date: Sat, 27 Jan 2018 19:58:09 GMT
-        x-amzn-requestid: 65e9c202-039c-11e8-a263-3708ed51d1ef
-        x-amzn-errortype: MissingAuthenticationTokenException
-        x-cache: Error from cloudfront
-        via: 1.1 c7b4131244863241121573ea02fc44ad.cloudfront.net (CloudFront)
-        x-amz-cf-id: hSJGJ7JgPFGz3p5XZc4oFqo84Z9S09dYB9QZiHhmtnfkeJAJ0-GhKA==
-        
-     If you see any error messages Access-Control-Allow-Origin or anything CORS related, it is a red herring!
-     Check the CloudWatch logs for that endpoint for the actual error. 
-     
-     For example: https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logs:
-```
-
-## Debugging RDB / Postgres 
-
-```
-    If you see this error message, "current transaction is aborted, commands ignored until end of transaction block on PUT media"
-	It usually means that there is a mismatch between the swagger definition and the RDB table definition
-```
-    
