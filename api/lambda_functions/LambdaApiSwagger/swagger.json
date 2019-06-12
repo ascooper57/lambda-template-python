@@ -13,8 +13,8 @@
     "/swagger": {
       "x-lambda": "LambdaApiSwagger",
       "get": {
-        "summary": "Get the swagger representation of the RESTful API in JSON or YAML",
-        "description": "Get the swagger representation of the RESTful API in JSON or YAML",
+        "summary": "Get the swagger representation of the RESTful API in JSON",
+        "description": "Get the swagger representation of the RESTful API in JSON",
         "consumes": [
           "application/json"
         ],

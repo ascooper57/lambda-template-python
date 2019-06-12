@@ -4,7 +4,6 @@ import json
 
 import boto3
 import requests
-import yaml
 
 from api.rdb.config import is_test, is_production
 from api.rdb.utils.apigateway import get_api_url
@@ -23,12 +22,6 @@ def test():
         assert len(response1['body'])
         assert json.loads(response1['body'])
 
-        payload = {"httpMethod": "GET", "queryStringParameters": {"format": 'yaml'}}
-        # noinspection PyTypeChecker
-        response2 = invoke(fullpath, payload)
-        assert response2['statusCode'] == STATUS_OK
-        assert len(response2['body'])
-        assert yaml.load(response2['body'], Loader=yaml.SafeLoader)
 
     elif is_production():
         fullpath = get_lambda_fullpath("LambdaApiSwagger")
@@ -40,11 +33,3 @@ def test():
         assert json.loads(response3.text)
         with open("API.json", "w") as text_file:
             text_file.write(response3.text)
-
-        event['queryStringParameters']['format'] = "yaml"
-        response4 = requests.get(url, params=event['queryStringParameters'])
-        assert response4.status_code == STATUS_OK
-        assert len(response4.text)
-        assert yaml.load(response4.text, Loader=yaml.SafeLoader)
-        with open("API.yaml", "w") as text_file:
-            text_file.write(response4.text)
