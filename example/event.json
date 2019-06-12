@@ -1,0 +1,12 @@
+{
+  "httpMethod": "PUT",
+  "body": {
+    "index_key_example": 1,
+    "integer_example": 0,
+    "datetime_example": "2012-07-09T22:27:50+00:00",
+    "text_example": "Text",
+    "decimal_example": 0.0,
+    "boolean_example": true
+  }
+}
+

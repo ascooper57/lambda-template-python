@@ -1,0 +1,289 @@
+ {
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "API"
+  },
+  "host": "r1gzxipb32.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/generated": {
+      "x-lambda": "LambdaApiGenerated",
+      "x-rdb-model": "generated",
+      "get": {
+        "summary": "Get the data record fields",
+        "description": "Get the info",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "index_key_example",
+            "in": "query",
+            "description": "row number",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/GeneratedResponses"
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Update the data record fields",
+        "description": "Update fields in the database",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "GeneratedUpdateForm",
+            "description": "Update fields",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GeneratedUpdateForm"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/GeneratedResponse"
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Create the data record",
+        "description": "Create the data record",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "description": "",
+            "in": "body",
+            "name": "GeneratedForm",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GeneratedForm"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/GeneratedResponse"
+            }
+          }
+        }
+      "delete": {
+        "summary": "Delete the data record ",
+        "description": "Delete a data record by database id",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "The system assigned id for this row",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            }
+          }
+        }
+      },
+      "options": {
+        "summary": "Standard RestFUL API OPTIONS for prefetch",
+        "description": "Standard RestFUL API OPTIONS for prefetch",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema",
+      "description": "Empty Schema"
+    },
+    "GeneratedForm": {
+      "type": "object",
+      "required": [
+        "index_key_example"
+      ],
+      "properties": {
+        "index_key_example": {
+          "type": "integer",
+          "description": "Index key column example",
+          "x-rdb-type": "IntegerField",
+          "x-rdb-index": "index_key_example"
+        },
+        "integer_example": {
+          "type": "integer",
+          "description": "Integer column example",
+          "x-rdb-type": "IntegerField"
+        },
+        "datetime_example": {
+          "type": "string",
+          "description": "Datetime column example",
+          "x-rdb-type": "TextField"
+        },
+        "text_example": {
+          "type": "string",
+          "description": "Text column example",
+          "x-rdb-type": "TextField"
+        },
+        "decimal_example": {
+          "type": "number",
+          "description": "Decimal number column example",
+          "x-rdb-type": "DecimalField"
+        },
+        "boolean_example": {
+          "type": "boolean",
+          "description": "Boolean column example",
+          "x-rdb-type": "BooleanField"
+        }
+      },
+      "title": "GeneratedForm",
+      "description": "This is the data input json model and database table definition"
+    },
+    "GeneratedResponse": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "Integer autoincremented unique key column"
+        },
+        "index_key_example": {
+          "type": "integer",
+          "description": "Index Key column example"
+        },
+        "integer_example": {
+          "type": "integer",
+          "description": "Integer column example"
+        },
+        "datetime_example": {
+          "type": "string",
+          "description": "Datetime column example"
+        },
+        "text_example": {
+          "type": "string",
+          "description": "Text column example"
+        },
+        "decimal_example": {
+          "type": "number",
+          "description": "Decimal number column example"
+        },
+        "boolean_example": {
+          "type": "boolean",
+          "description": "Boolean column example"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "updated_at date time"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "created_at date time"
+        }
+      },
+      "title": "GeneratedResponse",
+      "description": "This is the data output json model"
+    },
+    "GeneratedUpdateForm": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "properties": {
+        "integer_example": {
+          "type": "integer",
+          "description": "Integer column example"
+        },
+        "datetime_example": {
+          "type": "string",
+          "description": "Date column example"
+        },
+        "text_example": {
+          "type": "string",
+          "description": "Text column example"
+        },
+        "decimal_example": {
+          "type": "number",
+          "description": "Decimal number column example"
+        },
+        "boolean_example": {
+          "type": "boolean",
+          "description": "Boolean column example"
+        }
+      },
+      "title": "GeneratedUpdateForm",
+      "description": "This is the data update json model"
+    },
+    "GeneratedResponses": {
+      "title": "GeneratedResponses",
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/GeneratedResponse"
+      }
+    }
+  }
+}
