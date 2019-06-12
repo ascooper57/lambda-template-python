@@ -211,3 +211,12 @@ open up a Terminal (shell) window
 cd praktikos-python-rdb/example
 ./test_published.sh
 ```
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b your_github_name-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Make sure to add tests for it. This is important so we don't break it in a future version unintentionally.
+5. Push to the branch (`git push origin my-new-feature`)
+6. Create new Pull Request
