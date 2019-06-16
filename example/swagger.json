@@ -1,4 +1,4 @@
- {
+{
   "swagger": "2.0",
   "info": {
     "version": "v1",
@@ -97,6 +97,7 @@
             }
           }
         }
+      },
       "delete": {
         "summary": "Delete the data record ",
         "description": "Delete a data record by database id",
