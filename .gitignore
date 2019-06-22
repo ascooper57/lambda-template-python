@@ -145,3 +145,4 @@ api/rdb/model/generated.py
 test/units/LambdaApiGenerated_test.py
 
 praktikos_python_rdb.egg-info/
+src/praktikos-configure-aws/

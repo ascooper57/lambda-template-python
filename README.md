@@ -130,7 +130,15 @@ and
 brew services stop postgresql
 ```
 
-## creating a new table in the production database
+## Configure your Amazon Web Service's account for Praktikos
+
+```bash
+cd pratikos-python-rdb
+pip3 install -r requirements.txt
+cd src/praktikos-configure-aws/aws
+./configure.py
+```
+## Creating a new table in the production database
 
 ```bash
 cd praktikos-python-rdb

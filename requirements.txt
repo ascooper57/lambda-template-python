@@ -20,3 +20,6 @@ pytest-gitignore>=1.3
 pytest-mock>=1.2
 
 -e.
+
+# praktikos packages
+-e git+git@github.com:praktikos/praktikos-configure-aws.git#egg=praktikos-configure-aws
