@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e
 
+[[ -e src ]] && rm -rf src > /dev/null 2>&1
+
 BUCKET=praktikos-template
 ZIP_FILE=/tmp/praktikos-python-rdb.zip
 echo "Sync content with S3 bucket ${BUCKET} start"
