@@ -109,9 +109,9 @@ class Config(object):
 
         self._read_config_files(h, prefix)
 
-        h = dict(((k, expand_value(v, self.environment)) for k, v in h[self.environment].items()))
-
-        self.config_values.update(h)
+        if self.environment in h:
+            h = dict(((k, expand_value(v, self.environment)) for k, v in h[self.environment].items()))
+            self.config_values.update(h)
 
     def _read_config_files(self, h, prefix=None):
         for path in candidate_files(self.module, self.environment, prefix):
