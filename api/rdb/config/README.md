@@ -48,7 +48,6 @@ config.init(module=sys.modules[__package__], dirs=['/also/look_here'])
 # inspect the environment
 print(config.environment())
 print(config.is_test())
-print(config.is_development())
 print(config.is_staging())
 print(config.is_production())
 

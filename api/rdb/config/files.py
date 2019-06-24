@@ -8,12 +8,12 @@ import re
 logger = logging.getLogger(__name__)
 
 
-def candidate_files(module, environment):
+def candidate_files(module, environment, prefix=None):
     """
     List of target files in increasing order of
     precedence.
     """
-    return _uniq(_candidate_files(module, environment))
+    return _uniq(_candidate_files(module, environment, prefix))
 
 
 # noinspection PyUnusedLocal
@@ -48,7 +48,7 @@ def read_file(path):
         if os.path.exists(path):
             # logger.debug("reading config from: %s" % path)
             with codecs.open(path, encoding="utf8") as fd:
-                if path.endswith('json'):
+                if path.endswith('.json'):
                     _update(json.load(fd))
     except FileNotFoundError:
         pass
@@ -60,11 +60,11 @@ def module_name(module):
     return module.__name__.split('.')[-1]
 
 
-def _candidate_files(module, environment):
+def _candidate_files(module, environment, prefix=None, pattern=None):
     home = _home()
 
     for d in candidate_directories(module):
-        for f in _candidate_basenames(module, environment, d):
+        for f in _candidate_basenames(module, environment, d, prefix, pattern):
             dot = '.' if d == home else ''
             yield os.path.join(d, dot + f + '.json')
 
@@ -86,9 +86,10 @@ def _candidate_basenames(module, environment, dirname, prefix=None, pattern=None
             prefixes = []
     else:
         prefixes = [module_name(module)]
-    for prefix in prefixes:
-        for suffix in ('', '_' + environment, '-' + environment):
-            yield prefix + suffix
+    return prefixes
+    # for prefix in prefixes:
+    #     for suffix in ('', '_' + environment, '-' + environment):
+    #         yield prefix + suffix
 
 
 def _home():

@@ -82,10 +82,6 @@ def is_test():
     return environment() == 'test'
 
 
-def is_development():
-    return environment() == 'development'
-
-
 def is_staging():
     return environment() == 'staging'
 

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # list of all valid environments
-_environments = ('test', 'development', 'staging', 'production')
+_environments = ('test', 'staging', 'production')
 
 
 def environments():

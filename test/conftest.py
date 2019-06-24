@@ -234,7 +234,7 @@ def empty_database(request, raw_database):
 
 @pytest.fixture(scope='function')
 def raw_database():
-    if is_test() and get('rdb.pg.database').endswith('test'):
+    if is_test() and get('database').endswith('test'):
         conn = psycopg2.connect(database='postgres')
         conn.set_isolation_level(0)
 
@@ -253,7 +253,7 @@ def raw_database():
 
 
 def _create_extensions():
-    conn = psycopg2.connect(database=get('rdb.pg.database'))
+    conn = psycopg2.connect(database=get('database'))
     conn.set_isolation_level(0)
 
     try:
@@ -264,19 +264,19 @@ def _create_extensions():
 
 
 def _drop_database(cursor):
-    if is_test() and get('rdb.pg.database').endswith('test'):
+    if is_test() and get('database').endswith('test'):
         try:
             # cursor.execute("SELECT * from pg_stat_activity;")
             # result = cursor.fetchall()
-            cursor.execute("DROP DATABASE %s" % get('rdb.pg.database'))
+            cursor.execute("DROP DATABASE %s" % get('database'))
         except Exception as ex:
             logger.error(str(ex))
 
 
 def _create_database(cursor):
-    if is_test() and get('rdb.pg.database').endswith('test'):
+    if is_test() and get('database').endswith('test'):
         try:
-            cursor.execute("CREATE DATABASE %s ENCODING 'UTF8'" % get('rdb.pg.database'))
+            cursor.execute("CREATE DATABASE %s ENCODING 'UTF8'" % get('database'))
 
         except psycopg2.ProgrammingError as ex:
             logger.error(str(ex))

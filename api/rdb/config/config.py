@@ -6,7 +6,7 @@ from api.rdb.utils.datetime import as_seconds
 from api.rdb.utils.size import as_size
 from .environment import environments
 from .exceptions import ConfigUnkownEnvError, ConfigKeyError, ConfigMissingKey
-from .files import candidate_files, candidate_directories, read_file
+from .files import candidate_files, read_file
 from .values import valid_key, expand_value
 
 
@@ -89,8 +89,8 @@ class Config(object):
 
         if self.environment not in environments():
             raise ConfigUnkownEnvError(self.environment)
-
-        self._read_configs()
+        config_dir = "config"
+        self._read_configs(config_dir)
 
     def get(self, key, default=None):
         return self.config_values.get(key, default)
@@ -104,24 +104,18 @@ class Config(object):
     def keys(self):
         return set(self.config_values.keys())
 
-    def _read_configs(self):
+    def _read_configs(self, prefix=None):
         h = {}
 
-        self._read_config_files(h)
+        self._read_config_files(h, prefix)
 
-        h = dict(((k, expand_value(v, self.environment)) for k, v in h.items()))
+        h = dict(((k, expand_value(v, self.environment)) for k, v in h[self.environment].items()))
 
         self.config_values.update(h)
 
-    def _read_config_files(self, h):
-        for path in self._candidate_files():
+    def _read_config_files(self, h, prefix=None):
+        for path in candidate_files(self.module, self.environment, prefix):
             _h = read_file(path)
             if _h:
                 h.update(_h)
         return h
-
-    def _candidate_files(self):
-        return candidate_files(self.module, self.environment)
-
-    def _candidate_directories(self):
-        return candidate_directories(self.module)

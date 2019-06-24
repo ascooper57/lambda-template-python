@@ -3,8 +3,7 @@ import datetime
 import logging
 
 from peewee import *
-# from playhouse.pool import PostgresqlExtDatabase
-from playhouse.postgres_ext import *
+from playhouse.pool import PostgresqlExtDatabase
 # noinspection PyUnresolvedReferences
 from playhouse.postgres_ext import BinaryJSONField
 
@@ -15,12 +14,12 @@ logger.setLevel(logging.INFO)
 
 # global db pointer
 _db = PostgresqlExtDatabase(
-    (get('rdb.pg.database') or None),
-    host=(get('rdb.pg.host') or None),
-    port=get('rdb.pg.port'),
-    user=(get('rdb.pg.username') or None),
-    password=(get('rdb.pg.password') or None),
-    sslmode=get('rdb.pg.sslmode'),
+    (get('database') or None),
+    host=(get('host') or None),
+    port=get('port'),
+    user=(get('username') or None),
+    password=(get('password') or None),
+    sslmode=get('sslmode'),
     autocommit=True,
     register_hstore=True)
 
