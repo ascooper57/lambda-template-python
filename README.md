@@ -24,21 +24,21 @@ API Gateway implemented with Lambda, Cognito and RDS (Postgres)
 
     brew install python3
     python3 --version 
-        Python 3.7.0
+        Python 3.7.4
         
     brew services stop postgresql
     brew uninstall -force postgresql
     rm -rf /usr/local/var/postgres
     
     brew install postgresql
+    brew postgresql-upgrade-database
     postgres --version
-        postgres \(PostgreSQL\) 9.6.5 
+        postgres \(PostgreSQL\) 11.4
             
     psql --version
-        psql (PostgreSQL) 11.2
+        psql (PostgreSQL) 11.4
 
     createdb praktikos_test -U `whoami`
-    psql -c 'CREATE DATABASE praktikos_test;' -U `whoami`
     psql -c 'CREATE EXTENSION hstore;' praktikos_test -U `whoami`
     Add a register_hstore parameter to PostgresqlExtDatabase.
     psql --host localhost praktikos_test
@@ -46,21 +46,12 @@ API Gateway implemented with Lambda, Cognito and RDS (Postgres)
                                      List of installed extensions
   	Name   | Version |   Schema   |                             Description                             
 	---------+---------+------------+---------------------------------------------------------------------
- 	hstore  | 1.4     | public     | data type for storing sets of (key, value) pairs
+ 	hstore  | 1.5     | public     | data type for storing sets of (key, value) pairs
  	plpgsql | 1.0     | pg_catalog | PL/pgSQL procedural language
                   
-    praktikos_test=# SELECT PostGIS_Version();
-            postgis_version            
-	---------------------------------------
- 	2.4 USE_GEOS=1 USE_PROJ=1 USE_STATS=1
-	(1 row)
-               
-    pip install -U pytest
+    pip3 install -U pytest
     py.test --version
-        This is pytest version 3.1.3, imported from /usr/local/lib/python3.6/site-packages/pytest.py
-            setuptools registered plugins:
-        pytest-pep8-1.0.6 at /usr/local/lib/python3.6/site-packages/pytest_pep8.py
-        pytest-cov-2.3.1 at /usr/local/lib/python3.6/site-packages/pytest_cov/plugin.py   
+	This is pytest version 5.0.1, imported from /usr/local/lib/python3.7/site-packages/pytest.py
 
     pgadmin4 https://www.postgresql.org/ftp/pgadmin/pgadmin4/v2.0/macos/  
 
