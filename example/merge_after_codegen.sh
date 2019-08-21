@@ -22,5 +22,5 @@ cp -pf ${CWD}/event.json api/lambda_functions/LambdaApiGenerated/event.json
 
 RDB_ENV=test py.test test/units/table_generated_test.py
 RDB_ENV=test py.test test/units/LambdaApiGenerated_test.py
-RDB_ENV=production py.test test/units/table_generated_test.py
+#RDB_ENV=production py.test test/units/table_generated_test.py
 echo RDB_ENV=test py.test --verbose test
