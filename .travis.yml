@@ -28,7 +28,6 @@ install:
 before_script:
   - psql -c 'CREATE DATABASE praktikos_test;' -U postgres
   - psql -c 'CREATE EXTENSION hstore;' praktikos_test -U postgres
-  - psql -c 'CREATE EXTENSION postgis;' praktikos_test -U postgres
 script:
   - py.test --verbose test
 after_script:
