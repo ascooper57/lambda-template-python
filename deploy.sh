@@ -13,7 +13,7 @@ aws s3 cp ${ZIP_FILE} s3://${BUCKET} --cache-control "public, max-age=31536000" 
 echo "Sync content with S3 bucket ${BUCKET} end"
 
 
-BUCKET=praktikos-media
+BUCKET=media-312293704956
 ZIP_FILE=0_TEST_PUBLISH_CODE.zip
 [[ -e ${ZIP_FILE} ]] && rm -f ${ZIP_FILE}
 zip -r -X ${ZIP_FILE} . --exclude deploy.sh *.git* *.idea* .DS_Store api/.DS_Store api/*/.DS_Store api/*/*/.DS_Store *__pycache__* *.pyc .gitignore .travis.yml API.json API.yaml Dockerfile ISSUE_TEMPLATE.md MANIFEST.in pytest.ini README.md requirements.txt setup.py tox.ini
