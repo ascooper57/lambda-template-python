@@ -42,7 +42,9 @@ def handler(request, context):
         name = context.function_name
         logger.info("Your backup" + name + " ran at " + str(current_time))
         s3_resource = boto3.resource('s3', region_name=get('aws_cognito_region'))
-        sts_client = boto3.client("sts")
+        logger.info("Got s3 client")
+        sts_client = boto3.client("sts", region_name=get('aws_cognito_region'))
+        logger.info("Got sts client")
         aws_account_id = sts_client.get_caller_identity()["Account"]
         duration = 0
         duration += backup_cognito(s3_resource, aws_account_id, current_date)
@@ -62,6 +64,7 @@ def handler(request, context):
 
 def backup_api_gateway(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
+    logger.info("backup apigateway ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-apigateway-%s" % aws_account_id
     s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
@@ -85,6 +88,7 @@ def backup_api_gateway(s3_resource, aws_account_id, current_date):
 
 def backup_cloudfront(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
+    logger.info("backup cloudfront ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-cloudfront-%s" % aws_account_id
     s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
@@ -105,6 +109,7 @@ def backup_cloudfront(s3_resource, aws_account_id, current_date):
 
 def backup_route53(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
+    logger.info("backup route53 ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-route53-%s" % aws_account_id
     s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
@@ -125,6 +130,7 @@ def backup_route53(s3_resource, aws_account_id, current_date):
 
 def backup_iam(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
+    logger.info("backup iam ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-iam-%s" % aws_account_id
     s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
@@ -169,6 +175,7 @@ def backup_iam(s3_resource, aws_account_id, current_date):
 
 def backup_cognito(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
+    logger.info("backup cognito ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-cognito-%s" % aws_account_id
     s3_resource.create_bucket(ACL='private', Bucket=bucket_name)

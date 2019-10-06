@@ -4,6 +4,7 @@
     {
       "Sid": "AllowGroupToPutObjectInBucket",
       "Action": [
+        "s3:*",
         "s3:GetObject",
         "s3:PutObject"
       ],
