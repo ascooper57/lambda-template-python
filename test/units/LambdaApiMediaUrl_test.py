@@ -31,8 +31,9 @@ def test_local(empty_database, fixture_directory, create_and_delete_user, create
         assert len(url)
         # headers = {'Content-Type': 'image/jpeg'}
         # https://stackoverflow.com/questions/8710456/reading-a-binary-file-with-python
-        with open(fixture_directory + "/logo.png", mode='rb') as file:  # b is important -> binary
+        with open(fixture_directory + "/image.jpeg", mode='rb') as file:  # b is important -> binary
             file_content = file.read()
+        # files = {"file": open(fixture_directory + "/image.jpeg", 'rb')}
         files = {"file": file_content}
         response3 = requests.put(url, files=files)
         assert response3.status_code == STATUS_OK or response3.status_code == STATUS_OK_NO_CONTENT
@@ -68,8 +69,9 @@ def test_local(empty_database, fixture_directory, create_and_delete_user, create
         assert len(media_uuid)
 
         # headers = {'Content-Type': 'image/jpeg'}
-        files = {"file": open(fixture_directory + "/logo.png", 'rb')}
+        files = {"file": open(fixture_directory + "/image.jpeg", 'rb')}
 
+        # response = requests.post(s3_url, data=fields, files=open(fixture_directory + "/image.jpeg", 'rb'))
         response7 = requests.put(s3_url, files=files)
         assert response7.status_code == STATUS_OK or response7.status_code == STATUS_OK_NO_CONTENT
 
@@ -82,6 +84,6 @@ def test_local(empty_database, fixture_directory, create_and_delete_user, create
         response9 = requests.get(data['url'])
         assert response9.status_code == STATUS_OK
 
-        url = get_api_url('API', '/v1', '/media')
+        url = get_api_url(boto3.client("apigateway"), 'API', '/v1', '/media')
         response9 = requests.delete(url, headers=event['headers'], params={"media_uuid": media_uuid})
         assert response9.status_code == STATUS_OK

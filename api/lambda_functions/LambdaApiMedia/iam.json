@@ -15,6 +15,18 @@
       "Resource": "arn:aws:rds:us-east-1:312293704956:db:praktikos-auora-us-east-1b"
     },
     {
+      "Sid": "AllowGroupToPutObjectInBucket",
+      "Action": [
+        "s3:*",
+        "s3:GetObject"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::media-*",
+        "arn:aws:s3:::media-*/*"
+      ]
+    },
+    {
       "Action": [
         "cognito-idp:ListUserPools"
       ],

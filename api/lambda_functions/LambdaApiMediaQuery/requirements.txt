@@ -5,7 +5,7 @@
 # ###################################
 
 # ###################################
-# pegged to praktikos-python-rdb/packages
+# pegged to praktikos-api/packages
 peewee==3.9.4
 psycopg2==2.8.2
 # ###################################

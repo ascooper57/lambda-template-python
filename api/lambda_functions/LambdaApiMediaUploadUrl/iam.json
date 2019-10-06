@@ -10,8 +10,8 @@
       ],
       "Effect": "Allow",
       "Resource": [
-        "arn:aws:s3:::praktikos-media",
-        "arn:aws:s3:::praktikos-media/*"
+        "arn:aws:s3:::media-*",
+        "arn:aws:s3:::media-*/*"
       ]
     },
     {

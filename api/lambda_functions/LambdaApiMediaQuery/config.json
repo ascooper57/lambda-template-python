@@ -9,6 +9,6 @@
     "RDB_LOG_LEVEL": "INFO"
   },
   "layers": [
-    "arn:aws:lambda:us-east-1:736686665353:layer:peewee-3_9_4:1"
+    "arn:aws:lambda:us-east-1:312293704956:layer:peewee-3_9_4:1"
   ]
 }
