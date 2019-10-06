@@ -38,7 +38,7 @@ def handler(request, context):
     # noinspection PyPep8Naming,PyUnusedLocal
     def http_get(request_params, request_body):
         # type: (dict, dict) -> dict
-        from api.rdb.model.database_migration import DatabaseMigration
+        from api.rdb.model.table_database_migration import DatabaseMigration
         with DatabaseMigration.atomic():
             database_migration = DatabaseMigration.select().limit(1)
             return {"health": 'OK'}

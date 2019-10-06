@@ -1,0 +1,92 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "API"
+  },
+  "host": "as2edhw8s7.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/media/downloadurl": {
+      "x-lambda": "LambdaApiMediaDownloadUrl",
+      "get": {
+        "summary": "Get a quickly expiring URL to download media",
+        "description": "Get a quickly expiring URL to download media",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "media_uuid",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/MediaDownloadUrlResponse"
+            }
+          }
+        },
+        "x-security": [
+          {
+            "praktikos": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema",
+      "description": "Empty Schema"
+    },
+    "MediaDownloadUrlResponse": {
+      "type": "object",
+      "required": [
+        "url"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "The media download url"
+        }
+      },
+      "title": "MediaDownloadUrlResponse"
+    }
+  }
+}

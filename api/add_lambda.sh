@@ -56,13 +56,17 @@ echo "************************"
 echo "Creating iam role $role end"
 
 # Create Lambda function
-echo "Updating function $f begin..."
-zip -r /tmp/${LAMBDA}.zip *
-# cd ${CWD}/../packages/${RUNTIME}
-# zip -ur /tmp/${LAMBDA}.zip *
-cd ${CWD}
-[[ ${RUNTIME} == python* ]] && zip -ur /tmp/${LAMBDA}.zip rdb
-cd ${CWD}/lambda_functions/${LAMBDA}
+[[ -f /tmp/${LAMBDA}.zip ]] && rm -f /tmp/${LAMBDA}.zip
+echo "Zipping folder ${LAMBDA}..."
+zip -r /tmp/${LAMBDA}.zip * -x .DS_Store -x config.json -x event.json -x iam.json -x requirements.txt -x API.*
+cd ${ROOT}/../packages/${RUNTIME}/
+echo `pwd`
+zip -ur /tmp/${LAMBDA}.zip * -x "*.DS_Store"
+cd ${ROOT}/..
+echo `pwd`
+[[ ${RUNTIME} == python* ]] && zip -ur /tmp/${LAMBDA}.zip api/rdb -x "*.DS_Store"
+
+cd ${ROOT}/lambda_functions/${LAMBDA}
 sleep 5 # To avoid errors
 echo "************************"
 pwd

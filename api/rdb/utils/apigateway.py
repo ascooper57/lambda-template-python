@@ -2,14 +2,17 @@
 
 import logging
 
+from api.rdb.config import get
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
 def get_api_url(apigateway_client, rest_api_name, stage, endpoint):
     # type: ('boto3.client("apigateway")', str, str, str) -> str
-    return 'https://%s.execute-api.us-east-1.amazonaws.com%s%s' % (
+    return 'https://%s.execute-api.%s.amazonaws.com%s%s' % (
         get_rest_api_id(apigateway_client, rest_api_name),
+        get('aws_cognito_region'),
         stage,
         endpoint
     )
@@ -31,5 +34,5 @@ def get_rest_api_id(apigateway_client, rest_api_name):
     # logger.info("response=" + str(response))
     for item in response['items']:
         if item['name'] == rest_api_name:
-            rest_api_id = item['id']  # 'r1gzxipb32'
+            rest_api_id = item['id']  # 'as2edhw8s7'
     return rest_api_id

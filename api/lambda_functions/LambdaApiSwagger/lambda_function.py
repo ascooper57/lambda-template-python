@@ -49,7 +49,7 @@ def handler(request, context):
         # https://console.aws.amazon.com/apigateway/home?region=us-east-1#/apis
         for item in response['items']:
             if item['name'].lower() == "API".lower():
-                rest_api_id = item['id']  # 'r1gzxipb32'
+                rest_api_id = item['id']  # 'as2edhw8s7'
         logger.info("rest api id=%s" % rest_api_id)
         response = apigateway_client.get_export(
             restApiId=rest_api_id,

@@ -4,6 +4,7 @@ from os import getcwd
 
 import boto3
 
+from api.rdb.config import get
 from api.rdb.utils.lambda_logger import lambda_logger
 from api.rdb.utils.service_framework import handle_request
 
@@ -45,7 +46,7 @@ def handler(request, context):
     def http_get(request_params, request_body):
         # type: (dict, dict) -> dict
         logger.info("http_get")
-        response = cognito_idp_client.list_users(UserPoolId=request_params['cognito_user_pool_id'])
+        response = cognito_idp_client.list_users(UserPoolId=get('aws_user_pools_id'))
         return response['Users']
 
     return handle_request(request, context, http_get=http_get)

@@ -19,7 +19,7 @@ def test(empty_database, create_and_delete_user, create_login_session):
     if is_test():
         fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
         event = get_lambda_test_data(fullpath)
-        # Read user tester1@praktikos.com
+        # Read user TESTER1
         payload = {"httpMethod": "GET", "queryStringParameters": event['body']}
         # noinspection PyTypeChecker
         response1 = invoke(fullpath, payload)
@@ -27,7 +27,6 @@ def test(empty_database, create_and_delete_user, create_login_session):
         assert len(response1['body'])
         response_data = json.loads(response1['body'])
         assert response_data['Username']
-        validate_uuid4(response_data['Username'])
         username = response_data['Username']
         assert 'UserAttributes' in response_data
         # TODO: iterate through UserAttributes list and verify given_name and family_name
@@ -39,7 +38,7 @@ def test(empty_database, create_and_delete_user, create_login_session):
         assert 'Enabled' in response_data
         assert 'UserStatus' in response_data
 
-        # Update user tester1@praktikos.com
+        # Update user TESTER1
         event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN)
         event['body'].pop('password', None)
         event['body'].pop('newpassword', None)
@@ -51,14 +50,13 @@ def test(empty_database, create_and_delete_user, create_login_session):
         assert len(response2['body'])
         response_data = json.loads(response2['body'])
         assert response_data['Username']
-        validate_uuid4(response_data['Username'])
         assert 'UserCreateDate' in response_data
         assert 'UserLastModifiedDate' in response_data
         assert 'Enabled' in response_data
         assert 'UserStatus' in response_data
 
         # Get errors
-        event['body']['email'] = "x@praktikos.com"
+        event['body']['username'] = "02347y23ijrkiuvc97dyvl4kjnvohv937fv3oijvn3o8uh91287dy"
         payload = {"httpMethod": "GET", "queryStringParameters": event['body']}
         response4 = invoke(fullpath, payload)
         assert response4['statusCode'] == STATUS_BAD_REQUEST

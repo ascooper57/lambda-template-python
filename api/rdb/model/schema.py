@@ -4,10 +4,10 @@ import logging
 from peewee import *
 from playhouse.migrate import PostgresqlMigrator, migrate
 
-from .database_migration import DatabaseMigration
 # noinspection PyProtectedMember
 from .db import BaseModel, _db
 from .model_list import get_model_list
+from .table_database_migration import DatabaseMigration
 
 # from playhouse.postgres_ext import TSVectorField
 

@@ -1,0 +1,11 @@
+[
+  "arn:aws:iam::aws:policy/IAMFullAccess",
+  "arn:aws:iam::aws:policy/AmazonCognitoPowerUser",
+  "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator",
+  "arn:aws:iam::aws:policy/AmazonS3FullAccess",
+  "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
+  "arn:aws:iam::aws:policy/AWSLambdaFullAccess",
+  "arn:aws:iam::aws:policy/service-role/AWSLambdaRole",
+  "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+  "arn:aws:iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs"
+]

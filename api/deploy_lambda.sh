@@ -18,6 +18,7 @@ ROOT=`pwd`
 find . -name __pycache__ -type d -exec rm -rf {} \; >> /dev/null 2>&1 
 
 # Read other configuration from rdb/config/config.json
+AWS_ACCOUNT_ID=$((RDB_ENV=test python3 ${ROOT}/cli.py config ${LAMBDA} account_id) 2>&1)
 REGION=$((RDB_ENV=test python3 ${ROOT}/cli.py config ${LAMBDA} region) 2>&1)
 RUNTIME=$((RDB_ENV=test python3 ${ROOT}/cli.py config ${LAMBDA} runtime) 2>&1)
 
@@ -34,6 +35,7 @@ echo `pwd`
 zip -ur /tmp/${LAMBDA}.zip * -x "*.DS_Store"
 cd ${ROOT}/..
 echo `pwd`
+zip -ur /tmp/${LAMBDA}.zip api/config.json
 [[ ${RUNTIME} == python* ]] && zip -ur /tmp/${LAMBDA}.zip api/rdb -x "*.DS_Store"
 
 echo "Updating function ${LAMBDA} begin..."

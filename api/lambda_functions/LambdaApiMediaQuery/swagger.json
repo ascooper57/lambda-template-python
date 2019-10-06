@@ -1,0 +1,137 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "API"
+  },
+  "host": "as2edhw8s7.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/media/query": {
+      "x-lambda": "LambdaApiMediaQuery",
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "MediaQueryForm",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MediaQueryForm"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/MediaQueryResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "x-security": [
+          {
+            "praktikos": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema",
+      "description": "Empty Schema"
+    },
+    "MediaQueryForm": {
+      "type": "object",
+      "required": [
+        "username"
+      ],
+      "properties": {
+        "username": {
+          "type": "string",
+          "description": "Username of the owner of the media"
+        },
+        "activity": {
+          "type": "string",
+          "description": "Type of activity",
+          "enum": [
+            "Fishing",
+            "Hunting",
+            "Viewing"
+          ]
+        },
+        "subject": {
+          "type": "string",
+          "description": "Media subject type",
+          "enum": [
+            "Property",
+            "Lodge",
+            "Person",
+            "Animal",
+            "Other"
+          ]
+        },
+        "tags": {
+          "type": "object",
+          "description": "key value search",
+          "properties": {}
+        },
+        "likes": {
+          "type": "integer",
+          "description": "Minimum number of likes"
+        }
+      },
+      "title": "MediaQueryForm"
+    },
+    "MediaQueryResponse": {
+      "title": "MediaQueryResponse",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "description": "Url pointing to the S3 bucket with the media"
+      }
+    }
+  }
+}

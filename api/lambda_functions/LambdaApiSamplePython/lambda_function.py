@@ -14,7 +14,7 @@ logger = lambda_logger(__name__, getcwd())
 # implement the http verb responses as needed
 # delete the rest and the arguments to handle_request
 def handler(request, context):
-    from api.rdb.model.sample import Sample
+    from api.rdb.model.table_sample import Sample
 
     # noinspection PyPep8Naming, PyUnusedLocal
     def http_get(request_params, request_body):

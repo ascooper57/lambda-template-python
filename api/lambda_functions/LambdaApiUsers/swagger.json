@@ -4,7 +4,7 @@
     "version": "v1",
     "title": "API"
   },
-  "host": "r1gzxipb32.execute-api.us-east-1.amazonaws.com",
+  "host": "as2edhw8s7.execute-api.us-east-1.amazonaws.com",
   "basePath": "/v1",
   "schemes": [
     "https"

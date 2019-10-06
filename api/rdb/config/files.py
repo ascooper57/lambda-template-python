@@ -8,12 +8,12 @@ import re
 logger = logging.getLogger(__name__)
 
 
-def candidate_files(module, environment, prefix=None):
+def candidate_files(module, prefix=None):
     """
     List of target files in increasing order of
     precedence.
     """
-    return _uniq(_candidate_files(module, environment, prefix))
+    return _uniq(_candidate_files(module, prefix))
 
 
 # noinspection PyUnusedLocal
@@ -26,9 +26,11 @@ def candidate_directories(module):
     module_base_path = os.path.dirname(module.__file__)
     # the config directory in that dir
     module_path = os.path.join(module_base_path, 'config')
+    api_path = os.path.abspath(os.path.join(module_base_path, ".."))
 
     # the order is important - this detemines precedence (later is higher)
     return [
+        api_path,
         module_path,
         _cwd_path()
     ]
@@ -60,16 +62,16 @@ def module_name(module):
     return module.__name__.split('.')[-1]
 
 
-def _candidate_files(module, environment, prefix=None, pattern=None):
+def _candidate_files(module, prefix=None, pattern=None):
     home = _home()
 
     for d in candidate_directories(module):
-        for f in _candidate_basenames(module, environment, d, prefix, pattern):
+        for f in _candidate_basenames(module, d, prefix, pattern):
             dot = '.' if d == home else ''
             yield os.path.join(d, dot + f + '.json')
 
 
-def _candidate_basenames(module, environment, dirname, prefix=None, pattern=None):
+def _candidate_basenames(module, dirname, prefix=None, pattern=None):
     if prefix:
         prefixes = [prefix]
     elif pattern:
@@ -87,9 +89,6 @@ def _candidate_basenames(module, environment, dirname, prefix=None, pattern=None
     else:
         prefixes = [module_name(module)]
     return prefixes
-    # for prefix in prefixes:
-    #     for suffix in ('', '_' + environment, '-' + environment):
-    #         yield prefix + suffix
 
 
 def _home():

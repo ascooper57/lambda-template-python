@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 ARRAY=()
 # get list of Lambda functions
 pushd lambda_functions

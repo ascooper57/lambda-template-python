@@ -1,0 +1,101 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "API"
+  },
+  "host": "as2edhw8s7.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/media/uploadurl": {
+      "x-lambda": "LambdaApiMediaUploadUrl",
+      "get": {
+        "summary": "Get a quickly expiring URL to uploading media",
+        "description": "Get a quickly expiring URL to uploading media",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/MediaUploadUrlResponse"
+            }
+          }
+        },
+        "x-security": [
+          {
+            "praktikos": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema",
+      "description": "Empty Schema"
+    },
+    "MediaUploadUrlResponse": {
+      "type": "object",
+      "properties": {
+        "post": {
+          "type": "object",
+          "description": "url and the data to put into the post",
+          "properties": {
+            "url": {
+              "type": "string",
+              "description": "url to call to upload media"
+            },
+            "fields": {
+              "type": "object",
+              "description": "{'acl': 'public-read','key': 'mykey', 'signature': 'mysignature', 'policy': 'mybase64 encoded policy'}",
+              "properties": {}
+            }
+          }
+        },
+        "media_uuid": {
+          "type": "string",
+          "description": "The uuid that must be put into the media metadata - it is the key to the media in the S3 bucket"
+        }
+      },
+      "title": "MediaUploadUrlResponse"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "httpMethod": "PUT",
+  "body": {
+    "username": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    "tags": {
+      "species": "Whitetail",
+      "size": "10 point"
+    },
+    "likes": 2,
+    "description": "Animal"
+  }
+}
+

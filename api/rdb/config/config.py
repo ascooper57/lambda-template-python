@@ -109,12 +109,20 @@ class Config(object):
 
         self._read_config_files(h, prefix)
 
+        filtered = dict()
         if self.environment in h:
-            h = dict(((k, expand_value(v, self.environment)) for k, v in h[self.environment].items()))
-            self.config_values.update(h)
+            for k, v in h.items():
+                if not isinstance(v, dict):
+                    filtered[k] = v
+            for k, v in h[self.environment].items():
+                filtered[k] = expand_value(v, self.environment)
+            # h = dict(((k, expand_value(v, self.environment)) for k, v in h[self.environment].items()))
+            self.config_values.update(filtered)
+
+            print(str(self.config_values))
 
     def _read_config_files(self, h, prefix=None):
-        for path in candidate_files(self.module, self.environment, prefix):
+        for path in candidate_files(self.module, prefix):
             _h = read_file(path)
             if _h:
                 h.update(_h)

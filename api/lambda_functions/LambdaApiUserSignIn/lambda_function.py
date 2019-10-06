@@ -4,7 +4,8 @@ from os import getcwd
 
 import boto3
 
-from api.rdb.utils.cognito import get_cognito_username_id, get_cognito_app_client_id
+from api.rdb.config import get
+from api.rdb.utils.cognito import get_cognito_app_client_id
 from api.rdb.utils.lambda_logger import lambda_logger
 from api.rdb.utils.service_framework import handle_request
 
@@ -49,17 +50,14 @@ def handler(request, context):
     # noinspection PyPep8Naming,PyUnusedLocal
     def http_post(request_params, request_body):
         # type: (dict, dict) -> dict
-        logger.info('http_post email=' + request_body['email'])
-        username = get_cognito_username_id(cognito_idp_client,
-                                           request_body['email'],
-                                           request_body['cognito_user_pool_id'])
+        logger.info('http_post username=' + request_body['username'])
         cognito_app_client_id = get_cognito_app_client_id(cognito_idp_client,
-                                                          cognito_user_pool_id=request_body['cognito_user_pool_id'])
+                                                          cognito_user_pool_id=get('aws_user_pools_id'))
 
         # ##############################################################################################################
         # IF Cognito user pool was created by Amplify or Manually, it may not have an auth flow that works via python
         response = cognito_idp_client.describe_user_pool_client(
-            UserPoolId=request_body['cognito_user_pool_id'],
+            UserPoolId=get('aws_user_pools_id'),
             ClientId=cognito_app_client_id
         )
         explicit_auth_flows = response['UserPoolClient']['ExplicitAuthFlows']
@@ -72,7 +70,7 @@ def handler(request, context):
         if explicit_auth_flows_count != len(explicit_auth_flows):
             # add new auth flows to cognito user pool
             response = cognito_idp_client.update_user_pool_client(
-                UserPoolId=request_body['cognito_user_pool_id'],
+                UserPoolId=get('aws_user_pools_id'),
                 ClientId=cognito_app_client_id,
                 ExplicitAuthFlows=[
                     'ADMIN_NO_SRP_AUTH',
@@ -85,7 +83,7 @@ def handler(request, context):
             ClientId=cognito_app_client_id,
             AuthFlow='USER_PASSWORD_AUTH',
             AuthParameters={
-                'USERNAME': username,
+                'USERNAME': request_body['username'],
                 'PASSWORD': request_body['password']
             }
         )

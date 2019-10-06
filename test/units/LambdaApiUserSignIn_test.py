@@ -58,12 +58,7 @@ def force_change_password():
     # new user, FORCE_CHANGE_PASSWORD required
     fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
     event = get_lambda_test_data(fullpath)
-    # Update user tester1@praktikos.com
-    cognito_idp_client = boto3.client('cognito-idp')
-    event['body']['username'] = get_cognito_username_id(cognito_idp_client,
-                                                        event['body']['email'],
-                                                        event['body']['cognito_user_pool_id'])
-    event['body'].pop('email', None)
+    # Update user TESTER1
     payload = {"httpMethod": "POST", "body": event['body']}
     response1 = invoke(fullpath, payload)
     assert response1['statusCode'] == STATUS_OK

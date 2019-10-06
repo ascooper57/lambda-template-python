@@ -1,0 +1,11 @@
+{
+  "region": "us-east-1",
+  "function_name": "LambdaApiGetMediaDownloadUrl",
+  "handler": "lambda_function.handler",
+  "description": "Upload file / media API",
+  "runtime": "python3.7",
+  "environment_variables": {
+    "RDB_ENV": "production",
+    "RDB_LOG_LEVEL": "INFO"
+  }
+}

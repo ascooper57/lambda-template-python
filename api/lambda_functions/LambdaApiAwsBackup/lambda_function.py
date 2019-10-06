@@ -6,6 +6,7 @@ from os import getcwd
 
 import boto3
 
+from api.rdb.config import get
 from api.rdb.utils.lambda_logger import lambda_logger
 from api.rdb.utils.service_framework import handle_request
 
@@ -40,7 +41,7 @@ def handler(request, context):
         current_date = str(current_time.strftime("%Y-%m-%d"))
         name = context.function_name
         logger.info("Your backup" + name + " ran at " + str(current_time))
-        s3_resource = boto3.resource('s3', region_name='us-east-1')
+        s3_resource = boto3.resource('s3', region_name=get('aws_cognito_region'))
         sts_client = boto3.client("sts")
         aws_account_id = sts_client.get_caller_identity()["Account"]
         duration = 0
@@ -63,9 +64,10 @@ def backup_api_gateway(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
     t0 = time.time()
     bucket_name = "backup-apigateway-%s" % aws_account_id
+    s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
     s3_bucket = s3_resource.Bucket(bucket_name)
     # http://boto3.readthedocs.io/en/latest/reference/services/apigateway.html#APIGateway.Client.get_export
-    api_gateway_client = boto3.client('apigateway', region_name='us-east-1')
+    api_gateway_client = boto3.client('apigateway', region_name=get('aws_cognito_region'))
     apis = api_gateway_client.get_rest_apis(limit=500)
     for api in apis['items']:
         stages = api_gateway_client.get_stages(restApiId=api['id'])
@@ -85,8 +87,9 @@ def backup_cloudfront(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
     t0 = time.time()
     bucket_name = "backup-cloudfront-%s" % aws_account_id
+    s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
     s3_bucket = s3_resource.Bucket(bucket_name)
-    cloudfront_client = boto3.client('cloudfront', region_name='us-east-1')
+    cloudfront_client = boto3.client('cloudfront', region_name=get('aws_cognito_region'))
     distributions = cloudfront_client.list_distributions()
     if 'Items' in distributions['DistributionList']:
         for item in distributions['DistributionList']['Items']:
@@ -104,6 +107,7 @@ def backup_route53(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
     t0 = time.time()
     bucket_name = "backup-route53-%s" % aws_account_id
+    s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
     s3_bucket = s3_resource.Bucket(bucket_name)
     route53_client = boto3.client('route53')
     hosted_zones = route53_client.list_hosted_zones()
@@ -123,6 +127,7 @@ def backup_iam(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
     t0 = time.time()
     bucket_name = "backup-iam-%s" % aws_account_id
+    s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
     s3_bucket = s3_resource.Bucket(bucket_name)
     iam_client = boto3.client('iam')
     user_dict = {}
@@ -150,8 +155,8 @@ def backup_iam(s3_resource, aws_account_id, current_date):
     s3_bucket.put_object(Key=current_date + '-group-policies-backup.json', Body=json.dumps(policies, indent=4))
 
     role_names = [
-        "Cognito_praktikosAuth_Role",
-        "Cognito_praktikosUnauth_Role"
+        "cognito71404f97_sns-role",
+        "cognito71404f97_userpoolclient_lambda_role"
     ]
 
     roles = []
@@ -166,6 +171,7 @@ def backup_cognito(s3_resource, aws_account_id, current_date):
     # type: ('boto3.client("s3")', str, str) -> float
     t0 = time.time()
     bucket_name = "backup-cognito-%s" % aws_account_id
+    s3_resource.create_bucket(ACL='private', Bucket=bucket_name)
     s3_bucket = s3_resource.Bucket(bucket_name)
     cognito_idp_client = boto3.client('cognito-idp')
     user_pools = cognito_idp_client.list_user_pools(

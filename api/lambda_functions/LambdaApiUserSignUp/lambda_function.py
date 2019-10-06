@@ -5,8 +5,8 @@ from time import sleep
 
 import boto3
 
-from api.rdb.config import is_test
-from api.rdb.utils.cognito import get_cognito_username_id, get_cognito_app_client_id, validate_uuid4
+from api.rdb.config import get, is_test
+from api.rdb.utils.cognito import get_cognito_app_client_id
 from api.rdb.utils.lambda_logger import lambda_logger
 from api.rdb.utils.service_framework import handle_request
 
@@ -23,7 +23,7 @@ def handler(request, context):
         # Don't Email when new user is provisioned in Cognito if is_test()
         message_action = 'SUPPRESS' if is_test() else 'RESEND'
         cognito_user = user_persist(cognito_idp_client,
-                                    request_body['cognito_user_pool_id'],
+                                    get('aws_user_pools_id'),
                                     request_body,
                                     True,
                                     ['EMAIL'],
@@ -34,7 +34,6 @@ def handler(request, context):
     def http_delete(request_params, request_body):
         # type: (dict, dict) -> dict
         logger.info("http_delete")
-        validate_uuid4(request_params['username'])
         if request_params and 'force' in request_params:
             logger.info(request_params['force'])
         # if test, delete the user
@@ -43,7 +42,7 @@ def handler(request, context):
         # disable user in Cognito
         if is_test() or "force" in request_params:
             try:
-                cognito_idp_client.admin_disable_user(UserPoolId=request_params['cognito_user_pool_id'],
+                cognito_idp_client.admin_disable_user(UserPoolId=get('aws_user_pools_id'),
                                                       Username=request_params['username'])
                 sleep(2)
             except cognito_idp_client.exceptions.UserNotFoundException as ex:
@@ -51,7 +50,7 @@ def handler(request, context):
 
         if is_test() or "force" in request_params:
             logger.info("Deleting user %s for real" % request_params['username'])
-            cognito_idp_client.admin_delete_user(UserPoolId=request_params['cognito_user_pool_id'],
+            cognito_idp_client.admin_delete_user(UserPoolId=get('aws_user_pools_id'),
                                                  Username=request_params['username'])
             logger.info("Deleted user from Cognito")
         return {}
@@ -60,32 +59,28 @@ def handler(request, context):
     def http_get(request_params, request_body):
         # type: (dict, dict) -> dict
         logger.info("http_get")
-        username = get_cognito_username_id(cognito_idp_client,
-                                           request_params['email'],
-                                           request_params['cognito_user_pool_id'])
-        cognito_user = cognito_idp_client.admin_get_user(UserPoolId=request_params['cognito_user_pool_id'],
-                                                         Username=username)
+        cognito_user = cognito_idp_client.admin_get_user(UserPoolId=get('aws_user_pools_id'),
+                                                         Username=request_params['username'])
         return remove_cruft(cognito_user)
 
     # noinspection PyPep8Naming,PyUnusedLocal
     def http_post(request_params, request_body):
         # type: (dict, dict) -> dict
         logger.info("http_post")
-        validate_uuid4(request_body['username'])
-        cognito_user = cognito_idp_client.admin_get_user(UserPoolId=request_body['cognito_user_pool_id'],
+        cognito_user = cognito_idp_client.admin_get_user(UserPoolId=get('aws_user_pools_id'),
                                                          Username=request_body['username'])
 
         if "cognito_user_pool_app_client_id" in request_body:
             cognito_app_client_id = request_body['cognito_user_pool_app_client_id']
         else:
             cognito_app_client_id = get_cognito_app_client_id(cognito_idp_client,
-                                                              cognito_user_pool_id=request_body['cognito_user_pool_id'])
+                                                              cognito_user_pool_id=get('aws_user_pools_id'))
 
         # TODO: enable ADMIN_NO_SRP_AUTH and USER_PASSWORD_AUTH auth flows
         if 'newpassword' in request_body:
             # noinspection PyBroadException
             auth_response = cognito_idp_client.admin_initiate_auth(
-                UserPoolId=request_body['cognito_user_pool_id'],
+                UserPoolId=get('aws_user_pools_id'),
                 AuthFlow='ADMIN_NO_SRP_AUTH',
                 AuthParameters={
                     'USERNAME': cognito_user['Username'],
@@ -119,24 +114,25 @@ def handler(request, context):
 # noinspection PyUnusedLocal
 def user_persist(cognito_idp_client, cognito_user_pool_id, request_body, email_verified, delivery_medium,
                  message_action):
-    import uuid
+    from api.rdb.model.table_user_profile import User_profile
 
     # noinspection PyBroadException
     try:
         # need this step after user successful login (means that they changed default password successfully
         cognito_user = cognito_idp_client.admin_get_user(UserPoolId=cognito_user_pool_id,
-                                                         Username=request_body['email'])
+                                                         Username=request_body['username'])
         if 'UserStatus' in cognito_user and cognito_user['UserStatus'] == 'FORCE_CHANGE_PASSWORD':
+            with User_profile.atomic():
+                User_profile.get_or_create(username=cognito_user['Username'])
             return cognito_user
     except cognito_idp_client.exceptions.UserNotFoundException as ex:
         pass
 
-    username = str(uuid.uuid4())
     if is_test():
         # Don't Email when new user is provisioned in Cognito
         cognito_user = cognito_idp_client.admin_create_user(
             UserPoolId=cognito_user_pool_id,
-            Username=username,
+            Username=request_body["username"],
             UserAttributes=[
                 {
                     'Name': 'email',
@@ -144,6 +140,14 @@ def user_persist(cognito_idp_client, cognito_user_pool_id, request_body, email_v
                 },
                 {
                     'Name': 'email_verified',
+                    'Value': 'True'
+                },
+                {
+                    'Name': 'phone_number',
+                    'Value': request_body["phone_number"]
+                },
+                {
+                    'Name': 'phone_number_verified',
                     'Value': 'True'
                 }
             ],
@@ -156,7 +160,7 @@ def user_persist(cognito_idp_client, cognito_user_pool_id, request_body, email_v
         # Send Email when new user is provisioned in Cognito with temp password
         cognito_user = cognito_idp_client.admin_create_user(
             UserPoolId=cognito_user_pool_id,
-            Username=username,
+            Username=request_body["username"],
             UserAttributes=[
                 {
                     'Name': 'email',
@@ -165,12 +169,25 @@ def user_persist(cognito_idp_client, cognito_user_pool_id, request_body, email_v
                 {
                     'Name': 'email_verified',
                     'Value': 'True'
+                },
+                {
+                    'Name': 'phone_number',
+                    'Value': request_body["phone_number"]
+                },
+                {
+                    'Name': 'phone_number_verified',
+                    'Value': 'True'
                 }
             ],
             TemporaryPassword=request_body["password"],
             ForceAliasCreation=email_verified,
             DesiredDeliveryMediums=delivery_medium
         )
+
+    with User_profile.atomic():
+        request_body = {'username': cognito_user['User']['Username']}
+        # user_profile = User_profile.create(**request_body)
+        User_profile.get_or_create(username=request_body['username'], defaults=request_body)
 
     return cognito_user['User']
 

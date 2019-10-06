@@ -1,0 +1,13 @@
+{
+  "httpMethod": "PUT",
+  "body": {
+    "username": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    "media_uuid": "0046d657-3fde-451d-9e50-ad51f6fd8236",
+    "tags": {
+      "species": "Whitetail",
+      "size": "10 point"
+    },
+    "likes": 3,
+    "description": "Animal"
+  }
+}

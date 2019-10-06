@@ -9,6 +9,7 @@ from boto3.session import Session
 
 from api.rdb.config import get, is_test, is_production
 from api.rdb.model import db_cursor, db_close, db_migrate
+from api.rdb.model.table_user_profile import User_profile
 from api.rdb.utils.apigateway import get_api_url
 from api.rdb.utils.cognito import get_cognito_username_id, get_cognito_user_pool_id
 from api.rdb.utils.service_framework import STATUS_OK, STATUS_BAD_REQUEST
@@ -22,8 +23,8 @@ logger.setLevel(logging.INFO)
 
 DELETE_AFTER_CREATE = True
 
-TESTER1 = "tester1@praktikos.com"
-TESTER2 = "tester2@praktikos.com"
+TESTER1 = "TESTER1"
+TESTER2 = "TESTER2"
 
 TESTERS = [TESTER1, TESTER2]
 
@@ -47,30 +48,73 @@ def get_secure_event(lambda_function, aws=False):
         event['body']['aws_account_id'] = aws_account_id
 
     if 'body' in event and 'username' in event['body']:
-        event['body']['username'] = get_cognito_username_id(cognito_idp_client,
-                                                            TESTER1,
-                                                            get_cognito_user_pool_id(cognito_idp_client,
-                                                                                     cognito_user_pool_name="cognito71404f97_userpool_71404f97"))
+        event['body']['username'] = TESTER1
+    if 'body' in event and 'recipient_username' in event['body']:
+        event['body']['recipient_username'] = get_cognito_username_id(cognito_idp_client,
+                                                                      TESTER1,
+                                                                      get_cognito_user_pool_id(cognito_idp_client))
+    if 'body' in event and 'blocked_username' in event['body']:
+        event['body']['blocked_username'] = get_cognito_username_id(cognito_idp_client,
+                                                                    TESTER2,
+                                                                    get_cognito_user_pool_id(cognito_idp_client))
+    if 'body' in event and 'from_username' in event['body']:
+        event['body']['from_username'] = get_cognito_username_id(cognito_idp_client,
+                                                                 TESTER2,
+                                                                 get_cognito_user_pool_id(cognito_idp_client))
+    if 'body' in event and 'to_username' in event['body']:
+        event['body']['to_username'] = get_cognito_username_id(cognito_idp_client,
+                                                               TESTER1,
+                                                               get_cognito_user_pool_id(cognito_idp_client))
     return event, fullpath
 
 
 def really_delete_users():
     # Unconditionally Delete testers
     for tester in TESTERS:
+        # local
+        # try:
+        #     event, fullpath = get_secure_event("LambdaApiUserSignUp")
+        #     event['body']['username'] = tester
+        #     event['httpMethod'] = 'GET'
+        #     response1 = invoke(fullpath, event)
+        #     if response1['statusCode'] == STATUS_OK:
+        #         response_data = json.loads(response1['body'])
+        #         payload = {"httpMethod": "DELETE",
+        #                    "queryStringParameters": {"username_id": response_data['username_id'],
+        #                                              "force": True}}
+        #         response2 = invoke(fullpath, payload)
+        #         assert response2  # "/user should return Status \"OK\"")
+        #         assert response2['statusCode'] == STATUS_OK
+        # except Exception as ex:
+        #     logger.info(str(ex))
+
+        # noinspection PyBroadException,PyUnusedLocal
+        try:
+            event, fullpath = get_secure_event("LambdaApiUserContact")
+            event['body']['username'] = tester
+            payload = {"httpMethod": "GET", "queryStringParameters": event['body']}
+            response2 = invoke(fullpath, payload)
+            if response2['statusCode'] == STATUS_OK:
+                response_data = json.loads(response2['body'])
+                assert 'TopicArn' in response_data
+                assert response_data['TopicArn'].startswith("arn:aws:sns:")
+                # noinspection PyShadowingBuiltins
+                payload = {"httpMethod": "DELETE", "queryStringParameters": {"topic_arn": response_data['TopicArn']}}
+                # noinspection PyTypeChecker
+                response3 = invoke(fullpath, payload)
+                assert response3['statusCode'] == STATUS_OK
+        except Exception as ex:
+            pass
+
         try:
             if is_test():
                 fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
                 event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN)
                 # noinspection PyTypeChecker
                 event['httpMethod'] = 'DELETE'
-                username = get_cognito_username_id(cognito_idp_client,
-                                                   tester,
-                                                   event['body']['cognito_user_pool_id'])
-
                 event['queryStringParameters'] = {
-                    'cognito_user_pool_id': event['body']['cognito_user_pool_id'],
                     'force': True,
-                    'username': username
+                    'username': tester
                 }
                 event.pop('body', None)
                 response2 = invoke(fullpath, event)
@@ -81,21 +125,16 @@ def really_delete_users():
                 fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
                 event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN)
                 event['httpMethod'] = 'DELETE'
-                username = get_cognito_username_id(cognito_idp_client,
-                                                   tester,
-                                                   event['body']['cognito_user_pool_id'])
-
                 event['queryStringParameters'] = {
-                    'cognito_user_pool_id': event['body']['cognito_user_pool_id'],
                     'force': True,
-                    'username': username
+                    'username': tester
                 }
                 url = get_api_url(apigateway_client, 'API', '/v1', '/user/signup')
                 # noinspection PyUnusedLocal
                 response3 = requests.delete(url, params=event['queryStringParameters'])
         # except cognito_idp_client.exceptions.UserNotFoundException as ex:
         except Exception as ex:
-            pass
+            logger.info(str(ex))
 
 
 # noinspection PyUnusedLocal
@@ -112,7 +151,7 @@ def create_users(delete_users):
         if is_test():
             fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
             event = get_lambda_test_data(fullpath)
-            event['body']['email'] = tester
+            event['body']['username'] = tester
             response = invoke(fullpath, event)
             assert response['body']
             body = json.loads(response['body'])
@@ -128,7 +167,7 @@ def create_users(delete_users):
         if is_production():
             # noinspection PyBroadException,PyUnusedLocal
             event = get_lambda_test_data(get_lambda_fullpath("LambdaApiUserSignUp"))
-            event['body']['email'] = tester
+            event['body']['username'] = tester
             url = get_api_url(apigateway_client, 'API', '/v1', '/user/signup')
             response = requests.put(url, headers=event['headers'], data=json.dumps(event['body']))
             response_data = json.loads(response.text)
@@ -139,20 +178,21 @@ def create_users(delete_users):
             else:
                 assert response.status_code == STATUS_OK
 
+        # update database
+        session = Session(region_name=get('aws_cognito_region'))
+        credentials = session.get_credentials()
 
-COGNITO_REGION = "COGNITO_REGION"
-COGNITO_USER_POOL_ID = "COGNITO_USER_POOL_ID"
-
-
-@pytest.fixture(scope="session")
-def cognito_settings():
-    cognito_user_pool_id = get_cognito_user_pool_id(cognito_idp_client,
-                                                    cognito_user_pool_name="cognito71404f97_userpool_71404f97")
-    return {
-        "cognito.region": 'us-east-1',
-        "cognito.userpool.id": cognito_user_pool_id
-    }
-
+        data = {
+            "username": tester,
+            "avatar": "00000000-0000-0000-0000-000000000000",
+            "given_name": "Tester1",
+            "family_name": "testerlicious"
+        }
+        # noinspection PyBroadException,PyUnusedLocal
+        with User_profile.atomic():
+            query = User_profile.update(**data).where(User_profile.username == tester)
+            count = query.execute()
+            assert count == 1
 
 # noinspection PyTypeChecker, noinspection PyBroadException
 @pytest.fixture(scope='function')
@@ -172,11 +212,6 @@ def create_login_session():
 
     # new user, FORCE_CHANGE_PASSWORD required
     event, fullpath = get_secure_event("LambdaApiUserSignUp")
-    username = get_cognito_username_id(cognito_idp_client,
-                                       event['body']['email'],
-                                       event['body']['cognito_user_pool_id'])
-    event['body']['username'] = username
-    event['body'].pop('email', None)
     # Update user tester1@praktikos.com
     payload = {"httpMethod": "POST", "body": event['body']}
     response1 = invoke(fullpath, payload)
@@ -192,6 +227,8 @@ def create_login_session():
 
     fullpath = get_lambda_fullpath("LambdaApiUserSignIn")
     event = get_lambda_test_data(fullpath)
+    # event['body']['username'] = username
+    # event['body'].pop('email', None)
     # https://github.com/nficano/python-lambda
     # noinspection PyTypeChecker
     response1 = invoke(fullpath, event)
@@ -209,6 +246,22 @@ def create_login_session():
     assert response_data["token_type"] == "Bearer"
     assert response_data["expires_in"] == 3600
     _ID_TOKEN = response_data['id_token']
+
+
+# noinspection PyTypeChecker, noinspection PyBroadException
+@pytest.fixture(scope='function')
+def create_user_contact(create_login_session):
+    fullpath = get_lambda_fullpath("LambdaApiUserContact")
+    event = get_lambda_test_data(fullpath, authorization_token=_ID_TOKEN)
+    payload = {"httpMethod": "PUT", "body": event['body']}
+    response1 = invoke(fullpath, payload)
+    assert response1['statusCode'] == STATUS_OK
+    body = response1['body']
+    assert body
+    data = json.loads(response1['body'])
+    assert data
+    assert 'topic_arn' in data
+    assert data['topic_arn'].startswith('arn:aws:sns')
 
 
 @pytest.fixture

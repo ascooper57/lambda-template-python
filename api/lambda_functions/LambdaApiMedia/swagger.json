@@ -1,0 +1,301 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "v1",
+    "title": "API"
+  },
+  "host": "as2edhw8s7.execute-api.us-east-1.amazonaws.com",
+  "basePath": "/v1",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/media": {
+      "x-lambda": "LambdaApiMedia",
+      "get": {
+        "summary": "GET operation for Media",
+        "description": "GET operation for Media",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "media_uuid",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/MediaResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "x-security": [
+          {
+            "praktikos": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "UPDATE operation for Media",
+        "description": "UPDATE operation for Media",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "MediaUpdateForm",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MediaUpdateForm"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/MediaResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "x-security": [
+          {
+            "praktikos": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "CREATE operation for Media",
+        "description": "CREATE operation for Media",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "MediaForm",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MediaForm"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/MediaResponse"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "x-security": [
+          {
+            "praktikos": []
+          }
+        ]
+      },
+      "delete": {
+        "summary": "DELETE operation for Media",
+        "description": "DELETE operation for Media",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "media_uuid",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "x-security": [
+          {
+            "praktikos": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/Empty"
+            },
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Empty": {
+      "type": "object",
+      "title": "Empty Schema",
+      "description": "Empty Schema"
+    },
+    "MediaForm": {
+      "type": "object",
+      "required": [
+        "username",
+        "media_uuid"
+      ],
+      "properties": {
+        "media_uuid": {
+          "type": "string",
+          "description": "Primary key - the uuid of the media stored in S3"
+        },
+        "username": {
+          "type": "string",
+          "description": "username of the owner of the media"
+        },
+        "tags": {
+          "type": "object",
+          "description": "Dictionary of key value pairs",
+          "properties": {}
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Place where media was shot: max_digits=9,decimal_places=6 "
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Place where media was shot: max_digits=9,decimal_places=6 "
+        },
+        "media_created": {
+          "type": "string",
+          "description": "Time when media was created in string form: 2017-10-05 10:55"
+        },
+        "likes": {
+          "type": "integer",
+          "description": "Number of likes"
+        }
+      },
+      "title": "MediaForm"
+    },
+    "MediaResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "description": "The system generated primary key of this row"
+        },
+        "media_uuid": {
+          "type": "string",
+          "description": "Primary key - the uuid of the media stored in S3"
+        },
+        "username": {
+          "type": "string",
+          "description": "username of the owner of the media"
+        },
+        "tags": {
+          "type": "object",
+          "description": "Dictionary of key value pairs",
+          "properties": {}
+        },
+        "latitude": {
+          "type": "number",
+          "description": "Place where media was shot: max_digits=9,decimal_places=6"
+        },
+        "longitude": {
+          "type": "number",
+          "description": "Place where media was shot: max_digits=9,decimal_places=6"
+        },
+        "likes": {
+          "type": "integer",
+          "description": "Number of likes for this piece of media"
+        },
+        "description": {
+          "type": "string",
+          "description": "Full text searchable description of the media"
+        },
+        "updated_at": {
+          "type": "string",
+          "description": "updated_at date time"
+        },
+        "created_at": {
+          "type": "string",
+          "description": "created_at date time"
+        }
+      },
+      "title": "MediaResponse"
+    },
+    "MediaUpdateForm": {
+      "type": "object",
+      "required": [
+        "media_uuid"
+      ],
+      "properties": {
+        "tags": {
+          "type": "object",
+          "description": "Dictionary of key value pairs",
+          "properties": {}
+        },
+        "likes": {
+          "type": "integer",
+          "description": "Number of likes for this piece of media"
+        },
+        "description": {
+          "type": "string",
+          "description": "Full text searchable description of the media"
+        }
+      },
+      "title": "MediaUpdateForm"
+    }
+  }
+}

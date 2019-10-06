@@ -1,0 +1,9 @@
+{
+  "httpMethod": "POST",
+  "body": {
+    "username": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    "avatar": "00000000-0000-0000-0000-000000000000",
+    "given_name": "Tester1",
+    "family_name": "testerlicious"
+  }
+}
