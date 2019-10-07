@@ -160,15 +160,20 @@ def backup_iam(s3_resource, aws_account_id, current_date):
         )})
     s3_bucket.put_object(Key=current_date + '-group-policies-backup.json', Body=json.dumps(policies, indent=4))
 
-    role_names = [
-        "cognito71404f97_sns-role",
-        "cognito71404f97_userpoolclient_lambda_role"
-    ]
-
-    roles = []
-    for role_name in role_names:
-        roles.append({role_name: iam_client.list_attached_role_policies(RoleName=role_name)})
-    s3_bucket.put_object(Key=current_date + '-roles-backup.json', Body=json.dumps(roles, indent=4))
+    role_policies = []
+    kwargs = {
+        'MaxItems': 10
+    }
+    while True:
+        response = iam_client.list_roles(**kwargs)
+        for role in response['Roles']:
+            role_policies.append({role['RoleName']: iam_client.list_attached_role_policies(RoleName=role['RoleName'])})
+        try:
+            kwargs['Marker'] = response['Marker']
+        except KeyError:
+            break
+    if len(role_policies):
+        s3_bucket.put_object(Key=current_date + '-roles-backup.json', Body=json.dumps(role_policies, indent=4))
     t1 = time.time()
     return t1 - t0
 
