@@ -46,7 +46,7 @@ echo "Updating function ${LAMBDA} end"
 
 # Create IAM Roles for Lambda Function
 echo "Updating role ${LAMBDA} begin..."
-aws iam update-assume-role-policy --role-name ${LAMBDA} --policy-document file://${ROOT}/lambda_functions/LambdaApiAwsPublishApi/trust_policy_lambda.json
+aws iam update-assume-role-policy --role-name ${LAMBDA} --policy-document file://${ROOT}/trust_policy_lambda.json
 aws iam put-role-policy --role-name ${LAMBDA} --policy-name ${LAMBDA} --policy-document file://${ROOT}/lambda_functions/${LAMBDA}/iam.json
 echo "Updating role ${LAMBDA} end"
 
