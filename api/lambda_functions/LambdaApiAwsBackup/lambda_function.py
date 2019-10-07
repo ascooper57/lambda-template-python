@@ -162,7 +162,7 @@ def backup_iam(s3_resource, aws_account_id, current_date):
 
     role_policies = []
     kwargs = {
-        'MaxItems': 10
+        'MaxItems': 100
     }
     while True:
         response = iam_client.list_roles(**kwargs)
