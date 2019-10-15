@@ -25,11 +25,11 @@
     "sslmode": "allow"
   },
   "production": {
-    "database": "praktikos_production",
-    "host": "",
+    "database": "praktikos",
+    "host": "praktikos-production-cluster.cluster-cj5b49o2kkrr.us-east-1.rds.amazonaws.com",
     "port": 5432,
     "username": "sa",
-    "password": "ChangeMe!",
+    "password": "LKqnsUIQ7h6FiXsu",
     "max_connections": 10000,
     "stale_timeout": 300,
     "sslmode": "allow"

@@ -1,0 +1,10 @@
+{
+  "httpMethod": "PUT",
+  "body": {
+    "from_username": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    "to_username": "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY",
+    "message": "This is a message",
+    "sns": false,
+    "cognito_user_pool_id": "us-east-1_a8nFeZaMd"
+  }
+}

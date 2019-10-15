@@ -1,0 +1,8 @@
+{
+  "httpMethod": "PUT",
+  "body": {
+    "username": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
+    "cognito_user_pool_id": "us-east-1_a8nFeZaMd",
+    "phone_number": "+15555555"
+  }
+}

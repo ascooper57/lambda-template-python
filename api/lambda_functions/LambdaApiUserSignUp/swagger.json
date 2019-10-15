@@ -217,6 +217,10 @@
         "password"
       ],
       "properties": {
+        "username": {
+          "type": "string",
+          "description": "User's de-identified name"
+        },
         "email": {
           "type": "string",
           "description": "User's (email address)"

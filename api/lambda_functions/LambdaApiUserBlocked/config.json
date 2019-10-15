@@ -1,0 +1,14 @@
+{
+  "region": "us-east-1",
+  "function_name": "LambdaApiUserBlocked",
+  "handler": "lambda_function.handler",
+  "description": "Block User from sending message to recipient API",
+  "runtime": "python3.7",
+  "environment_variables": {
+    "RDB_ENV": "production",
+    "RDB_LOG_LEVEL": "INFO"
+  },
+  "layers": [
+    "arn:aws:lambda:us-east-1:312293704956:layer:peewee-3_9_4:1"
+  ]
+}

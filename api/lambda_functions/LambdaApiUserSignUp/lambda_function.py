@@ -28,6 +28,8 @@ def handler(request, context):
                                     True,
                                     ['EMAIL'],
                                     message_action)
+        cognito_user = cognito_idp_client.admin_get_user(UserPoolId=get('aws_user_pools_id'),
+                                                         Username=cognito_user['Username'])
         return remove_cruft(cognito_user)
 
     # noinspection PyPep8Naming,PyUnusedLocal,PyBroadException
