@@ -5,7 +5,6 @@ from os import getcwd
 
 import boto3
 
-from api.rdb.utils.cognito import validate_uuid4
 from api.rdb.utils.lambda_logger import lambda_logger
 from api.rdb.utils.service_framework import handle_request
 from api.rdb.utils.sns import get_sns_attributes
@@ -56,8 +55,6 @@ def handler(request, context):
     def http_put(request_params, request_body):
         # type: (dict, dict) -> dict
         logger.info("http_put")
-        validate_uuid4(request_body['from_username'])
-        validate_uuid4(request_body['to_username'])
         sns_client = boto3.client('sns')
 
         topic_attributes = get_sns_attributes(sns_client, request_body['to_username'])

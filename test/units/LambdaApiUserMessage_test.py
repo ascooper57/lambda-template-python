@@ -12,7 +12,6 @@ from api.rdb.utils.service_framework import STATUS_OK
 from ..conftest import get_secure_event
 from ..utilities import invoke
 
-
 # noinspection PyUnusedLocal
 def test(empty_database, create_and_delete_user, create_login_session, create_user_contact):
     if is_test():

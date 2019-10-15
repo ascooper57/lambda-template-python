@@ -9,7 +9,6 @@ from peewee import DoesNotExist
 from api.rdb.utils.lambda_logger import lambda_logger
 from api.rdb.utils.service_framework import handle_request
 from api.rdb.model.table_user_profile import User_profile
-from api.rdb.utils.cognito import validate_uuid4
 
 logger = lambda_logger(__name__, getcwd())
 
@@ -56,8 +55,6 @@ def handler(request, context):
     def http_get(request_params, request_body):
         # type: (dict, dict) -> dict
         logger.info("http_get")
-        validate_uuid4(request_params['recipient_username'])
-        validate_uuid4(request_params['blocked_username'])
         cognito_idp_client = boto3.client('cognito-idp')
         recipient_user_profile = User_profile.get(User_profile.username == request_params['recipient_username'])
         blocked_user_profile = User_profile.get(User_profile.username == request_params['blocked_username'])
@@ -75,8 +72,6 @@ def handler(request, context):
     def http_put(request_params, request_body):
         # type: (dict, dict) -> dict
         logger.info("http_put")
-        validate_uuid4(request_body['recipient_username'])
-        validate_uuid4(request_body['blocked_username'])
         cognito_idp_client = boto3.client('cognito-idp')
         recipient_user_profile = User_profile.get(User_profile.username == request_body['recipient_username'])
         blocked_user_profile = User_profile.get(User_profile.username == request_body['blocked_username'])

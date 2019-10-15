@@ -11,7 +11,8 @@ def get_model_list():
     from .table_user_blocked import User_blocked
     from .table_user_message import User_message
     from .table_user_profile import User_profile
+    from .table_sample import Sample
 
     # Add new tables to front of list
     # INSERT new table classes to be inited here
-    return [User_blocked, User_message, Media, User_profile, DatabaseMigration]
+    return [Sample, User_blocked, User_message, Media, User_profile, DatabaseMigration]

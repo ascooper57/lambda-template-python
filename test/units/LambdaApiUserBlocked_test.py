@@ -7,7 +7,7 @@ import requests
 from api.rdb.config import is_test, is_production
 from api.rdb.utils.apigateway import get_api_url
 from ..utilities import invoke
-from api.rdb.utils.service_framework import STATUS_OK, STATUS_BAD_REQUEST
+from api.rdb.utils.service_framework import STATUS_OK, STATUS_BAD_REQUEST, STATUS_NOT_FOUND
 from ..conftest import get_secure_event
 
 
@@ -23,7 +23,6 @@ def test(empty_database, create_and_delete_user, create_login_session):
         payload = {"httpMethod": "GET",
                    "queryStringParameters": event['body']}
         response2 = invoke(fullpath, payload)
-        assert response2
         assert response2['statusCode'] == STATUS_OK
         response_data = json.loads(response2['body'])
         assert response_data['blocked']
@@ -38,11 +37,9 @@ def test(empty_database, create_and_delete_user, create_login_session):
                    "queryStringParameters": {"recipient_username": "x@y.com",
                                              "blocked_username": event['body']['blocked_username']}}
         response4 = invoke(fullpath, payload)
-        assert response4
-        assert response4['statusCode'] == STATUS_BAD_REQUEST
+        assert response4['statusCode'] == STATUS_NOT_FOUND
         response_data = json.loads(response4['body'])
-        assert response_data
-        assert response_data['Message'] == 'badly formed hexadecimal UUID string'
+        assert response_data['Message']
 
     elif is_production():
         event, fullpath = get_secure_event("LambdaApiUserBlocked")
@@ -63,7 +60,6 @@ def test(empty_database, create_and_delete_user, create_login_session):
         response8 = requests.get(url,
                                  headers=event['headers'],
                                  params=event['body'])
-        assert response8.status_code == STATUS_BAD_REQUEST
+        assert response8.status_code == STATUS_NOT_FOUND
         response_data = json.loads(response8.text)
         assert response_data
-        assert response_data['Message'] == 'badly formed hexadecimal UUID string'
