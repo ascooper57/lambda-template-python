@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-import boto3
 import json
+
+import boto3
 import requests
 
 from api.rdb.config import is_test, is_production
 from api.rdb.utils.apigateway import get_api_url
-from ..utilities import invoke
-from api.rdb.utils.service_framework import STATUS_OK, STATUS_BAD_REQUEST, STATUS_NOT_FOUND
+from api.rdb.utils.service_framework import STATUS_OK, STATUS_NOT_FOUND
 from ..conftest import get_secure_event
+from ..utilities import invoke
 
 
 # noinspection PyUnusedLocal

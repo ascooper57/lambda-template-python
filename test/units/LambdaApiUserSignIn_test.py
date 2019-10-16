@@ -7,7 +7,6 @@ import requests
 
 from api.rdb.config import is_test, is_production
 from api.rdb.utils.apigateway import get_api_url
-from api.rdb.utils.cognito import get_cognito_username_id
 from api.rdb.utils.service_framework import STATUS_OK
 from ..utilities import invoke, get_lambda_test_data, get_lambda_fullpath
 

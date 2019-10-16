@@ -94,12 +94,12 @@ def really_delete_users():
             if is_test():
                 response2 = invoke(fullpath, event)
                 assert response2  # "/user should return Status \"OK\"")
-                assert response2['statusCode'] == STATUS_OK
+                assert response2.status_code == STATUS_OK
             elif is_production():
                 url = get_api_url(apigateway_client, 'API', '/v1', '/user/signup')
                 # noinspection PyUnusedLocal
                 response3 = requests.delete(url, params=event['queryStringParameters'])
-                assert response3['statusCode'] != STATUS_FORBIDDEN
+                assert response3.status_code != STATUS_FORBIDDEN
 
         # except cognito_idp_client.exceptions.UserNotFoundException as ex:
         except Exception as ex:

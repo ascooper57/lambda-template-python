@@ -8,14 +8,12 @@ import requests
 from api.rdb.config import is_test, is_production
 from api.rdb.utils.apigateway import get_api_url
 from api.rdb.utils.service_framework import STATUS_OK, STATUS_BAD_REQUEST
-from ..conftest import get_secure_event
 from ..utilities import invoke, get_lambda_test_data, get_lambda_fullpath
 
 
 # noinspection PyUnusedLocal
 def test(empty_database, create_and_delete_user, create_login_session):
     from ..conftest import _ID_TOKEN
-    from api.rdb.utils.cognito import validate_uuid4
     if is_test():
         fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
         event = get_lambda_test_data(fullpath)
