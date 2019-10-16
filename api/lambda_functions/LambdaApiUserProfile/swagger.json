@@ -329,11 +329,11 @@
         },
         "given_name": {
           "type": "string",
-          "description": "User's First name",
+          "description": "User's First name"
         },
         "family_name": {
           "type": "string",
-          "description": "User's Last name",
+          "description": "User's Last name"
         },
         "address_line1": {
           "type": "string",
