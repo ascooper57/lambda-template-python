@@ -15,7 +15,7 @@ Debugging
 open up a Terminal (shell) window
 
 ```bash
-    If you see this error message, you have envoked the endpoint with the incorrect hppt verb (GET/PUT/POST/DELETE)
+    If you see this error message, you have invoked the endpoint with the incorrect http verb (GET/PUT/POST/DELETE)
         HTTP/2 403 
         content-type: application/json
         content-length: 42
@@ -32,6 +32,13 @@ open up a Terminal (shell) window
      For example: https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logs:
 cd praktikos-python-rdb/example
 ./test_published.sh
+```
+
+```
+    If you see this error message afteryou have invoked the endpoint with the http verb (GET/PUT/POST/DELETE)
+	HTTP/2 403 Invalid request body
+    you have invoked the verb GET/PUT/POST/DELETE with the incorrect data (parameters / body) that it was expecting.
+    In the swagger model, the "required" data is not present in the request or the lambda function's implementation is referencing data it did not receive in the request. 
 ```
 
 # Debugging RDB / Postgres 

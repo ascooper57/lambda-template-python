@@ -73,7 +73,8 @@ def test(empty_database, create_and_delete_user, create_login_session):
         # assert response_data['Message'] == 'Param ["username"] is not valid'
 
     elif is_production():
-        event, fullpath = get_secure_event("LambdaApiUserSignUp")
+        fullpath = get_lambda_fullpath("LambdaApiUserSignUp")
+        event = get_lambda_test_data(fullpath)
         url = get_api_url(boto3.client("apigateway"), 'API', '/v1', '/user/signup')
         response6 = requests.get(url, params=event['body'])
         assert response6.status_code == STATUS_OK

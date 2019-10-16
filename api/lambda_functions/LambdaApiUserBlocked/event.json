@@ -2,7 +2,6 @@
   "httpMethod": "PUT",
   "body": {
     "recipient_username": "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-    "blocked_username":   "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY",
-    "cognito_user_pool_id": "us-east-1_a8nFeZaMd"
+    "blocked_username":   "YYYYYYYY-YYYY-YYYY-YYYY-YYYYYYYYYYYY"
   }
 }
