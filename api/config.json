@@ -1,9 +1,9 @@
 {
-  "aws_cognito_identity_pool_id": "us-east-1:f389cca1-ac10-4462-b549-e6716a2b8de9",
+  "aws_cognito_identity_pool_id": "us-east-1:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
   "aws_cognito_region": "us-east-1",
-  "aws_user_pools_id": "us-east-1_a8nFeZaMd",
-  "aws_user_pools_web_client_id": "4mope7koh9mmbdbfuiopf8rh16",
-  "aws_account_id": "312293704956",
+  "aws_user_pools_id": "us-east-1_XXXXXXXXX",
+  "aws_user_pools_web_client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXX",
+  "aws_account_id": "############",
   "test": {
     "database": "praktikos_test",
     "host": "",
@@ -26,10 +26,10 @@
   },
   "production": {
     "database": "praktikos",
-    "host": "praktikos-production-cluster.cluster-cj5b49o2kkrr.us-east-1.rds.amazonaws.com",
+    "host": "XXXXXXXXX-production-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
     "port": 5432,
     "username": "sa",
-    "password": "LKqnsUIQ7h6FiXsu",
+    "password": "XXXXXXXXXXXXXXXX",
     "max_connections": 10000,
     "stale_timeout": 300,
     "sslmode": "allow"
