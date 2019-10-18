@@ -1,18 +1,9 @@
 praktikos-python-rdb
-================
+====================
 
-[![Travis][build-badge]][build]
-[![Coveralls][coveralls-badge]][coveralls]
+API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
 
-[build-badge]: https://travis-ci.com/praktikos/praktikos-python-rdb.svg?token=ULzyak4HQDRjWMeE2ZaM&branch=master
-[build]: https://travis-ci.com/praktikos/praktikos-python-rdb
-    
-[coveralls-badge]: https://img.shields.io/coveralls/praktikos/praktikos-python-rdb/master.png?style=flat-square
-[coveralls]: https://coveralls.io/github/praktikos/praktikos-python-rdb
-
-<img src="http://online.swagger.io/validator?url=https://api.praktikos.com/swagger">
-
-API Gateway implemented with Lambda, Cognito and RDS (Postgres)
+<img src="http://online.swagger.io/validator?url=https://r1gzxipb32.execute-api.us-east-1.amazonaws.com/v1/swagger">
 
 ## Getting Started on Mac OS
 
@@ -57,16 +48,26 @@ API Gateway implemented with Lambda, Cognito and RDS (Postgres)
 
 ```
 
-### file ~/.aws/credentials
+## Optionally Getting Started on Docker
 
-Ask for credentails for AWS from Andy or Andy
+see DOCKER.md
+
+### file ~/.aws/credentials
+When you interact with AWS, you specify your AWS security credentials to verify who you are and whether you have permission to access the resources that you are requesting. AWS uses the security credentials to authenticate and authorize your requests. Access keys consist of two parts: an access key ID (for example, AKIAIOSFODNN7EXAMPLE) and a secret access key (for example, wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY). You use access keys to sign programmatic requests that you make to AWS if you use AWS CLI commands (using the SDKs) or using AWS API operations.
+
+```bash
+open https://console.aws.amazon.com/iam/home?#/security_credentials
+```
+
+```bash
+aws configure
+```
 
 ```
-  [default]
-  output = json
-  region = us-east-1
-  aws_access_key_id = ********************
-  aws_secret_access_key = ****************************************
+AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Default region name [None]: us-east-1
+Default output format [None]: json
 ```
 
 ## Familiar with Git?
@@ -83,15 +84,6 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 ```
 
 ```bash
-
-    brew install git
-    git --version
-        git version 2.20.1 (Apple Git-117)
-    open https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/
-    brew install gpg
-    gpg --version
-        gpg \(GnuPG\) 2.2.1
-        libgcrypt 1.8.1
     ssh-add -K ~/.ssh/id_rsa
     ssh-add -L
     git clone https://github.com/praktikos/praktikos-python-rdb.git
@@ -99,14 +91,6 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
     pip3 install -r requirements.txt
 ```
 
-### OPTIONAL: .env
-
-If you create an .env file at the root of the project, you can add the RDB_ENV= and it will overrdie the env variable.
-
-```bash
-cd praktikos-python-rdb
-echo RDB_ENV=test > .env
-```
 
 ## Start Postgres
 
