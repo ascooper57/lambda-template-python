@@ -11,7 +11,7 @@ psycopg2==2.8.2
 # ###################################
 
 # upgradable
-requests==2.21.0
+requests==2.20.1
 pip>=9.0.1
 tox>=2.4.1
 pytest>=3.0.3
