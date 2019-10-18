@@ -17,6 +17,10 @@ API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
     python3 --version 
         Python 3.7.4
         
+    brew install awscli
+    aws --version
+        aws-cli/1.16.260 Python/3.7.3 Darwin/18.6.0 botocore/1.12.170
+
     brew services stop postgresql
     brew uninstall -force postgresql
     rm -rf /usr/local/var/postgres
