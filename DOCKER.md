@@ -7,11 +7,11 @@ Docker
 	brew install docker
 	docker --version
 	
-    cd praktikos-python-rdb
-    docker build -t praktikos-python-rdb .
+    cd praktikos-template-python
+    docker build -t praktikos-template-python .
     docker images
     docker ps
-    docker run -it -v `pwd`:/mnt --entrypoint=/bin/bash  praktikos-python-rdb
+    docker run -it -v `pwd`:/mnt --entrypoint=/bin/bash  praktikos-template-python
     (you are automatically put into: /mnt )
 ```
 ```bash

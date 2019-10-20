@@ -6,14 +6,14 @@ PRAKTIKOS_HOME=${CWD}/../
 
 echo "Prepare ${DOWNLOADS} folder"
 pushd ${DOWNLOADS}
-rm -rf ${DOWNLOADS}/praktikos-python-rdb > /dev/null
-mkdir -p ${DOWNLOADS}/praktikos-python-rdb
+rm -rf ${DOWNLOADS}/praktikos-template-python > /dev/null
+mkdir -p ${DOWNLOADS}/praktikos-template-python
 
 echo "Unzip generated files"
-cd praktikos-python-rdb
-unzip ../praktikos-python-rdb.zip
+cd praktikos-template-python
+unzip ../praktikos-template-python.zip
 cd ${DOWNLOADS}
-ditto -V praktikos-python-rdb ${PRAKTIKOS_HOME}
+ditto -V praktikos-template-python ${PRAKTIKOS_HOME}
 
 echo "Merge and run automated tests on generated code changes"
 cd ${PRAKTIKOS_HOME}

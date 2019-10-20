@@ -30,7 +30,7 @@ open up a Terminal (shell) window
      Check the CloudWatch logs for that endpoint for the actual error. 
      
      For example: https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#logs:
-cd praktikos-python-rdb/example
+cd praktikos-template-python/example
 ./test_published.sh
 ```
 
@@ -57,7 +57,7 @@ cd praktikos-python-rdb/example
 To create a diagram call the script with:
    * In the browser window side panel, Click "Generate Code"
    * Click in dashed line box "Drag SWAGGER JSON file here..."
-   * Navigate to the file: praktikos-python-rdb/example/swagger.json
+   * Navigate to the file: praktikos-template-python/example/swagger.json
    * Click the "Next" button
    * Click the "Finish" button after generated code is downloaded
 
@@ -98,6 +98,6 @@ To create a diagram call the script with:
     Dot executable is /usr/local/opt/graphviz/bin/dot
     Dot version: dot - graphviz version 2.40.1 (20161225.0304)
     Installation seems OK. File generation OK    
-    cd praktikos-python-rdb/api/rdb/utils
+    cd praktikos-template-python/api/rdb/utils
     python swagger_2_puml.py endpoints/sample.json > sample.puml
 ```

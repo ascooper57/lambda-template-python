@@ -4,7 +4,7 @@ set -e
 [[ -e src ]] && rm -rf src > /dev/null 2>&1
 
 BUCKET=praktikos-template
-ZIP_FILE=/tmp/praktikos-python-rdb.zip
+ZIP_FILE=/tmp/praktikos-template-python.zip
 echo "Sync content with S3 bucket ${BUCKET} start"
 [[ -e ${ZIP_FILE} ]] && rm -f ${ZIP_FILE}
 zip -r -X ${ZIP_FILE} . --exclude deploy.sh *.git* *.idea* .DS_Store api/.DS_Store api/*/.DS_Store api/*/*/.DS_Store *__pycache__* *.pyc

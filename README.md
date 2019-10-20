@@ -1,4 +1,4 @@
-praktikos-python-rdb
+praktikos-template-python
 ====================
 
 API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
@@ -90,8 +90,8 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 ```bash
     ssh-add -K ~/.ssh/id_rsa
     ssh-add -L
-    git clone https://github.com/praktikos/praktikos-python-rdb.git
-    cd praktikos-python-rdb
+    git clone https://github.com/praktikos/praktikos-template-python.git
+    cd praktikos-template-python
     pip3 install -r requirements.txt
 ```
 
@@ -120,7 +120,7 @@ cd src/praktikos-configure-aws/aws
 ## Creating a new table in the production database
 
 ```bash
-cd praktikos-python-rdb
+cd praktikos-template-python
 
 RDB_ENV=test       ./cli.sh migrate
 RDB_ENV=production ./cli.sh migrate
@@ -131,7 +131,7 @@ Table should now be in production with the requesite test data in it.
 ### to run tests
 
 ```bash
-cd praktikos-python-rdb
+cd praktikos-template-python
 pip3 install -r requirements.txt
 
 TO run a unit test
@@ -154,7 +154,7 @@ open https://client.praktikos.com
 
    * In the browser window side panel, Click "Generate Code"
    * Click in dashed line box "Drag SWAGGER JSON file here..."
-   * Navigate to the file: praktikos-python-rdb/example/swagger.json
+   * Navigate to the file: praktikos-template-python/example/swagger.json
    * Click the "Next" button
    * Click the "Finish" button after generated code is downloaded
 
@@ -163,16 +163,16 @@ open https://client.praktikos.com
 open up a Terminal (shell) window
 
 ```bash
-cd praktikos-python-rdb/example
+cd praktikos-template-python/example
 ./merge_after_codegen.sh
 ```
 
 ## 4. Publish API from newly generated code
 
-   * Zip up the main project (merged) ~/praktikos-python-rdb.zip
+   * Zip up the main project (merged) ~/praktikos-template-python.zip
    * In the browser window side panel, Click "Publish API"
    * Click in dashed line box "Drag Zip file here..."
-   * Navigate to the file: praktikos-python-rdb.zip
+   * Navigate to the file: praktikos-template-python.zip
    * Click the "Next" button
    * Click on "LambdaApiGenerated"
    * Click the "Next" button
@@ -184,7 +184,7 @@ cd praktikos-python-rdb/example
 open up a Terminal (shell) window
 
 ```bash
-cd praktikos-python-rdb/example
+cd praktikos-template-python/example
 ./test_published.sh
 ```
 
