@@ -29,7 +29,7 @@
     "host": "XXXXXXXXX-production-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
     "port": 5432,
     "username": "sa",
-    "password": "XXXXXXXXXXXXXXXX",
+    "password": "ChangeMe!",
     "max_connections": 10000,
     "stale_timeout": 300,
     "sslmode": "allow"
