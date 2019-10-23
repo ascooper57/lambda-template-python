@@ -1,0 +1,53 @@
+{
+  "UserPoolId": "us-east-1_XXXXXXXXX",
+  "ClientName": "praktikos",
+  "RefreshTokenValidity": 30,
+  "ReadAttributes": [
+    "address",
+    "birthdate",
+    "email",
+    "email_verified",
+    "family_name",
+    "gender",
+    "given_name",
+    "locale",
+    "middle_name",
+    "name",
+    "nickname",
+    "phone_number",
+    "phone_number_verified",
+    "picture",
+    "preferred_username",
+    "profile",
+    "updated_at",
+    "website",
+    "zoneinfo"
+  ],
+  "WriteAttributes": [
+    "address",
+    "birthdate",
+    "email",
+    "family_name",
+    "gender",
+    "given_name",
+    "locale",
+    "middle_name",
+    "name",
+    "nickname",
+    "phone_number",
+    "picture",
+    "preferred_username",
+    "profile",
+    "updated_at",
+    "website",
+    "zoneinfo"
+  ],
+  "ExplicitAuthFlows": [
+    "ADMIN_NO_SRP_AUTH",
+    "USER_PASSWORD_AUTH"
+  ],
+  "SupportedIdentityProviders": [
+    "COGNITO"
+  ],
+  "AllowedOAuthFlowsUserPoolClient": false
+}

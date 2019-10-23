@@ -6,15 +6,13 @@
         "rds-db:connect"
       ],
       "Effect": "Allow",
-      "Resource": "*"
+      "Resource": "arn:aws:rds:::"
     },
     {
       "Sid": "DenyDelete1",
       "Effect": "Deny",
-      "Action": [
-        "rds:*"
-      ],
-      "Resource": "*"
+      "Action": "rds:*",
+      "Resource": "arn:aws:rds:::"
     },
     {
       "Action": [

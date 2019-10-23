@@ -6,13 +6,13 @@
         "rds-db:connect"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:rds:us-east-1:312293704956:db:praktikos-auora-us-east-1b"
+      "Resource": "arn:aws:rds:::"
     },
     {
       "Sid": "DenyDelete1",
       "Effect": "Deny",
       "Action": "rds:*",
-      "Resource": "arn:aws:rds:us-east-1:312293704956:db:praktikos-auora-us-east-1b"
+      "Resource": "arn:aws:rds:::"
     },
     {
       "Sid": "AllowGroupToPutObjectInBucket",

@@ -67,3 +67,4 @@ def validate_uuid4(uuid_string):
     if val.hex == uuid_string.replace('-', ''):
         return
     raise ValueError("hexadecimal value in uuid do not match")
+

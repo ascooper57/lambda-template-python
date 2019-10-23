@@ -2,7 +2,7 @@
 
 if [ -z "$1" ]; then
   echo "No argument supplied"
-  exit -1
+  exit 1
 fi
 
 LAMBDA=$1
@@ -37,13 +37,13 @@ echo "Creating role $role from $f begin..."
 trust="trust_policy_lambda.json"
 echo "************************"
 pwd
-echo 1 aws iam create-role --role-name ${role} --assume-role-policy-document file://${trust}
+echo 1 aws iam create-role --role-name ${role} --assume-role-policy-document file://configs/${trust}
 aws iam create-role --role-name ${role} --assume-role-policy-document file://${trust}
 sleep 5
 echo "************************"
 pwd
-echo 2 aws iam update-assume-role-policy --role-name ${role} --policy-document file://${trust}
-aws iam update-assume-role-policy --role-name ${role} --policy-document file://${trust}
+echo 2 aws iam update-assume-role-policy --role-name ${role} --policy-document file://configs/${trust}
+aws iam update-assume-role-policy --role-name ${role} --policy-document file://configs/${trust}
 sleep 5
 echo "************************"
 

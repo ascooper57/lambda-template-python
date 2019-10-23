@@ -40,13 +40,14 @@ zip -ur /tmp/${LAMBDA}.zip api/config.json
 
 echo "Updating function ${LAMBDA} begin..."
 cd ${ROOT}/lambda_functions/${LAMBDA}
+echo aws lambda update-function-code --function-name ${LAMBDA} --zip-file fileb:///tmp/${LAMBDA}.zip --region ${REGION}
 aws lambda update-function-code --function-name ${LAMBDA} --zip-file fileb:///tmp/${LAMBDA}.zip --region ${REGION}
 rm /tmp/${LAMBDA}.zip
 echo "Updating function ${LAMBDA} end"
 
 # Create IAM Roles for Lambda Function
 echo "Updating role ${LAMBDA} begin..."
-aws iam update-assume-role-policy --role-name ${LAMBDA} --policy-document file://${ROOT}/trust_policy_lambda.json
+aws iam update-assume-role-policy --role-name ${LAMBDA} --policy-document file://${ROOT}/configs/trust_policy_lambda.json
 aws iam put-role-policy --role-name ${LAMBDA} --policy-name ${LAMBDA} --policy-document file://${ROOT}/lambda_functions/${LAMBDA}/iam.json
 echo "Updating role ${LAMBDA} end"
 
