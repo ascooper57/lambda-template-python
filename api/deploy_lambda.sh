@@ -40,7 +40,6 @@ zip -ur /tmp/${LAMBDA}.zip api/config.json
 
 echo "Updating function ${LAMBDA} begin..."
 cd ${ROOT}/lambda_functions/${LAMBDA}
-echo aws lambda update-function-code --function-name ${LAMBDA} --zip-file fileb:///tmp/${LAMBDA}.zip --region ${REGION}
 aws lambda update-function-code --function-name ${LAMBDA} --zip-file fileb:///tmp/${LAMBDA}.zip --region ${REGION}
 rm /tmp/${LAMBDA}.zip
 echo "Updating function ${LAMBDA} end"
