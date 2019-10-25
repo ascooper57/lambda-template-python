@@ -7,23 +7,37 @@ API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
 
 <img src="http://online.swagger.io/validator?url=https://r1gzxipb32.execute-api.us-east-1.amazonaws.com/v1/swagger">
 
+Table of Contents
+=================
+
+   * [praktikos-template-python](#praktikos-template-python)
+   * [Table of Contents](#table-of-contents)
+      * [Getting Started on Mac OS](#getting-started-on-mac-os)
+      * [Familiar with Git?](#familiar-with-git)
+      * [Optionally Getting Started on Docker](#optionally-getting-started-on-docker)
+         * [AWS developer credentials](#aws-developer-credentials)
+      * [Start Postgres](#start-postgres)
+      * [Configure your Amazon Web Service's account for Praktikos](#configure-your-amazon-web-services-account-for-praktikos)
+      * [Creating a new table in the production database](#creating-a-new-table-in-the-production-database)
+         * [to run tests](#to-run-tests)
+   * [RESTful API Code generation, provisioning and publication automation](#restful-api-code-generation-provisioning-and-publication-automation)
+   * [Our Core Principals](#our-core-principals)
+      * [1. Sign Up / Sign in](#1-sign-up--sign-in)
+      * [2. Generate Code from example swagger file](#2-generate-code-from-example-swagger-file)
+      * [3. Merge generated code into main project](#3-merge-generated-code-into-main-project)
+      * [4. Publish API from newly generated code](#4-publish-api-from-newly-generated-code)
+      * [5. Test RESTful API locally](#5-test-restful-api-locally)
+      * [6. Test RESTful API remotely deployed into Amazon Web Services](#6-test-restful-api-remotely-deployed-into-amazon-web-services)
+      * [Contributing](#contributing)
+
+
 Most applications are designed a three tiers. The thin top tier (front end) is the graphical user interface on your mobile device or desktop, the (backend) middle tier is the business logic / data base access functions and the bottom tier is the database (persisted object itself). Application Programming Interfaces (APIs) are commonly implemented as RESTful style endpoints. Each RESTful endpoint has one to four actions / verbs: GET, PUT, POST, DELETE. Middle tier endpoints can operate upon persisted data or contain your application's business logic.
 
 A microservice splits a large monolithic application into several small, self-containing services. Amazon Web Services (AWS) introduced a technology named Functions as a Service (Lambda) which allows each API endpoint to be become a discrete self-contained stateless microservice. Developing and deploying correctly architected Lambda functions that meet enterprise-level standards of scalability, maintainability, and security is difficult and time consuming.
 
 With our approach and toolset, AWS developers can automatically generate source and test code, then deploy a correct Functions as a Service backend, allowing you to focus their time and energy on building valuable business logic instead of wrangling with and debugging mundane, common, and routine code. We provide this open source project template to bootstrap Lambda Endpoint development. We also provide our tool Praktikos to publish these (and your future / custom Lambda Endpoints) into Amazon Web Services reducing or eliminating the need for you to become an expert in technologies such as RDS, S3, Cognito, IAM, Lambda, Api Gateway, CloudWatch, Simple Messaging Service.
 
-Table of Contents
-=================
 
-   * [praktikos-client](#praktikos-client)
-   * [Getting Started](#getting-started)
-         * [file ~/.aws/credentials](#file-awscredentials)
-      * [Get the source code hierarchy](#get-the-source-code-hierarchy)
-      * [Building](#building)
-      * [Development Server](#development-server)
-      * [Running Tests](#running-tests)
-      * [Deploy to Amazon](#deploy-to-amazon)
 
 ## Getting Started on Mac OS
 
@@ -222,9 +236,6 @@ open up a Terminal (shell) window
 ```bash
 cd praktikos-template-python
 RDB_ENV=test py.test --verbose test
-
-cd praktikos-template-python/example
-./test_published.sh
 ```
 
 ## 6. Test RESTful API remotely deployed into Amazon Web Services
@@ -233,7 +244,8 @@ open up a Terminal (shell) window
 
 ```bash
 cd praktikos-template-python/example
-./test
+./test_published.sh
+```
 
 ## Contributing
 
