@@ -13,6 +13,18 @@ A microservice splits a large monolithic application into several small, self-co
 
 With our approach and toolset, AWS developers can automatically generate source and test code, then deploy a correct Functions as a Service backend, allowing you to focus their time and energy on building valuable business logic instead of wrangling with and debugging mundane, common, and routine code. We provide this open source project template to bootstrap Lambda Endpoint development. We also provide our tool Praktikos to publish these (and your future / custom Lambda Endpoints) into Amazon Web Services reducing or eliminating the need for you to become an expert in technologies such as RDS, S3, Cognito, IAM, Lambda, Api Gateway, CloudWatch, Simple Messaging Service.
 
+Table of Contents
+=================
+
+   * [praktikos-client](#praktikos-client)
+   * [Getting Started](#getting-started)
+         * [file ~/.aws/credentials](#file-awscredentials)
+      * [Get the source code hierarchy](#get-the-source-code-hierarchy)
+      * [Building](#building)
+      * [Development Server](#development-server)
+      * [Running Tests](#running-tests)
+      * [Deploy to Amazon](#deploy-to-amazon)
+
 ## Getting Started on Mac OS
 
 ```bash
