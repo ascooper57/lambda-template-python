@@ -15,7 +15,7 @@ Table of Contents
       * [Getting Started on Mac OS](#getting-started-on-mac-os)
       * [Familiar with Git?](#familiar-with-git)
       * [Optionally Getting Started on Docker](#optionally-getting-started-on-docker)
-         * [AWS developer credentials](#aws-developer-credentials)
+      * [AWS developer credentials](#aws-developer-credentials)
       * [Start Postgres](#start-postgres)
       * [Configure your Amazon Web Service's account for Praktikos](#configure-your-amazon-web-services-account-for-praktikos)
       * [Creating a new table in the production database](#creating-a-new-table-in-the-production-database)
@@ -126,7 +126,7 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 
 see DOCKER.md
 
-### AWS developer credentials
+## AWS developer credentials
 
 When you interact with AWS, you specify your AWS security credentials to verify who you are and whether you have permission to access the resources that you are requesting. AWS uses the security credentials to authenticate and authorize your requests. Access keys consist of two parts: an access key ID (for example, AKIAIOSFODNN7EXAMPLE) and a secret access key (for example, wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY). You use access keys to sign programmatic requests that you make to AWS if you use AWS CLI commands (using the SDKs) or using AWS API operations.
 
@@ -201,7 +201,7 @@ RDB_ENV=test py.test --verbose test
 
 # Our Core Principals
 
-* End-to-end Application design should come from a *single* source of truth that describes the interaction of how the user facing frontend and data providing backend enforcing what each expects to receive/send via a Swagger data model
+* End-to-end Application design should come from a *single* source of truth that describes the interaction of how the user facing frontend and data providing backend enforcing what each expects to receive/send via a OpenAPI (Swagger) data model
 * We suggest that user-facing frontend *should* be built against a backend system of distributed, stateless, atomic functions that are infinitely scalable, easy to maintain and reuse
 * 70% of an application's backend is typically built on common, routine functionality. The remaining 30% is the "secret sauce" - business logic that makes the application valuable and specific to the organization building it
 * Developers shouldn’t expend time on routine coding - Managers should leverage developers to focus on the features / functionality (creative, fun, special) aspects of application coding, not the framework - the common, error prone, routine parts of the application. For these common, routine parts, they welcome an automation solution.
