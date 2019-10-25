@@ -19,7 +19,7 @@ Table of Contents
       * [Start Postgres](#start-postgres)
       * [Configure your Amazon Web Service's account for Praktikos](#configure-your-amazon-web-services-account-for-praktikos)
       * [Creating a new table in the production database](#creating-a-new-table-in-the-production-database)
-         * [to run tests](#to-run-tests)
+      * [to run tests](#to-run-tests)
    * [RESTful API Code generation, provisioning and publication automation](#restful-api-code-generation-provisioning-and-publication-automation)
    * [Our Core Principals](#our-core-principals)
       * [1. Sign Up / Sign in](#1-sign-up--sign-in)
@@ -35,7 +35,7 @@ Most applications are designed a three tiers. The thin top tier (front end) is t
 
 A microservice splits a large monolithic application into several small, self-containing services. Amazon Web Services (AWS) introduced a technology named Functions as a Service (Lambda) which allows each API endpoint to be become a discrete self-contained stateless microservice. Developing and deploying correctly architected Lambda functions that meet enterprise-level standards of scalability, maintainability, and security is difficult and time consuming.
 
-With our approach and toolset, AWS developers can automatically generate source and test code, then deploy a correct Functions as a Service backend, allowing you to focus their time and energy on building valuable business logic instead of wrangling with and debugging mundane, common, and routine code. We provide this open source project template to bootstrap Lambda Endpoint development. We also provide our tool Praktikos to publish these (and your future / custom Lambda Endpoints) into Amazon Web Services reducing or eliminating the need for you to become an expert in technologies such as RDS, S3, Cognito, IAM, Lambda, Api Gateway, CloudWatch, Simple Messaging Service.
+With our approach and toolset, AWS developers can automatically generate source and test code, then deploy a correct Functions as a Service backend, allowing you to focus their time and energy on building valuable business logic instead of wrangling with and debugging mundane, common, and routine code. We provide this open source project template to bootstrap Lambda Endpoint development. We also provide our tool Praktikós to publish these (and your future / custom Lambda Endpoints) into Amazon Web Services reducing or eliminating the need for you to become an expert in technologies such as RDS, S3, Cognito, IAM, Lambda, Api Gateway, CloudWatch, Simple Messaging Service.
 
 We are not a runtime library. All Praktikós generated code utilizes native language libraries / packages / modules. Everything that is provisioned or installed in Amazon utilizes their native, pristine services
 
@@ -157,12 +157,12 @@ output=json
 If you want to manually start and stop postgresql (installed via homebrew), the easiest way is:
 
 ```bash
-rm /usr/local/var/postgres/postmaster.pid
-brew services start postgresql
+cd pratikos-python-rdb/bin
+./start_postgres.sh
 
-and
+OR
 
-brew services stop postgresql
+./stop_postgres.sh
 ```
 
 ## Configure your Amazon Web Service's account for Praktikos
@@ -183,7 +183,7 @@ RDB_ENV=production ./cli.sh migrate
 Table should now be in production with the requesite test data in it.
 ```
 
-### to run tests
+## to run tests
 
 Verify the integrity of the project by running the test suite locally against your locally installed Postgres database
 
