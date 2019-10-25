@@ -52,28 +52,6 @@ API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
 
 ```
 
-## Optionally Getting Started on Docker
-
-see DOCKER.md
-
-### file ~/.aws/credentials
-When you interact with AWS, you specify your AWS security credentials to verify who you are and whether you have permission to access the resources that you are requesting. AWS uses the security credentials to authenticate and authorize your requests. Access keys consist of two parts: an access key ID (for example, AKIAIOSFODNN7EXAMPLE) and a secret access key (for example, wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY). You use access keys to sign programmatic requests that you make to AWS if you use AWS CLI commands (using the SDKs) or using AWS API operations.
-
-```bash
-open https://console.aws.amazon.com/iam/home?#/security_credentials
-```
-
-```bash
-aws configure
-```
-
-```
-AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
-AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
-Default region name [None]: us-east-1
-Default output format [None]: json
-```
-
 ## Familiar with Git?
 Checkout this repo, then install dependencies with the following:
 
@@ -95,6 +73,27 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
     pip3 install -r requirements.txt
 ```
 
+## Optionally Getting Started on Docker
+
+see DOCKER.md
+
+### file ~/.aws/credentials
+When you interact with AWS, you specify your AWS security credentials to verify who you are and whether you have permission to access the resources that you are requesting. AWS uses the security credentials to authenticate and authorize your requests. Access keys consist of two parts: an access key ID (for example, AKIAIOSFODNN7EXAMPLE) and a secret access key (for example, wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY). You use access keys to sign programmatic requests that you make to AWS if you use AWS CLI commands (using the SDKs) or using AWS API operations.
+
+```bash
+open https://console.aws.amazon.com/iam/home?#/security_credentials
+```
+
+```bash
+aws configure
+```
+
+```
+AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
+AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+Default region name [None]: us-east-1
+Default output format [None]: json
+```
 
 ## Start Postgres
 
