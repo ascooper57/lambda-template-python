@@ -5,7 +5,7 @@ Functions as a Service implemented with API Gateway, Lambda, Cognito, S3, SNS an
 
 This is a software design paradigm shift
 
-<img src="http://online.swagger.io/validator?url=https://r1gzxipb32.execute-api.us-east-1.amazonaws.com/v1/swagger">
+Published Swagger API for this project: <img src="http://online.swagger.io/validator?url=https://r1gzxipb32.execute-api.us-east-1.amazonaws.com/v1/swagger">
 
 Table of Contents
 =================
