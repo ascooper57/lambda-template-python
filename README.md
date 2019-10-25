@@ -154,8 +154,7 @@ brew services stop postgresql
 ```bash
 cd pratikos-python-rdb
 pip3 install -r requirements.txt
-cd src/praktikos-configure-aws/aws
-./configure.py
+RDB_ENV=test ./cli/py cognito
 ```
 ## Creating a new table in the production database
 
@@ -170,9 +169,10 @@ Table should now be in production with the requesite test data in it.
 
 ### to run tests
 
+Verify the integrity of the project by running the test suite locally against your locally installed Postgres database
+
 ```bash
 cd praktikos-template-python
-pip3 install -r requirements.txt
 
 TO run a unit test
 RDB_ENV=test py.test test/units/LambdaApiHealth_test.py
