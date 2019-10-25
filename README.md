@@ -1,9 +1,17 @@
 praktikos-template-python
-====================
+=========================
+
+Software design paradigm shift
 
 API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
 
 <img src="http://online.swagger.io/validator?url=https://r1gzxipb32.execute-api.us-east-1.amazonaws.com/v1/swagger">
+
+Most applications are designed a three tiers. The thin top tier (front end) is the graphical user interface on your mobile device or desktop, the (backend) middle tier is the business logic / data base access functions and the bottom tier is the database (persisted object itself). Application Programming Interfaces (APIs) are commonly implemented as RESTful style endpoints. Each RESTful endpoint has one to four actions / verbs: GET, PUT, POST, DELETE. Middle tier endpoints can operate upon persisted data or contain your application's business logic.
+
+A microservice splits a large monolithic application into several small, self-containing services. Amazon Web Services (AWS) introduced a technology named Functions as a Service (Lambda) which allows each API endpoint to be become a discrete self-contained stateless microservice. Developing and deploying correctly architected Lambda functions that meet enterprise-level standards of scalability, maintainability, and security is difficult and time consuming.
+
+With our approach and toolset, AWS developers can automatically generate source and test code, then deploy a correct Functions as a Service backend, allowing you to focus their time and energy on building valuable business logic instead of wrangling with and debugging mundane, common, and routine code. We provide this open source project template to bootstrap Lambda Endpoint development. We also provide our tool Praktikos to publish these (and your future / custom Lambda Endpoints) into Amazon Web Services reducing or eliminating the need for you to become an expert in technologies such as RDS, S3, Cognito, IAM, Lambda, Api Gateway, CloudWatch, Simple Messaging Service.
 
 ## Getting Started on Mac OS
 
@@ -16,10 +24,14 @@ API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
     brew install python3
     python3 --version 
         Python 3.7.4
-        
+                   
+    pip3 install -U pytest
+    py.test --version
+	This is pytest version 4.5.0, imported from /usr/local/lib/python3.7/site-packages/pytest.py
+
     brew install awscli
     aws --version
-        aws-cli/1.16.260 Python/3.7.3 Darwin/18.6.0 botocore/1.12.170
+        aws-cli/1.16.260 Python/3.7.4 Darwin/19.0.0 botocore/1.12.250
 
     brew services stop postgresql
     brew uninstall -force postgresql
@@ -28,14 +40,13 @@ API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
     brew install postgresql
     brew postgresql-upgrade-database
     postgres --version
-        postgres \(PostgreSQL\) 11.4
+        postgres \(PostgreSQL\) 11.5
             
     psql --version
-        psql (PostgreSQL) 11.4
+        psql (PostgreSQL) 11.5
 
     createdb praktikos_test -U `whoami`
     psql -c 'CREATE EXTENSION hstore;' praktikos_test -U `whoami`
-    Add a register_hstore parameter to PostgresqlExtDatabase.
     psql --host localhost praktikos_test
      \dx
                                      List of installed extensions
@@ -43,13 +54,9 @@ API Gateway implemented with Lambda, Cognito, S3, SNS and RDS (Postgres)
 	---------+---------+------------+---------------------------------------------------------------------
  	hstore  | 1.5     | public     | data type for storing sets of (key, value) pairs
  	plpgsql | 1.0     | pg_catalog | PL/pgSQL procedural language
-                  
-    pip3 install -U pytest
-    py.test --version
-	This is pytest version 5.0.1, imported from /usr/local/lib/python3.7/site-packages/pytest.py
 
-    pgadmin4 https://www.postgresql.org/ftp/pgadmin/pgadmin4/v2.0/macos/  
-
+    Optional pgadmin4 
+    open https://www.postgresql.org/ftp/pgadmin/pgadmin4/v2.0/macos/
 ```
 
 ## Familiar with Git?
@@ -77,24 +84,32 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 
 see DOCKER.md
 
-### file ~/.aws/credentials
+### AWS developer credentials
+
 When you interact with AWS, you specify your AWS security credentials to verify who you are and whether you have permission to access the resources that you are requesting. AWS uses the security credentials to authenticate and authorize your requests. Access keys consist of two parts: an access key ID (for example, AKIAIOSFODNN7EXAMPLE) and a secret access key (for example, wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY). You use access keys to sign programmatic requests that you make to AWS if you use AWS CLI commands (using the SDKs) or using AWS API operations.
 
 ```bash
 open https://console.aws.amazon.com/iam/home?#/security_credentials
-```
 
-```bash
 aws configure
-```
 
-```
 AWS Access Key ID [None]: AKIAIOSFODNN7EXAMPLE
 AWS Secret Access Key [None]: wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
 Default region name [None]: us-east-1
 Default output format [None]: json
 ```
 
+```bash
+more ~/.aws/credentials
+
+[default]
+aws_account_id=1234567890
+aws_access_key_id=AKIAIOSFODNN7EXAMPLE
+aws_secret_access_key=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+region=us-east-1
+output=json
+
+```
 ## Start Postgres
 
 If you want to manually start and stop postgresql (installed via homebrew), the easiest way is:
@@ -142,6 +157,16 @@ RDB_ENV=test py.test --verbose test
 
 # RESTful API Code generation, provisioning and publication automation
 
+# Our Core Principals
+
+* End-to-end Application design should come from a *single* source of truth that describes the interaction of how the user facing frontend and data providing backend enforcing what each expects to receive/send via a Swagger data model
+* We suggest that user-facing frontend *should* be built against a backend system of distributed, stateless, atomic functions that are infinitely scalable, easy to maintain and reuse
+* 70% of an application's backend is typically built on common, routine functionality. The remaining 30% is the "secret sauce" - business logic that makes the application valuable and specific to the organization building it
+* Developers shouldn’t expend time on routine coding - Managers should leverage developers to focus on the features / functionality (creative, fun, special) aspects of application coding, not the framework - the common, error prone, routine parts of the application. For these common, routine parts, they welcome an automation solution.
+* Automation of the backend data services improves quality and reduces Time to Market (TTM)
+* Modification of any atomic backend service should not disturb the overall integrity of the system thereby reducing re-certification efforts and overall risk - endure stresses of the entire application lifecycle
+* A monolith is a service that has more than one restful endpoint OR is stateful (in the backend). Tends to have more permissions, resources (memory, cpu) than each actually needs to execute properly thereby reducing threat profile for each endpoint
+* Should be able to track the cost of *each* endpoint execution and make business decisions around the Return of Investment (ROI) of that endpoint. (in a true microservices application)
 
 ## 1. Sign Up / Sign in
 
@@ -178,14 +203,25 @@ cd praktikos-template-python/example
    * wait patiently about a minute
    * Click the "Finish" button after API is provisioned and published
    
-## 5. Test RESTful API
+## 5. Test RESTful API locally
+
+open up a Terminal (shell) window
+
+```bash
+cd praktikos-template-python
+RDB_ENV=test py.test --verbose test
+
+cd praktikos-template-python/example
+./test_published.sh
+```
+
+## 6. Test RESTful API remotely deployed into Amazon Web Services
 
 open up a Terminal (shell) window
 
 ```bash
 cd praktikos-template-python/example
-./test_published.sh
-```
+./test
 
 ## Contributing
 
