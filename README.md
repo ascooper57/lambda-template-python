@@ -37,7 +37,23 @@ A microservice splits a large monolithic application into several small, self-co
 
 With our approach and toolset, AWS developers can automatically generate source and test code, then deploy a correct Functions as a Service backend, allowing you to focus their time and energy on building valuable business logic instead of wrangling with and debugging mundane, common, and routine code. We provide this open source project template to bootstrap Lambda Endpoint development. We also provide our tool Praktikos to publish these (and your future / custom Lambda Endpoints) into Amazon Web Services reducing or eliminating the need for you to become an expert in technologies such as RDS, S3, Cognito, IAM, Lambda, Api Gateway, CloudWatch, Simple Messaging Service.
 
+We are not a runtime library. All Praktikós generated code utilizes native language libraries / packages / modules. Everything that is provisioned or installed in Amazon utilizes their native, pristine services
 
+* `Secure User Management` Authentication and Authorization: Cognito authenticated RestFUL APIs create complete front-end / back-end isolation with per endpoint customized security
+* `Scalability` CloudFront and API Gateway handles any number of global requests per second (RPS) while making good use of system resources
+* `Logging / Traceability` CloudWatch collects and accesses all your performance and operational data in form of logs and metrics from a single platform.
+* `Test Harness` User executes auto generated test automation suite for new RESTful Endpoint, locally and remotely
+* `Common RESTful endpoints` template includes Lambda RESTful endpoints and automated tests for functions that are common these days as backend services
+* `Unified Modeling Language` Auto generated from Swagger definitions, always up-to-date, UML View of entire API
+
+
+| Name	             | Description                                                                                     |
+|:-------------------|:------------------------------------------------------------------------------------------------|
+| Handler	         | When a Lambda function is invoked, AWS Lambda starts executing your generated code by calling the handler function. AWS Lambda passes any event data to this handler as the first parameter. Your handler should process the incoming event data and may invoke any other functions/methods in your code. |
+| Invocation Context | Your Lambda handler function is also passed a context object to the handler function, as the second parameter. Via this context object your code can interact with the Lambda service itself. |
+| Logging            | Your Lambda function can contain logging statements. Lambda writes these logs to CloudWatch Logs. Specific language statements generate log entries, depending on the language you use to author your Lambda function code. |
+| Exceptions         | Your Lambda function needs to communicate the result of the function execution to Lambda. Depending on the language you author your Lambda function code, there are different ways to end a request successfully or to notify Lambda an error occurred during execution. The Swagger data models are enforced by the API Gateway preventing malformed RESTful requests and responses; a common cause of Exceptions. |
+| Stateless          |Your Lambda function code must be written in a stateless style, and have no affinity with the underlying compute infrastructure. Your code should expect local file system access, child processes, and similar artifacts to be limited to the lifetime of the request. Persistent state should be stored in PostgresSql, Amazon S3, Amazon DynamoDB, or another cloud storage service. Requiring functions to be stateless enables Lambda to launch as many copies of a function as needed to scale to the incoming rate of events and requests. These functions may not always run on the same compute instance from request to request, and a given instance of your Lambda function may be used more than once by Lambda. |
 
 ## Getting Started on Mac OS
 
