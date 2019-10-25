@@ -2,6 +2,7 @@ praktikos-template-python
 =========================
 
 Functions as a Service implemented with API Gateway, Lambda, Cognito, S3, SNS and RDS (Postgres)
+
 This is a software design paradigm shift
 
 <img src="http://online.swagger.io/validator?url=https://r1gzxipb32.execute-api.us-east-1.amazonaws.com/v1/swagger">
