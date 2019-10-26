@@ -21,7 +21,6 @@ Table of Contents
       * [Creating a new table in the production database](#creating-a-new-table-in-the-production-database)
       * [to run tests](#to-run-tests)
    * [RESTful API Code generation, provisioning and publication automation](#restful-api-code-generation-provisioning-and-publication-automation)
-   * [Our Core Principals](#our-core-principals)
       * [1. Sign Up / Sign in](#1-sign-up--sign-in)
       * [2. Generate Code from example swagger file](#2-generate-code-from-example-swagger-file)
       * [3. Merge generated code into main project](#3-merge-generated-code-into-main-project)
@@ -54,6 +53,18 @@ We are not a runtime library. All Praktikós generated code utilizes native lang
 | Logging            | Your Lambda function can contain logging statements. Lambda writes these logs to CloudWatch Logs. Specific language statements generate log entries, depending on the language you use to author your Lambda function code. |
 | Exceptions         | Your Lambda function needs to communicate the result of the function execution to Lambda. Depending on the language you author your Lambda function code, there are different ways to end a request successfully or to notify Lambda an error occurred during execution. The Swagger data models are enforced by the API Gateway preventing malformed RESTful requests and responses; a common cause of Exceptions. |
 | Stateless          |Your Lambda function code must be written in a stateless style, and have no affinity with the underlying compute infrastructure. Your code should expect local file system access, child processes, and similar artifacts to be limited to the lifetime of the request. Persistent state should be stored in PostgresSql, Amazon S3, Amazon DynamoDB, or another cloud storage service. Requiring functions to be stateless enables Lambda to launch as many copies of a function as needed to scale to the incoming rate of events and requests. These functions may not always run on the same compute instance from request to request, and a given instance of your Lambda function may be used more than once by Lambda. |
+
+
+Our Core Principals
+
+* End-to-end Application design should come from a *single* source of truth that describes the interaction of how the user facing frontend and data providing backend enforcing what each expects to receive/send via a OpenAPI (Swagger) data model
+* We suggest that user-facing frontend *should* be built against a backend system of distributed, stateless, atomic functions that are infinitely scalable, easy to maintain and reuse
+* 70% of an application's backend is typically built on common, routine functionality. The remaining 30% is the "secret sauce" - business logic that makes the application valuable and specific to the organization building it
+* Developers shouldn’t expend time on routine coding - Managers should leverage developers to focus on the features / functionality (creative, fun, special) aspects of application coding, not the framework - the common, error prone, routine parts of the application. For these common, routine parts, they welcome an automation solution.
+* Automation of the backend data services improves quality and reduces Time to Market (TTM)
+* Modification of any atomic backend service should not disturb the overall integrity of the system thereby reducing re-certification efforts and overall risk - endure stresses of the entire application lifecycle
+* A monolith is a service that has more than one restful endpoint OR is stateful (in the backend). Tends to have more permissions, resources (memory, cpu) than each actually needs to execute properly thereby reducing threat profile for each endpoint
+* Should be able to track the cost of *each* endpoint execution and make business decisions around the Return of Investment (ROI) of that endpoint. (in a true microservices application)
 
 ## Getting Started on Mac OS
 
@@ -198,17 +209,6 @@ RDB_ENV=test py.test --verbose test
 ```
 
 # RESTful API Code generation, provisioning and publication automation
-
-# Our Core Principals
-
-* End-to-end Application design should come from a *single* source of truth that describes the interaction of how the user facing frontend and data providing backend enforcing what each expects to receive/send via a OpenAPI (Swagger) data model
-* We suggest that user-facing frontend *should* be built against a backend system of distributed, stateless, atomic functions that are infinitely scalable, easy to maintain and reuse
-* 70% of an application's backend is typically built on common, routine functionality. The remaining 30% is the "secret sauce" - business logic that makes the application valuable and specific to the organization building it
-* Developers shouldn’t expend time on routine coding - Managers should leverage developers to focus on the features / functionality (creative, fun, special) aspects of application coding, not the framework - the common, error prone, routine parts of the application. For these common, routine parts, they welcome an automation solution.
-* Automation of the backend data services improves quality and reduces Time to Market (TTM)
-* Modification of any atomic backend service should not disturb the overall integrity of the system thereby reducing re-certification efforts and overall risk - endure stresses of the entire application lifecycle
-* A monolith is a service that has more than one restful endpoint OR is stateful (in the backend). Tends to have more permissions, resources (memory, cpu) than each actually needs to execute properly thereby reducing threat profile for each endpoint
-* Should be able to track the cost of *each* endpoint execution and make business decisions around the Return of Investment (ROI) of that endpoint. (in a true microservices application)
 
 ## 1. Sign Up / Sign in
 
