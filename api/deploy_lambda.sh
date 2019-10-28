@@ -17,9 +17,9 @@ fi
 ROOT=$(pwd)
 find . -name __pycache__ -type d -exec rm -rf {} \; >> /dev/null 2>&1 
 
-# Read other configuration from rdb/config/config.json
-REGION=$((RDB_ENV=test python3 "${ROOT}"/cli.py config "${LAMBDA}" region) 2>&1)
-RUNTIME=$((RDB_ENV=test python3 "${ROOT}"/cli.py config "${LAMBDA}" runtime) 2>&1)
+# Read other configuration from config.json
+REGION=$((RDB_ENV=test python3 "${ROOT}"/cli.py get "${LAMBDA}" region) 2>&1)
+RUNTIME=$((RDB_ENV=test python3 "${ROOT}"/cli.py get "${LAMBDA}" runtime) 2>&1)
 
 # Updating Lambda functions
 # ./create_python_links.py "${LAMBDA}"
@@ -51,7 +51,7 @@ echo Updating role "${LAMBDA}" end
 
 echo "Updating environment variables"
 # https://gist.github.com/andywirv/f312d561c9702522f6d4ede1fe2750bd
-ENV_VARIABLES=$((RDB_ENV=test python3 "${ROOT}"/cli.py config "${LAMBDA}" environment_variables) 2>&1)
+ENV_VARIABLES=$((RDB_ENV=test python3 "${ROOT}"/cli.py get "${LAMBDA}" environment_variables) 2>&1)
 ENV_VARIABLES=$(echo "${ENV_VARIABLES}" | sed "s/\'/\"/g")
 aws lambda update-function-configuration --function-name "${LAMBDA}" --environment '{"Variables":{"RDB_ENV":"production","RDB_LOG_LEVEL":"INFO"}}'
 

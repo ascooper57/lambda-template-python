@@ -14,12 +14,31 @@ root_directory = path.abspath(path.dirname(__file__))
 configs_directory = root_directory + path.sep + "configs"
 
 
+# ######################################################################################################################
+
 def migrate_database():
     from api.rdb.model.schema import db_migrate
     """Create and ensure proper schema"""
     logger.info("migrating database")
     db_migrate()
 
+
+# ######################################################################################################################
+
+def get_setting():
+    # example: ./cli.py get_setting LambdaApiTemplateJS region
+    if len(sys.argv) > 2:
+        lambda_directory = path.abspath(path.join(path.dirname(__file__), "lambda_functions", sys.argv[2]))
+        filename = "%s/get_setting.json" % lambda_directory
+        with open(filename, 'r') as fd:
+            contents = json.load(fd)
+            contents.update({'account_id': boto3.client("sts").get_caller_identity()["Account"]})
+            val = contents[sys.argv[3]]
+            # print(val)
+            return val
+
+
+# ######################################################################################################################
 
 # noinspection PyMethodMayBeStatic
 def get_file_contents(filename, mode="r"):
@@ -235,32 +254,18 @@ def create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client):
                                  )
 
 
-def config():
-    # example: ./cli.py config LambdaApiTemplateJS region
-    if len(sys.argv) > 2:
-        lambda_directory = path.abspath(path.join(path.dirname(__file__), "lambda_functions", sys.argv[2]))
-        filename = "%s/config.json" % lambda_directory
-        with open(filename, 'r') as fd:
-            contents = json.load(fd)
-            contents.update({'account_id': boto3.client("sts").get_caller_identity()["Account"]})
-            val = contents[sys.argv[3]]
-            # print(val)
-            return val
-
-
-def main():
+def configure_aws():
     """
-    administration
+    configure AWS IAM user and Cognito User and Identity Pools
     """
-    # if len(sys.argv) > 1:
-    #     if sys.argv[1] == "migrate":
-    #         migrate_database()
-    #     elif sys.argv[1] == "config":
-    #         sys.exit(config())
-    #     else:
-    #         raise Exception("Unrecognized command: %s" % sys.argv[1])
+    from boto3.session import Session
+    # https://github.com/nficano/python-lambda
+    # noinspection PyTypeChecker
+    session = Session()
+    credentials = session.get_credentials()
+    aws_access_key_id = credentials.access_key
+    aws_secret_access_key = credentials.secret_key
 
-    # ##################################################################################################################
     # 1. create an IAM user with all of the roles necessary to bootstrap AWS services required by Praktikos
     # The user in ~/.aws/credentials must have a IAM FullAccess policy attached to user
     # https://console.aws.amazon.com/iam/home?region=us-east-1#/policies/arn:aws:iam::aws:policy/IAMFullAccess$jsonEditor
@@ -268,45 +273,35 @@ def main():
     response = create_iam_user_praktikos(iam_client, "praktikos", "praktikos")
     # save off temporary  access key
     user_name = response['AccessKey']['UserName']
-    aws_access_key_id = response['AccessKey']['AccessKeyId']
-    aws_secret_access_key = response['AccessKey']['SecretAccessKey']
-    iam_client = boto3.client('iam',
-                              aws_access_key_id=aws_access_key_id,
-                              aws_secret_access_key=aws_secret_access_key)
-    cognito_idp_client = boto3.client('cognito-idp',
-                                      aws_access_key_id=aws_access_key_id,
-                                      aws_secret_access_key=aws_secret_access_key)
-    cognito_identity_client = boto3.client('cognito-identity',
-                                           aws_access_key_id=aws_access_key_id,
-                                           aws_secret_access_key=aws_secret_access_key)
-
-    # sts_client = boto3.client("sts")
-    # x = sts_client.get_caller_identity()
-    # aws_account_id = x["Account"]
-    # aws_account_id = iam_client.CurrentUser().arn.split(':')[4]
-    # ##################################################################################################################
-
+    # aws_access_key_id = response['AccessKey']['AccessKeyId']
+    # aws_secret_access_key = response['AccessKey']['SecretAccessKey']
     try:
-        # ##############################################################################################################
+        # now switch to new, temporary user "praktikos" credentials
+        iam_client = boto3.client('iam',
+                                  aws_access_key_id=aws_access_key_id,
+                                  aws_secret_access_key=aws_secret_access_key)
+        cognito_idp_client = boto3.client('cognito-idp',
+                                          aws_access_key_id=aws_access_key_id,
+                                          aws_secret_access_key=aws_secret_access_key)
+        cognito_identity_client = boto3.client('cognito-identity',
+                                               aws_access_key_id=aws_access_key_id,
+                                               aws_secret_access_key=aws_secret_access_key)
         # 2. create a AWS Cognito User Pool
         create_cognito_user_pool_praktikos(cognito_idp_client)
-        # ##############################################################################################################
 
-        # ##############################################################################################################
         # 3. create a AWS Cognito Identity Pool and IAM Lambda Roles
         create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client)
-        # ##############################################################################################################
 
     finally:
-        # ##############################################################################################################
         if iam_client:
             # delete temporary access key
             iam_client.delete_access_key(
                 UserName=user_name,
                 AccessKeyId=aws_access_key_id
             )
-        # ##############################################################################################################
 
+
+# ######################################################################################################################
 
 if __name__ == '__main__':
     """
@@ -315,7 +310,9 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         if sys.argv[1] == "migrate":
             migrate_database()
-        elif sys.argv[1] == "config":
-            sys.exit(config())
+        elif sys.argv[1] == "get":
+            sys.exit(get_setting())
+        elif sys.argv[1] == "configure":
+            sys.exit(configure_aws())
         else:
             raise Exception("Unrecognized command: %s" % sys.argv[1])

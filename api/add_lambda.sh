@@ -17,9 +17,9 @@ fi
 ROOT=$(pwd)
 
 # Read other configuration from config.json
-AWS_ACCOUNT_ID=$((RDB_ENV=test python3 "${ROOT}/cli.py" config "${LAMBDA}" account_id) 2>&1)
-REGION=$((RDB_ENV=test python3 "${ROOT}/cli.py" config "${LAMBDA}" region) 2>&1)
-RUNTIME=$((RDB_ENV=test python3 "${ROOT}/cli.py" config "${LAMBDA}" runtime) 2>&1)
+AWS_ACCOUNT_ID=$((RDB_ENV=test python3 "${ROOT}/cli.py" get "${LAMBDA}" account_id) 2>&1)
+REGION=$((RDB_ENV=test python3 "${ROOT}/cli.py" get "${LAMBDA}" region) 2>&1)
+RUNTIME=$((RDB_ENV=test python3 "${ROOT}/cli.py" get "${LAMBDA}" runtime) 2>&1)
 
 
 ROLE="${LAMBDA}"
@@ -60,7 +60,7 @@ cd "${ROOT}/lambda_functions/${LAMBDA}" || exit 1
 sleep 5 # To avoid errors
 echo "************************"
 pwd
-HANDLER=$((RDB_ENV=test python3 "${ROOT}/cli.py" config "${LAMBDA}" handler) 2>&1)
+HANDLER=$((RDB_ENV=test python3 "${ROOT}/cli.py" get "${LAMBDA}" handler) 2>&1)
 echo 4 aws lambda create-function
 aws lambda create-function \
         --function-name "${LAMBDA}" \
@@ -77,7 +77,7 @@ aws lambda update-function-code \
 
 # https://gist.github.com/andywirv/f312d561c9702522f6d4ede1fe2750bd
 echo "5 Updating environment variables"
-ENV_VARIABLES=$((RDB_ENV=test python3 "${ROOT}/cli.py" config "${LAMBDA}" environment_variables) 2>&1)
+ENV_VARIABLES=$((RDB_ENV=test python3 "${ROOT}/cli.py" get "${LAMBDA}" environment_variables) 2>&1)
 ENV_VARIABLES=$(echo "${ENV_VARIABLES}" | sed "s/\'/\"/g")
 aws lambda update-function-configuration --function-name "${LAMBDA}" --region "${REGION}" --environment '{"Variables":{"RDB_ENV":"production","RDB_LOG_LEVEL":"INFO"}}'
 
