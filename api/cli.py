@@ -56,17 +56,8 @@ def create_iam_role(iam_client, lambda_role_name, description, json_policy):
     )
 
 
-def create_iam_user_and_group_policies(iam_client, user_name, group_name, policy_arns):
-    # type: ('boto3.client("iam")', str, str, list) -> dict
-
-    try:
-        iam_client.create_user(UserName=user_name)
-        logger.info("User created:" + user_name)
-    except Exception as ex:
-        # it's ok if user already exists
-        # noinspection PyUnresolvedReferences
-        if ex.response['Error']['Code'] == "EntityAlreadyExists":
-            pass
+def update_iam_user_and_group_policies(iam_client, user_name, group_name, policy_arns):
+    # type: ('boto3.client("iam")', str, str, list) -> None
     try:
         iam_client.create_group(GroupName=group_name)
         logger.info("Group created:" + group_name)
@@ -83,42 +74,29 @@ def create_iam_user_and_group_policies(iam_client, user_name, group_name, policy
 
     # it's ok if user is already added to group
     iam_client.add_user_to_group(GroupName=group_name, UserName=user_name)
-    logger.info("User %s attached to group %s." % (user_name, group_name))
-    response = iam_client.create_access_key(UserName=user_name)
     time.sleep(10)
-    return response
+    logger.info("User %s attached to group %s." % (user_name, group_name))
 
 
 def create_cognito_user_pool(cognito_idp_client, user_pool_config):
     # type: ('boto3.client("cognito-idp")', dict) -> str
     # noinspection PyBroadException,PyUnusedLocal
-    try:
-        kwargs = {
-            "MaxResults": 60
-        }
-        while True:
-            response = cognito_idp_client.list_user_pools(**kwargs)
-            # yield from response['events']
-            try:
-                kwargs['NextToken'] = response['NextToken']
-            except KeyError:
-                break
-        for user_pool in response['UserPools']:
-            if user_pool['Name'] == user_pool_config['PoolName']:
-                return user_pool['Id']
+    kwargs = {
+        "MaxResults": 60
+    }
+    while True:
+        response = cognito_idp_client.list_user_pools(**kwargs)
+        # yield from response['events']
+        try:
+            for user_pool in response['UserPools']:
+                if user_pool['Name'] == user_pool_config['PoolName']:
+                    return user_pool['Id']
+            kwargs['NextToken'] = response['NextToken']
+        except KeyError:
+            break
 
-        response = cognito_idp_client.create_user_pool(**user_pool_config)
-        return response['UserPool']['Id']
-    except Exception as ex:
-        pass
-
-    # try:
-    #     response = cognito_idp_client.create_user_pool_domain(
-    #         Domain='praktikos',
-    #         UserPoolId='string'
-    #     )
-    # except Exception as ex:
-    #     pass
+    response = cognito_idp_client.create_user_pool(**user_pool_config)
+    return response['UserPool']['Id']
 
 
 def fix_identity_pool_id(trust_policy_str, identity_pool_id):
@@ -127,6 +105,16 @@ def fix_identity_pool_id(trust_policy_str, identity_pool_id):
     trust_policy_dict['Statement'][0]['Condition']['StringEquals'][
         'cognito-identity.amazonaws.com:aud'] = identity_pool_id
     return json.dumps(trust_policy_dict)
+
+
+def get_cognito_identity_pool_id(cognito_identity_client, identity_pool_name):
+    # type: ('boto3.client("cognito-identity")', str) -> str
+    identity_pools = cognito_identity_client.list_identity_pools(MaxResults=60)
+    identity_pool_id = None
+    for identity_pool in identity_pools['IdentityPools']:
+        if identity_pool['IdentityPoolName'] == identity_pool_name:
+            identity_pool_id = identity_pool['IdentityPoolId']
+    return identity_pool_id
 
 
 # noinspection PyUnusedLocal
@@ -138,24 +126,15 @@ def create_cognito_identity_pool(cognito_identity_client,
                                  cognito_praktikos_trust_policy_unauth_file
                                  ):
     # type: ('boto3.client("cognito-identity")', 'boto3.client("iam")', str, bool, str, str) -> None
-    identity_pools = cognito_identity_client.list_identity_pools(MaxResults=60)
-    identity_pool_id = None
-    for identity_pool in identity_pools['IdentityPools']:
-        if identity_pool['IdentityPoolName'] == identity_pool_name:
-            identity_pool_id = identity_pool['IdentityPoolId']
+    identity_pool_id = get_cognito_identity_pool_id(cognito_identity_client, identity_pool_name)
     if not identity_pool_id:
-        cognito_identity_client.create_identity_pool(
+        response = cognito_identity_client.create_identity_pool(
             IdentityPoolName=identity_pool_name,
             AllowUnauthenticatedIdentities=allow_unauthenticated_identities
         )
-        # recurse only once
-        create_cognito_identity_pool(cognito_identity_client,
-                                     iam_client,
-                                     identity_pool_name,
-                                     allow_unauthenticated_identities,
-                                     cognito_praktikos_trust_policy_auth_file,
-                                     cognito_praktikos_trust_policy_unauth_file
-                                     )
+        identity_pool_id = response['IdentityPoolId']
+        time.sleep(10)
+
     response = cognito_identity_client.get_identity_pool_roles(IdentityPoolId=identity_pool_id)
     if 'Roles' not in response:
         # noinspection PyBroadException
@@ -224,12 +203,12 @@ def create_cognito_user_pool_group(cognito_idp_client, user_pool_id, group_name)
     )
 
 
-def create_iam_user_praktikos(iam_client, user_name="praktikos", group_name="praktikos"):
-    # type: ('boto3.client("iam")', str, str) -> dict
+def update_iam_user_praktikos(iam_client, user_name, group_name="praktikos"):
+    # type: ('boto3.client("iam")', str, str) -> None
     filename = path.abspath(path.join(configs_directory, "iam_user_and_group_policy_arns.json"))
     with open(filename, 'r') as fd:
         policy_arns = json.loads(fd.read())
-    return create_iam_user_and_group_policies(iam_client, user_name, group_name, policy_arns)
+    update_iam_user_and_group_policies(iam_client, user_name, group_name, policy_arns)
 
 
 def create_cognito_user_pool_praktikos(cognito_idp_client):
@@ -245,7 +224,7 @@ def create_cognito_user_pool_praktikos(cognito_idp_client):
 def create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client):
     auth_filename = path.abspath(path.join(configs_directory, "trust_policy_cognito_auth.json"))
     unauth_filename = path.abspath(path.join(configs_directory, "trust_policy_cognito_unauth.json"))
-    create_cognito_identity_pool(cognito_identity_client,
+    return create_cognito_identity_pool(cognito_identity_client,
                                  iam_client,
                                  "praktikos",
                                  True,
@@ -266,39 +245,31 @@ def configure_aws():
     aws_access_key_id = credentials.access_key
     aws_secret_access_key = credentials.secret_key
 
+    sts_client = boto3.client("sts",
+                          aws_access_key_id=aws_access_key_id,
+                          aws_secret_access_key=aws_secret_access_key)
+    account_id = sts_client.get_caller_identity()["Account"]
+    user_arn = sts_client.get_caller_identity()['Arn']
+    user_name = user_arn.split('/')[1]
     # 1. create an IAM user with all of the roles necessary to bootstrap AWS services required by Praktikos
     # The user in ~/.aws/credentials must have a IAM FullAccess policy attached to user
     # https://console.aws.amazon.com/iam/home?region=us-east-1#/policies/arn:aws:iam::aws:policy/IAMFullAccess$jsonEditor
-    iam_client = boto3.client('iam')
-    response = create_iam_user_praktikos(iam_client, "praktikos", "praktikos")
-    # save off temporary  access key
-    user_name = response['AccessKey']['UserName']
-    # aws_access_key_id = response['AccessKey']['AccessKeyId']
-    # aws_secret_access_key = response['AccessKey']['SecretAccessKey']
-    try:
-        # now switch to new, temporary user "praktikos" credentials
-        iam_client = boto3.client('iam',
-                                  aws_access_key_id=aws_access_key_id,
-                                  aws_secret_access_key=aws_secret_access_key)
-        cognito_idp_client = boto3.client('cognito-idp',
-                                          aws_access_key_id=aws_access_key_id,
-                                          aws_secret_access_key=aws_secret_access_key)
-        cognito_identity_client = boto3.client('cognito-identity',
-                                               aws_access_key_id=aws_access_key_id,
-                                               aws_secret_access_key=aws_secret_access_key)
-        # 2. create a AWS Cognito User Pool
-        create_cognito_user_pool_praktikos(cognito_idp_client)
+    iam_client = boto3.client('iam',
+                              aws_access_key_id=aws_access_key_id,
+                              aws_secret_access_key=aws_secret_access_key)
 
-        # 3. create a AWS Cognito Identity Pool and IAM Lambda Roles
-        create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client)
+    update_iam_user_praktikos(iam_client, user_name, "praktikos")
+    cognito_idp_client = boto3.client('cognito-idp',
+                                      aws_access_key_id=aws_access_key_id,
+                                      aws_secret_access_key=aws_secret_access_key)
+    cognito_identity_client = boto3.client('cognito-identity',
+                                           aws_access_key_id=aws_access_key_id,
+                                           aws_secret_access_key=aws_secret_access_key)
+    # 2. create a AWS Cognito User Pool
+    create_cognito_user_pool_praktikos(cognito_idp_client)
 
-    finally:
-        if iam_client:
-            # delete temporary access key
-            iam_client.delete_access_key(
-                UserName=user_name,
-                AccessKeyId=aws_access_key_id
-            )
+    # 3. create a AWS Cognito Identity Pool and IAM Lambda Roles
+    create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client)
 
 
 # ######################################################################################################################

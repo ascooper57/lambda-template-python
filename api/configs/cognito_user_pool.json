@@ -12,7 +12,7 @@
   },
   "LambdaConfig": {
   },
-  "SchemaAttributes": [
+  "Schema": [
     {
       "Name": "sub",
       "AttributeDataType": "String",
@@ -197,13 +197,6 @@
       }
     },
     {
-      "Name": "phone_number_verified",
-      "AttributeDataType": "Boolean",
-      "DeveloperOnlyAttribute": false,
-      "Mutable": true,
-      "Required": false
-    },
-    {
       "Name": "address",
       "AttributeDataType": "String",
       "DeveloperOnlyAttribute": false,
@@ -238,13 +231,11 @@
     "DefaultEmailOption": "CONFIRM_WITH_CODE"
   },
   "MfaConfiguration": "OFF",
-  "EstimatedNumberOfUsers": 4,
   "EmailConfiguration": {
     "EmailSendingAccount": "COGNITO_DEFAULT"
   },
   "UserPoolTags": {},
   "AdminCreateUserConfig": {
-    "AllowAdminCreateUserOnly": false,
-    "UnusedAccountValidityDays": 7
+    "AllowAdminCreateUserOnly": false
   }
 }
