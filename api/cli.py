@@ -235,13 +235,6 @@ def create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client):
                                  unauth_filename
                                  )
 
-def get_cognito_app_client_id(cognito_idp_client, aws_user_pools_id):
-    response = cognito_idp_client.list_user_pool_clients(
-        UserPoolId=aws_user_pools_id,
-        MaxResults=60
-    )
-    return response['UserPoolClients'][0]['ClientId']
-
 def configure_aws():
     """
     configure AWS IAM user and Cognito User and Identity Pools
@@ -288,7 +281,6 @@ def configure_aws():
         config['aws_cognito_region'] = session.region_name
         config['aws_user_pools_id'] = aws_user_pools_id
         config['aws_cognito_identity_pool_id'] = aws_cognito_identity_pool_id
-        config['aws_user_pools_web_client_id'] = get_cognito_app_client_id(cognito_idp_client, aws_user_pools_id)
         fd.close()
         with open(filename, 'w') as fd:
             fd.write(json.dumps(config, indent=4, separators=(',', ': ')))
