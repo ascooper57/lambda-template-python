@@ -1,37 +1,37 @@
 {
-  "aws_cognito_identity_pool_id": "us-east-1:XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX",
-  "aws_cognito_region": "us-east-1",
-  "aws_user_pools_id": "us-east-1_XXXXXXXXX",
-  "aws_user_pools_web_client_id": "XXXXXXXXXXXXXXXXXXXXXXXXXX",
-  "aws_account_id": "############",
-  "test": {
-    "database": "praktikos_test",
-    "host": "",
-    "port": 5432,
-    "username": "",
-    "password": "",
-    "max_connections": 10,
-    "stale_timeout": 300,
-    "sslmode": "allow"
-  },
-  "staging": {
-    "database": "praktikos_staging",
-    "host": "XXXXXXXXX-staging-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
-    "port": 5432,
-    "username": "sa",
-    "password": "ChangeMe!",
-    "max_connections": 10,
-    "stale_timeout": 300,
-    "sslmode": "allow"
-  },
-  "production": {
-    "database": "praktikos",
-    "host": "XXXXXXXXX-production-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
-    "port": 5432,
-    "username": "sa",
-    "password": "ChangeMe!",
-    "max_connections": 10000,
-    "stale_timeout": 300,
-    "sslmode": "allow"
-  }
+    "aws_cognito_identity_pool_id": "us-east-1:1fd5d1e9-82f4-4fb6-9984-2b2641a43d17",
+    "aws_cognito_region": "us-east-1",
+    "aws_user_pools_id": "us-east-1_G1QyIE5pa",
+    "aws_user_pools_web_client_id": "3sauh3oc7ff10j3l97f3mjjv5v",
+    "aws_account_id": "312293704956",
+    "test": {
+        "database": "praktikos_test",
+        "host": "",
+        "port": 5432,
+        "username": "",
+        "password": "",
+        "max_connections": 10,
+        "stale_timeout": 300,
+        "sslmode": "allow"
+    },
+    "staging": {
+        "database": "praktikos_staging",
+        "host": "XXXXXXXXX-staging-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
+        "port": 5432,
+        "username": "sa",
+        "password": "ChangeMe!",
+        "max_connections": 10,
+        "stale_timeout": 300,
+        "sslmode": "allow"
+    },
+    "production": {
+        "database": "praktikos",
+        "host": "XXXXXXXXX-production-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
+        "port": 5432,
+        "username": "sa",
+        "password": "ChangeMe!",
+        "max_connections": 10000,
+        "stale_timeout": 300,
+        "sslmode": "allow"
+    }
 }
