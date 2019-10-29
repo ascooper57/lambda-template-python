@@ -167,6 +167,8 @@ def create_cognito_identity_pool(cognito_identity_client,
         }
         cognito_identity_client.set_identity_pool_roles(**kwargs)
 
+    return identity_pool_id
+
 
 def create_cognito_user_pool_client(cognito_idp_client, user_pool_id, client_name, cognito_user_pool_client_file):
     # type: ('boto3.client("cognito-idp")', str, str, str) -> None
@@ -208,17 +210,18 @@ def update_iam_user_praktikos(iam_client, user_name, group_name="praktikos"):
     filename = path.abspath(path.join(configs_directory, "iam_user_and_group_policy_arns.json"))
     with open(filename, 'r') as fd:
         policy_arns = json.loads(fd.read())
-    update_iam_user_and_group_policies(iam_client, user_name, group_name, policy_arns)
+        update_iam_user_and_group_policies(iam_client, user_name, group_name, policy_arns)
 
 
 def create_cognito_user_pool_praktikos(cognito_idp_client):
     filename = path.abspath(path.join(configs_directory, "cognito_user_pool.json"))
     with open(filename, 'r') as fd:
         cognito_user_pool = json.loads(fd.read())
-    user_pool_id = create_cognito_user_pool(cognito_idp_client, cognito_user_pool)
-    filename = path.abspath(path.join(configs_directory, "cognito_user_pool_client.json"))
-    create_cognito_user_pool_client(cognito_idp_client, user_pool_id, "praktikos", filename)
-    create_cognito_user_pool_group(cognito_idp_client, user_pool_id, "authenticated")
+        user_pool_id = create_cognito_user_pool(cognito_idp_client, cognito_user_pool)
+        filename = path.abspath(path.join(configs_directory, "cognito_user_pool_client.json"))
+        create_cognito_user_pool_client(cognito_idp_client, user_pool_id, "praktikos", filename)
+        create_cognito_user_pool_group(cognito_idp_client, user_pool_id, "authenticated")
+        return user_pool_id
 
 
 def create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client):
@@ -232,6 +235,12 @@ def create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client):
                                  unauth_filename
                                  )
 
+def get_cognito_app_client_id(cognito_idp_client, aws_user_pools_id):
+    response = cognito_idp_client.list_user_pool_clients(
+        UserPoolId=aws_user_pools_id,
+        MaxResults=60
+    )
+    return response['UserPoolClients'][0]['ClientId']
 
 def configure_aws():
     """
@@ -248,7 +257,7 @@ def configure_aws():
     sts_client = boto3.client("sts",
                           aws_access_key_id=aws_access_key_id,
                           aws_secret_access_key=aws_secret_access_key)
-    account_id = sts_client.get_caller_identity()["Account"]
+    aws_account_id = sts_client.get_caller_identity()["Account"]
     user_arn = sts_client.get_caller_identity()['Arn']
     user_name = user_arn.split('/')[1]
     # 1. create an IAM user with all of the roles necessary to bootstrap AWS services required by Praktikos
@@ -266,10 +275,23 @@ def configure_aws():
                                            aws_access_key_id=aws_access_key_id,
                                            aws_secret_access_key=aws_secret_access_key)
     # 2. create a AWS Cognito User Pool
-    create_cognito_user_pool_praktikos(cognito_idp_client)
+    aws_user_pools_id = create_cognito_user_pool_praktikos(cognito_idp_client)
 
     # 3. create a AWS Cognito Identity Pool and IAM Lambda Roles
-    create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client)
+    aws_cognito_identity_pool_id = create_cognito_identity_pool_praktikos(cognito_identity_client, iam_client)
+
+    # 4 write configuration values to project's api.config.json
+    filename = path.abspath(path.join(root_directory, "config.json"))
+    with open(filename, 'r') as fd:
+        config = json.loads(fd.read())
+        config['aws_account_id'] = aws_account_id
+        config['aws_cognito_region'] = session.region_name
+        config['aws_user_pools_id'] = aws_user_pools_id
+        config['aws_cognito_identity_pool_id'] = aws_cognito_identity_pool_id
+        config['aws_user_pools_web_client_id'] = get_cognito_app_client_id(cognito_idp_client, aws_user_pools_id)
+        fd.close()
+        with open(filename, 'w') as fd:
+            fd.write(json.dumps(config, indent=4, separators=(',', ': ')))
 
 
 # ######################################################################################################################
