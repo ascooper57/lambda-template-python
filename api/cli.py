@@ -29,7 +29,7 @@ def get_setting():
     # example: ./cli.py get_setting LambdaApiTemplateJS region
     if len(sys.argv) > 2:
         lambda_directory = path.abspath(path.join(path.dirname(__file__), "lambda_functions", sys.argv[2]))
-        filename = "%s/get_setting.json" % lambda_directory
+        filename = "%s/config.json" % lambda_directory
         with open(filename, 'r') as fd:
             contents = json.load(fd)
             contents.update({'account_id': boto3.client("sts").get_caller_identity()["Account"]})
