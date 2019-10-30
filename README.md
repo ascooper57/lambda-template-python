@@ -135,7 +135,7 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 
 # Optionally Getting Started on Docker
 
-see DOCKER.md
+[see DOCKER.md](https://github.com/praktikos/praktikos-template-python/blob/master/DOCKER.md)
 
 # AWS developer credentials
 
@@ -190,9 +190,9 @@ Once your project works against your local database, it is time to create a clou
 
 ```bash
 cd praktikos-template-python/api
-vim config.json
-
 (Edit section with your internet accessible database)
+namo config.json
+
   "production": {
     "database": "praktikos",
     "host": "XXXXXXXXX-production-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
@@ -203,6 +203,8 @@ vim config.json
     "stale_timeout": 300,
     "sslmode": "allow"
   }
+^o
+^x
 
 RDB_ENV=test       ./cli.py migrate
 RDB_ENV=production ./cli.py migrate
@@ -251,7 +253,6 @@ cd praktikos-template-python/example
 
 ## 4. Publish API from newly generated code
 
-
    * Zip up the main project (merged) ~/praktikos-template-python.zip
    * In the browser window side panel, Click "Publish API"
    * Click in dashed line box "Drag Zip file here..."
@@ -272,10 +273,10 @@ cd praktikos-template-python/example
 ```
 
 # Contributing
-
-1. Fork it
-2. Create your feature branch (`git checkout -b your_github_name-feature`)
-3. Commit your changes (`git commit -am 'Added some feature'`)
-4. Make sure to add tests for it. This is important so we don't break it in a future version unintentionally.
-5. Push to the branch (`git push origin my-new-feature`)
-6. Create new Pull Request
+   * Fork it
+   * Create your feature branch (`git checkout -b your_github_name-feature`)
+   * Commit your changes (`git commit -am 'Added some feature'`)
+   * Make sure to add tests for it. This is important so we don't break it in a future version unintentionally.
+   * [File an Issue](https://github.com/praktikos/praktikos-template-python/issues)
+   * Push to the branch (`git push origin your_github_name-feature`)
+   * Create new Pull Request
