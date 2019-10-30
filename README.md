@@ -26,6 +26,7 @@ Table of Contents
       * [3. Merge generated code into main project](#3-merge-generated-code-into-main-project)
       * [4. Publish API from newly generated code](#4-publish-api-from-newly-generated-code)
       * [5. Test RESTful API remotely deployed into Amazon Web Services](#5-test-restful-api-remotely-deployed-into-amazon-web-services)
+   * [Debugging](#debugging)
    * [Contributing](#contributing)
 
 
@@ -236,6 +237,8 @@ open https://client.praktikos.com
 
 ## 2. Generate Code from example swagger file
 
+[What and Why Swagger](https://github.com/praktikos/praktikos-template-python/blob/master/OPENAPI.md)
+
    * In the browser window side panel, Click "Generate Code"
    * Click in dashed line box "Drag SWAGGER JSON file here..."
    * Navigate to the file: praktikos-template-python/example/swagger.json
@@ -271,6 +274,10 @@ open up a Terminal (shell) window
 cd praktikos-template-python/example
 ./test_published.sh
 ```
+
+# Debugging
+
+[Debugging](https://github.com/praktikos/praktikos-template-python/blob/master/DEBUGGING.md)
 
 # Contributing
    * Fork it
