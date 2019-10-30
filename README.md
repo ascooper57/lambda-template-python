@@ -25,9 +25,8 @@ Table of Contents
       * [2. Generate Code from example swagger file](#2-generate-code-from-example-swagger-file)
       * [3. Merge generated code into main project](#3-merge-generated-code-into-main-project)
       * [4. Publish API from newly generated code](#4-publish-api-from-newly-generated-code)
-      * [5. Test RESTful API locally](#5-test-restful-api-locally)
-      * [6. Test RESTful API remotely deployed into Amazon Web Services](#6-test-restful-api-remotely-deployed-into-amazon-web-services)
-      * [Contributing](#contributing)
+      * [5. Test RESTful API remotely deployed into Amazon Web Services](#5-test-restful-api-remotely-deployed-into-amazon-web-services)
+   * [Contributing](#contributing)
 
 
 Most applications are designed a three tiers. The thin top tier (front end) is the graphical user interface on your mobile device or desktop, the (backend) middle tier is the business logic / data base access functions and the bottom tier is the database (persisted object itself). Application Programming Interfaces (APIs) are commonly implemented as RESTful style endpoints. Each RESTful endpoint has one to four actions / verbs: GET, PUT, POST, DELETE. Middle tier endpoints can operate upon persisted data or contain your application's business logic.
@@ -113,6 +112,7 @@ Our Core Principals
 ```
 
 ## Familiar with Git?
+
 Checkout this repo, then install dependencies with the following:
 
 ```
@@ -179,17 +179,33 @@ OR
 ## Configure your Amazon Web Service's account for Praktikos
 
 ```bash
-cd pratikos-python-rdb
+cd praktikos-template-python
 pip3 install -r requirements.txt
-RDB_ENV=test ./cli/py cognito
+cd praktikos-template-python/api
+RDB_ENV=test ./cli/py configure
 ```
 ## Creating a new table in the production database
 
-```bash
-cd praktikos-template-python
+Once your project works against your local database, it is time to create a cloud based / internet accessbile "production" database.
 
-RDB_ENV=test       ./cli.sh migrate
-RDB_ENV=production ./cli.sh migrate
+```bash
+cd praktikos-template-python/api
+vim config.json
+
+(Edit section with your internet accessible database)
+  "production": {
+    "database": "praktikos",
+    "host": "XXXXXXXXX-production-cluster.cluster-XXXXXXXXXXXX.us-east-1.rds.amazonaws.com",
+    "port": 5432,
+    "username": "sa",
+    "password": "ChangeMe!",
+    "max_connections": 10000,
+    "stale_timeout": 300,
+    "sslmode": "allow"
+  }
+
+RDB_ENV=test       ./cli.py migrate
+RDB_ENV=production ./cli.py migrate
 
 Table should now be in production with the requesite test data in it.
 ```
@@ -245,16 +261,7 @@ cd praktikos-template-python/example
    * wait patiently about a minute
    * Click the "Finish" button after API is provisioned and published
    
-## 5. Test RESTful API locally
-
-open up a Terminal (shell) window
-
-```bash
-cd praktikos-template-python
-RDB_ENV=test py.test --verbose test
-```
-
-## 6. Test RESTful API remotely deployed into Amazon Web Services
+## 5. Test RESTful API remotely deployed into Amazon Web Services
 
 open up a Terminal (shell) window
 
@@ -263,7 +270,7 @@ cd praktikos-template-python/example
 ./test_published.sh
 ```
 
-## Contributing
+# Contributing
 
 1. Fork it
 2. Create your feature branch (`git checkout -b your_github_name-feature`)
