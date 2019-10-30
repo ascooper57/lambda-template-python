@@ -12,14 +12,14 @@ Table of Contents
 
    * [praktikos-template-python](#praktikos-template-python)
    * [Table of Contents](#table-of-contents)
-      * [Getting Started on Mac OS](#getting-started-on-mac-os)
-      * [Familiar with Git?](#familiar-with-git)
-      * [Optionally Getting Started on Docker](#optionally-getting-started-on-docker)
-      * [AWS developer credentials](#aws-developer-credentials)
-      * [Start Postgres](#start-postgres)
-      * [Configure your Amazon Web Service's account for Praktikos](#configure-your-amazon-web-services-account-for-praktikos)
-      * [Creating a new table in the production database](#creating-a-new-table-in-the-production-database)
-      * [to run tests](#to-run-tests)
+   * [Getting Started on Mac OS](#getting-started-on-mac-os)
+   * [Familiar with Git?](#familiar-with-git)
+   * [Optionally Getting Started on Docker](#optionally-getting-started-on-docker)
+   * [AWS developer credentials](#aws-developer-credentials)
+   * [Start Postgres](#start-postgres)
+   * [Configure your Amazon Web Service's account for Praktikos](#configure-your-amazon-web-services-account-for-praktikos)
+   * [Creating a new table in the production database](#creating-a-new-table-in-the-production-database)
+   * [to run tests](#to-run-tests)
    * [RESTful API Code generation, provisioning and publication automation](#restful-api-code-generation-provisioning-and-publication-automation)
       * [1. Sign Up / Sign in](#1-sign-up--sign-in)
       * [2. Generate Code from example swagger file](#2-generate-code-from-example-swagger-file)
@@ -65,7 +65,7 @@ Our Core Principals
 * A monolith is a service that has more than one restful endpoint OR is stateful (in the backend). Tends to have more permissions, resources (memory, cpu) than each actually needs to execute properly thereby reducing threat profile for each endpoint
 * Should be able to track the cost of *each* endpoint execution and make business decisions around the Return of Investment (ROI) of that endpoint. (in a true microservices application)
 
-## Getting Started on Mac OS
+# Getting Started on Mac OS
 
 ```bash
     ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -111,7 +111,7 @@ Our Core Principals
     open https://www.postgresql.org/ftp/pgadmin/pgadmin4/v2.0/macos/
 ```
 
-## Familiar with Git?
+# Familiar with Git?
 
 Checkout this repo, then install dependencies with the following:
 
@@ -133,11 +133,11 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
     pip3 install -r requirements.txt
 ```
 
-## Optionally Getting Started on Docker
+# Optionally Getting Started on Docker
 
 see DOCKER.md
 
-## AWS developer credentials
+# AWS developer credentials
 
 When you interact with AWS, you specify your AWS security credentials to verify who you are and whether you have permission to access the resources that you are requesting. AWS uses the security credentials to authenticate and authorize your requests. Access keys consist of two parts: an access key ID (for example, AKIAIOSFODNN7EXAMPLE) and a secret access key (for example, wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY). You use access keys to sign programmatic requests that you make to AWS if you use AWS CLI commands (using the SDKs) or using AWS API operations.
 
@@ -163,7 +163,7 @@ region=us-east-1
 output=json
 
 ```
-## Start Postgres
+# Start Postgres
 
 If you want to manually start and stop postgresql (installed via homebrew), the easiest way is:
 
@@ -176,7 +176,7 @@ OR
 ./stop_postgres.sh
 ```
 
-## Configure your Amazon Web Service's account for Praktikos
+# Configure your Amazon Web Service's account for Praktikos
 
 ```bash
 cd praktikos-template-python
@@ -184,7 +184,7 @@ pip3 install -r requirements.txt
 cd praktikos-template-python/api
 RDB_ENV=test ./cli/py configure
 ```
-## Creating a new table in the production database
+# Creating a new table in the production database
 
 Once your project works against your local database, it is time to create a cloud based / internet accessbile "production" database.
 
@@ -210,7 +210,7 @@ RDB_ENV=production ./cli.py migrate
 Table should now be in production with the requesite test data in it.
 ```
 
-## to run tests
+# to run tests
 
 Verify the integrity of the project by running the test suite locally against your locally installed Postgres database
 
@@ -250,6 +250,7 @@ cd praktikos-template-python/example
 ```
 
 ## 4. Publish API from newly generated code
+
 
    * Zip up the main project (merged) ~/praktikos-template-python.zip
    * In the browser window side panel, Click "Publish API"
