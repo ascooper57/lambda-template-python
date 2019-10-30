@@ -1,7 +1,7 @@
 # Docker file for a slim Ubuntu-based Python3 image
 
 FROM ubuntu:latest
-MAINTAINER fnndsc "dev@babymri.org"
+LABEL maintainer="alan@praktikos.com"
 
 # https://websiteforstudents.com/installing-the-latest-python-3-7-on-ubuntu-16-04-18-04/
 RUN apt-get update 
