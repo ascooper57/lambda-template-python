@@ -136,7 +136,7 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 
 # Optionally Getting Started on Docker
 
-[see DOCKER.md](https://github.com/praktikos/praktikos-template-python/blob/master/DOCKER.md)
+[See DOCKER.md](https://github.com/praktikos/praktikos-template-python/blob/master/DOCKER.md)
 
 # AWS developer credentials
 
@@ -277,7 +277,7 @@ cd praktikos-template-python/example
 
 # Debugging
 
-[Debugging](https://github.com/praktikos/praktikos-template-python/blob/master/DEBUGGING.md)
+[See Debugging](https://github.com/praktikos/praktikos-template-python/blob/master/DEBUGGING.md)
 
 # Contributing
    * Fork it
