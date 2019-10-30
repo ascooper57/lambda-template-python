@@ -1,7 +1,7 @@
 praktikos-template-python
 =========================
 
-Functions as a Service implemented with API Gateway, Lambda, Cognito, S3, SNS and RDS (Postgres)
+Functions as a Service implemented with API Gateway, Lambda, Cognito, S3, SNS and RDS (Postgres/SQLite/MySQL)
 
 This is a software design paradigm shift
 
