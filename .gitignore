@@ -146,3 +146,7 @@ test/units/LambdaApiGenerated_test.py
 
 praktikos_python_rdb.egg-info/
 src/praktikos-configure-aws/
+api/lambda_functions/LambdaApiGenerated/config.json
+api/lambda_functions/LambdaApiGenerated/swagger.json
+api/rdb/model/table_generated.py
+test/units/table_generated_test.py
