@@ -3,7 +3,7 @@ set -e
 
 [[ -e src ]] && rm -rf src > /dev/null 2>&1
 
-BUCKET=lambda-template
+BUCKET=praktikos-template
 ZIP_FILE=/tmp/lambda-template-python.zip
 echo "Sync content with S3 bucket ${BUCKET} start"
 [[ -e ${ZIP_FILE} ]] && rm -f ${ZIP_FILE}
