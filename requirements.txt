@@ -5,7 +5,7 @@ botocore==1.12.221
 # ###################################
 
 # ###################################
-# pegged to praktikos-template-python/packages
+# pegged to lambda-template-python/packages
 peewee==3.9.4
 psycopg2==2.8.2
 # ###################################

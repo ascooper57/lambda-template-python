@@ -7,11 +7,11 @@ Docker
 	brew install docker
 	docker --version
 	
-    cd praktikos-template-python
-    docker build -t praktikos-template-python .
+    cd lambda-template-python
+    docker build -t lambda-template-python .
     docker images
     docker ps
-    docker run -it -v `pwd`:/mnt --entrypoint=/bin/bash  praktikos-template-python
+    docker run -it -v `pwd`:/mnt --entrypoint=/bin/bash  lambda-template-python
     (you are automatically put into: /mnt )
 ```
 ```bash

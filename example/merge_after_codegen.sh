@@ -6,14 +6,14 @@ PROJECT_ROOT="${CWD}/../"
 
 echo Prepare "${DOWNLOADS}" folder
 pushd "${DOWNLOADS}" || exit 1
-rm -rf "${DOWNLOADS}/praktikos-template-python" > /dev/null
-mkdir -p "${DOWNLOADS}/praktikos-template-python"
+rm -rf "${DOWNLOADS}/lambda-template-python" > /dev/null
+mkdir -p "${DOWNLOADS}/lambda-template-python"
 
 echo "Unzip generated files"
-cd "${DOWNLOADS}/praktikos-template-python" || exit 1
-unzip "${DOWNLOADS}/praktikos-template-python.zip"
+cd "${DOWNLOADS}/lambda-template-python" || exit 1
+unzip "${DOWNLOADS}/lambda-template-python.zip"
 cd "${DOWNLOADS}" || exit 1
-ditto -V "${DOWNLOADS}/praktikos-template-python" "${PROJECT_ROOT}"
+ditto -V "${DOWNLOADS}/lambda-template-python" "${PROJECT_ROOT}"
 
 echo "Merge and run automated tests on generated code changes"
 cd "${PROJECT_ROOT}" || exit 1

@@ -14,12 +14,12 @@ REQUIRES = ['boto3', 'botocore', 'psycopg2', 'peewee' ]
 
 SCRIPTS = []
 
-setup(name='praktikos-template-python',
+setup(name='lambda-template-python',
       version='0.1',
       description='API Lambda and Database backend implementation',
       author='',
       author_email='',
-      url='https://github.com/praktikos/praktikos-template-python.git',
+      url='https://github.com/praktikos/lambda-template-python.git',
       packages=['api'],
       install_requires=REQUIRES,
       # scripts=SCRIPTS,

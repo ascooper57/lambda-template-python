@@ -1,4 +1,4 @@
-praktikos-template-python
+lambda-template-python
 =========================
 
 Functions as a Service implemented with API Gateway, Lambda, Cognito, S3, SNS and RDS (Postgres/SQLite/MySQL)
@@ -10,7 +10,7 @@ Published Swagger API for this project: <img src="http://online.swagger.io/valid
 Table of Contents
 =================
 
-   * [praktikos-template-python](#praktikos-template-python)
+   * [lambda-template-python](#lambda-template-python)
    * [Table of Contents](#table-of-contents)
    * [Getting Started on Mac OS](#getting-started-on-mac-os)
    * [Familiar with Git?](#familiar-with-git)
@@ -129,14 +129,14 @@ check to make sure your github key has been added to the ssh-agent list.  Here's
 ```bash
     ssh-add -K ~/.ssh/id_rsa
     ssh-add -L
-    git clone https://github.com/praktikos/praktikos-template-python.git
-    cd praktikos-template-python
+    git clone https://github.com/praktikos/lambda-template-python.git
+    cd lambda-template-python
     pip3 install -r requirements.txt
 ```
 
 # Optionally Getting Started on Docker
 
-[See DOCKER.md](https://github.com/praktikos/praktikos-template-python/blob/master/DOCKER.md)
+[See DOCKER.md](https://github.com/praktikos/lambda-template-python/blob/master/DOCKER.md)
 
 # AWS developer credentials
 
@@ -180,9 +180,9 @@ OR
 # Configure your Amazon Web Service's account for Praktikos
 
 ```bash
-cd praktikos-template-python
+cd lambda-template-python
 pip3 install -r requirements.txt
-cd praktikos-template-python/api
+cd lambda-template-python/api
 RDB_ENV=test ./cli/py configure
 ```
 # Creating a new table in the production database
@@ -190,7 +190,7 @@ RDB_ENV=test ./cli/py configure
 Once your project works against your local database, it is time to create a cloud based / internet accessbile "production" database.
 
 ```bash
-cd praktikos-template-python/api
+cd lambda-template-python/api
 (Edit section with your internet accessible database)
 namo config.json
 
@@ -218,7 +218,7 @@ Table should now be in production with the requesite test data in it.
 Verify the integrity of the project by running the test suite locally against your locally installed Postgres database
 
 ```bash
-cd praktikos-template-python
+cd lambda-template-python
 
 TO run a unit test
 RDB_ENV=test py.test test/units/LambdaApiHealth_test.py
@@ -237,11 +237,11 @@ open https://client.praktikos.com
 
 ## 2. Generate Code from example swagger file
 
-[What and Why Swagger](https://github.com/praktikos/praktikos-template-python/blob/master/OPENAPI.md)
+[What and Why Swagger](https://github.com/praktikos/lambda-template-python/blob/master/OPENAPI.md)
 
    * In the browser window side panel, Click "Generate Code"
    * Click in dashed line box "Drag SWAGGER JSON file here..."
-   * Navigate to the file: praktikos-template-python/example/swagger.json
+   * Navigate to the file: lambda-template-python/example/swagger.json
    * Click the "Next" button
    * Click the "Finish" button after generated code is downloaded
 
@@ -250,16 +250,16 @@ open https://client.praktikos.com
 open up a Terminal (shell) window
 
 ```bash
-cd praktikos-template-python/example
+cd lambda-template-python/example
 ./merge_after_codegen.sh
 ```
 
 ## 4. Publish API from newly generated code
 
-   * Zip up the main project (merged) ~/praktikos-template-python.zip
+   * Zip up the main project (merged) ~/lambda-template-python.zip
    * In the browser window side panel, Click "Publish API"
    * Click in dashed line box "Drag Zip file here..."
-   * Navigate to the file: praktikos-template-python.zip
+   * Navigate to the file: lambda-template-python.zip
    * Click the "Next" button
    * Click on "LambdaApiGenerated"
    * Click the "Next" button
@@ -271,19 +271,19 @@ cd praktikos-template-python/example
 open up a Terminal (shell) window
 
 ```bash
-cd praktikos-template-python/example
+cd lambda-template-python/example
 ./test_published.sh
 ```
 
 # Debugging
 
-[See Debugging](https://github.com/praktikos/praktikos-template-python/blob/master/DEBUGGING.md)
+[See Debugging](https://github.com/praktikos/lambda-template-python/blob/master/DEBUGGING.md)
 
 # Contributing
    * Fork it
    * Create your feature branch (`git checkout -b your_github_name-feature`)
    * Commit your changes (`git commit -am 'Added some feature'`)
    * Make sure to add tests for it. This is important so we don't break it in a future version unintentionally.
-   * [File an Issue](https://github.com/praktikos/praktikos-template-python/issues)
+   * [File an Issue](https://github.com/praktikos/lambda-template-python/issues)
    * Push to the branch (`git push origin your_github_name-feature`)
    * Create new Pull Request
