@@ -1,4 +1,4 @@
-from api.rdb.utils import lambda_logger
+from api.rdb.utils.lambda_logger import lambda_logger
 
 
 # noinspection PyCallingNonCallable
