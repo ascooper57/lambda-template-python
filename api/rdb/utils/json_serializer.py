@@ -1,5 +1,6 @@
 import decimal
 from datetime import datetime, date
+import bson
 from uuid import UUID
 
 
@@ -30,6 +31,8 @@ def json_serialize(obj):
                         elif isinstance(v, UUID):
                             # if the obj is uuid, we simply return the value of uuid
                             o[k] = uuid2string(v)
+                        elif isinstance(o[k], bson.ObjectId):
+                            o[k] = str(v)
             else:
                 for k, v in o.items():
                     if isinstance(v, dict):
@@ -44,6 +47,8 @@ def json_serialize(obj):
                         elif isinstance(v, UUID):
                             # if the obj is uuid, we simply return the value of uuid
                             o[k] = uuid2string(v)
+                        elif isinstance(o[k], bson.ObjectId):
+                            o[k] = str(v)
 
 
 # http://www.chanduthedev.com/2014/05/how-to-convert-uuid-to-string-in-python.html
