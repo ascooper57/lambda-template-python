@@ -2,7 +2,7 @@
 import re
 
 from api.rdb.utils.boolean import as_bool
-from api.rdb.utils.datetime import as_seconds
+from api.rdb.utils.utc_datetime import as_seconds
 from api.rdb.utils.size import as_size
 from .environment import environments
 from .exceptions import ConfigUnkownEnvError, ConfigKeyError, ConfigMissingKey

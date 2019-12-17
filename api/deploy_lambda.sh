@@ -53,6 +53,6 @@ echo "Updating environment variables"
 # https://gist.github.com/andywirv/f312d561c9702522f6d4ede1fe2750bd
 ENV_VARIABLES=$((RDB_ENV=test python3 "${ROOT}"/cli.py get "${LAMBDA}" environment_variables) 2>&1)
 ENV_VARIABLES=$(echo "${ENV_VARIABLES}" | sed "s/\'/\"/g")
-aws lambda update-function-configuration --function-name "${LAMBDA}" --environment '{"Variables":{"RDB_ENV":"production","RDB_LOG_LEVEL":"INFO"}}'
+## aws lambda update-function-configuration --function-name "${LAMBDA}" --environment '{"Variables":{"RDB_ENV":"production","RDB_LOG_LEVEL":"INFO"}}'
 
 cd .. || exit 1
