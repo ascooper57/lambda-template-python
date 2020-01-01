@@ -103,7 +103,7 @@ def handler(request, context):
             logger.error(str(ex))
 
         s3_client = boto3.client('s3', config=Config(signature_version='s3v4',
-                                                     region_name=get('aws_cognito_region')))
+                                                     region_name=get('aws_region_name')))
         bucket_name = "media-%s" % get('aws_account_id')
         s3_client.delete_object(Bucket=bucket_name, Key=request_params["media_uuid"])
         return {}

@@ -9,6 +9,9 @@ from .exceptions import ConfigUnkownEnvError, ConfigKeyError, ConfigMissingKey
 from .files import candidate_files, read_file
 from .values import valid_key, expand_value
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 class ConfigDict(dict):
 
@@ -123,6 +126,7 @@ class Config(object):
 
     def _read_config_files(self, h, prefix=None):
         for path in candidate_files(self.module, prefix):
+            logger.info("CONFIG:" + path)
             _h = read_file(path)
             if _h:
                 h.update(_h)

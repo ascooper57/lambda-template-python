@@ -60,7 +60,7 @@ def handler(request, context):
 
         # noinspection PyUnresolvedReferences
         s3_client = boto3.client('s3', config=Config(signature_version='s3v4',
-                                                     region_name=get('aws_cognito_region')))
+                                                     region_name=get('aws_region_name')))
         # {
         #     "username_id": "TESTER1",
         #     "media_uuid": "fffe57fe-a60b-4374-8c35-97abe629afbb",

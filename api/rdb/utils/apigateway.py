@@ -12,7 +12,7 @@ def get_api_url(apigateway_client, rest_api_name, stage, endpoint):
     # type: ('boto3.client("apigateway")', str, str, str) -> str
     return 'https://%s.execute-api.%s.amazonaws.com%s%s' % (
         get_rest_api_id(apigateway_client, rest_api_name),
-        get('aws_cognito_region'),
+        get('aws_region_name'),
         stage,
         endpoint
     )

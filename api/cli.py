@@ -278,7 +278,7 @@ def configure_aws():
     with open(filename, 'r') as fd:
         config = json.loads(fd.read())
         config['aws_account_id'] = aws_account_id
-        config['aws_cognito_region'] = session.region_name
+        config['aws_region_name'] = session.region_name
         config['aws_user_pools_id'] = aws_user_pools_id
         config['aws_cognito_identity_pool_id'] = aws_cognito_identity_pool_id
         fd.close()

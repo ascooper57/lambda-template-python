@@ -49,7 +49,7 @@ def handler(request, context):
         # type: (dict, dict) -> dict
         logger.info("http_get")
         s3_client = boto3.client('s3', config=Config(signature_version='s3v4',
-                                                     region_name=get('aws_cognito_region')))
+                                                     region_name=get('aws_region_name')))
         bucket_name = "media-%s" % get('aws_account_id')
         s3_client.create_bucket(ACL='private', Bucket=bucket_name)
         url = s3_client.generate_presigned_url(

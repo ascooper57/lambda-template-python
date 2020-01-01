@@ -43,7 +43,7 @@ def handler(request, context):
         logger.info("Your backup" + name + " ran at " + str(current_time))
         s3_resource = boto3.resource('s3')
         logger.info("Got s3 client")
-        sts_client = boto3.client("sts", region_name=get('aws_cognito_region'))
+        sts_client = boto3.client("sts", region_name=get('aws_region_name'))
         logger.info("Got sts client")
         aws_account_id = sts_client.get_caller_identity()["Account"]
         duration = 0
@@ -67,9 +67,9 @@ def backup_api_gateway(s3_resource, aws_account_id, current_date):
     logger.info("backup apigateway ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-apigateway-%s" % aws_account_id
-    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_cognito_region'))
+    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_region_name'))
     # http://boto3.readthedocs.io/en/latest/reference/services/apigateway.html#APIGateway.Client.get_export
-    api_gateway_client = boto3.client('apigateway', region_name=get('aws_cognito_region'))
+    api_gateway_client = boto3.client('apigateway', region_name=get('aws_region_name'))
     apis = api_gateway_client.get_rest_apis(limit=500)
     for api in apis['items']:
         stages = api_gateway_client.get_stages(restApiId=api['id'])
@@ -90,8 +90,8 @@ def backup_cloudfront(s3_resource, aws_account_id, current_date):
     logger.info("backup cloudfront ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-cloudfront-%s" % aws_account_id
-    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_cognito_region'))
-    cloudfront_client = boto3.client('cloudfront', region_name=get('aws_cognito_region'))
+    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_region_name'))
+    cloudfront_client = boto3.client('cloudfront', region_name=get('aws_region_name'))
     distributions = cloudfront_client.list_distributions()
     if 'Items' in distributions['DistributionList']:
         for item in distributions['DistributionList']['Items']:
@@ -110,7 +110,7 @@ def backup_route53(s3_resource, aws_account_id, current_date):
     logger.info("backup route53 ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-route53-%s" % aws_account_id
-    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_cognito_region'))
+    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_region_name'))
     route53_client = boto3.client('route53')
     hosted_zones = route53_client.list_hosted_zones()
     for hosted_zone in hosted_zones['HostedZones']:
@@ -130,7 +130,7 @@ def backup_iam(s3_resource, aws_account_id, current_date):
     logger.info("backup iam ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-iam-%s" % aws_account_id
-    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_cognito_region'))
+    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_region_name'))
     iam_client = boto3.client('iam')
     user_dict = {}
     groups = []
@@ -179,8 +179,8 @@ def backup_cognito(s3_resource, aws_account_id, current_date):
     logger.info("backup cognito ran at " + str(datetime.datetime.now()))
     t0 = time.time()
     bucket_name = "backup-cognito-%s" % aws_account_id
-    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_cognito_region'))
-    cognito_idp_client = boto3.client('cognito-idp', region_name=get('aws_cognito_region'))
+    s3_bucket = get_S3_bucket(s3_resource, bucket_name, get('aws_region_name'))
+    cognito_idp_client = boto3.client('cognito-idp', region_name=get('aws_region_name'))
     user_pools = cognito_idp_client.list_user_pools(
         MaxResults=60
     )
@@ -205,7 +205,7 @@ def backup_cognito(s3_resource, aws_account_id, current_date):
             response['UserPoolClient']['CreationDate'] = None
             user_pool_client_list.append(response['UserPoolClient'])
 
-    cognito_identity_client = boto3.client('cognito-identity', region_name=get('aws_cognito_region'))
+    cognito_identity_client = boto3.client('cognito-identity', region_name=get('aws_region_name'))
     identity_pools = cognito_identity_client.list_identity_pools(MaxResults=60)
     for idenity_pool in identity_pools['IdentityPools']:
         response = cognito_identity_client.describe_identity_pool(IdentityPoolId=idenity_pool['IdentityPoolId'])

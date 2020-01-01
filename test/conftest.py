@@ -38,7 +38,7 @@ def get_secure_event(lambda_function, aws=False):
     param = 'body' if 'body' in event else 'queryStringParameters'
     if aws:
         # noinspection PyTypeChecker
-        session = Session(region_name=get('aws_cognito_region'))
+        session = Session(region_name=get('aws_region_name'))
         credentials = session.get_credentials()
         event[param]['aws_access_key_id'] = credentials.access_key
         event[param]['aws_secret_access_key'] = credentials.secret_key
@@ -149,7 +149,7 @@ def create_users(delete_users):
                 assert response.status_code == STATUS_OK
 
         # update database
-        session = Session(region_name=get('aws_cognito_region'))
+        session = Session(region_name=get('aws_region_name'))
 
         data = {
             "username": tester,
